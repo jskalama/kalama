@@ -1,0 +1,18 @@
+{
+    "name": "kalama",
+    "version": "0.0.1",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "build": "backpack build",
+        "dev": "backpack"
+    },
+    "dependencies": {
+        "backpack-core": "^0.2.0",
+        "cheerio": "^0.22.0",
+        "child-process-promise": "^2.2.0",
+        "inquirer": "^3.0.2",
+        "node-fetch": "^1.6.3",
+        "q-io": "^1.13.2"
+    }
+}
