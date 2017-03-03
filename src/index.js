@@ -58,7 +58,18 @@ const playSongsList = async songs => {
     await exec(`${PLAYER} ${fname}`);
 };
 
+const getLogo = () => {
+    return `
+ \\ | /
+_______
+-_____-
+`;
+}
+
+const displayLogo = () => console.log(getLogo());
+
 const main = async () => {
+    displayLogo();
     const term = await askSearchTerm();
     const suggestions = await search(term);
     const item = await chooseStuff(suggestions);
