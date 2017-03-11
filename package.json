@@ -1,12 +1,17 @@
 {
     "name": "kalama",
-    "version": "0.0.1",
+    "version": "0.0.2",
     "main": "index.js",
     "license": "MIT",
     "scripts": {
         "build": "backpack build",
         "dev": "backpack"
     },
+    "files": [
+        "build",
+        "src",
+        "kalama.js"
+    ],
     "dependencies": {
         "backpack-core": "^0.2.0",
         "cheerio": "^0.22.0",
