@@ -5,7 +5,6 @@ import fs from 'q-io/fs';
 import os from 'os';
 import path from 'path';
 import { exec } from 'child-process-promise';
-import Player from 'player';
 
 const SERVER_ROOT = 'https://myzuka.me';
 const PLAYER = 'vlc';
