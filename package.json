@@ -4,8 +4,8 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "build": "backpack build",
-        "dev": "backpack"
+        "start": "npm run build:live",
+        "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/index.ts"
     },
     "files": [
         "build",
@@ -13,12 +13,14 @@
         "kalama.js"
     ],
     "dependencies": {
-        "backpack-core": "^0.2.0",
         "cheerio": "^0.22.0",
         "child-process-promise": "^2.2.0",
         "inquirer": "^3.0.2",
         "node-fetch": "^1.6.3",
-        "q-io": "^1.13.2"
+        "nodemon": "^1.11.0",
+        "q-io": "^1.13.2",
+        "ts-node": "^3.3.0",
+        "typescript": "^2.4.2"
     },
     "bin": {
         "kalama": "./kalama.js"
