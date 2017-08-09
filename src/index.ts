@@ -1,14 +1,9 @@
-import { search, getArtistAlbumsList } from './api';
+import { search, getArtistAlbumsList, Album, ItemType } from './api';
+import { askSearchTerm, chooseFromSearchResults } from './inquirer-ui';
 
-const main = () => {
-    getArtistAlbumsList({
-        url: 'https://myzuka.me/Artist/142/Muse'
-    }).then((result)=>{
-        console.log(result);
-    })
-    // search('muse').then((result)=>{
-    //     console.log(result);
-    // })
+const main = async () => {
+    const searchResultItem = await askSearchTerm();
+    console.log(searchResultItem);
 };
 
 main();

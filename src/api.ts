@@ -6,7 +6,7 @@ const SERVER_ROOT = 'https://myzuka.me';
 const PLAYER = 'vlc';
 const NEW_SEARCH = 'NEW_SEARCH';
 
-enum ItemType {
+export enum ItemType {
     Artist,
     Album,
     Song
@@ -33,25 +33,30 @@ interface Resource {
 }
 
 interface Item extends Resource {
-    id: string;
+    id?: string;
     label: string;
     image?: string;
-    type: string;
+    type?: string;
 }
 
-interface SearchResultItem extends Item {
+export interface SearchResultItem extends Item {
     itemType: ItemType;
 }
 
-interface Artist extends SearchResultItem {}
-
-interface Album extends SearchResultItem {
-    albumCategory?: AlbumCategory
+export interface Artist extends SearchResultItem {
+    itemType: ItemType.Artist;
 }
 
-interface Song extends SearchResultItem {}
+export interface Album extends SearchResultItem {
+    albumCategory?: AlbumCategory;
+    itemType: ItemType.Album;
+}
 
-interface SearchResult {
+export interface Song extends SearchResultItem {
+    itemType: ItemType.Song;
+}
+
+export interface SearchResult {
     artists: Array<Artist>;
     albums: Array<Album>;
     songs: Array<Song>;
@@ -74,7 +79,14 @@ const decodeItem = (item: Item): SearchResultItem => {
     };
 };
 
-export const search = async (term: string): Promise<SearchResult> => {
+export const search = async (term: string | null): Promise<SearchResult> => {
+    if (term === null) {
+        return {
+            artists: [],
+            albums: [],
+            songs: []
+        };
+    }
     const res = await fetch(
         `${SERVER_ROOT}/Search/Suggestions?term=${encodeURIComponent(term)}`,
         {
