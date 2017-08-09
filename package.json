@@ -1,6 +1,6 @@
 {
     "name": "kalama",
-    "version": "0.1.1",
+    "version": "0.1.2",
     "main": "index.js",
     "license": "MIT",
     "scripts": {
@@ -9,7 +9,11 @@
         "once": "ts-node ./src/index.ts",
         "compile": "tsc -p tsconfig.json"
     },
-    "files": ["dist", "src", "kalama.js"],
+    "files": [
+        "dist",
+        "src",
+        "kalama.js"
+    ],
     "devDependencies": {
         "@types/node": "^8.0.20",
         "nodemon": "^1.11.0",
