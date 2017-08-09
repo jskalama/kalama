@@ -12,7 +12,7 @@ export enum ItemType {
     Song
 }
 
-enum AlbumCategory {
+export enum AlbumCategory {
     StudioAlbum = 2,
     EP = 3,
     Single = 4,
@@ -28,7 +28,7 @@ enum AlbumCategory {
     Other = 1
 }
 
-interface Resource {
+export interface Resource {
     url: string;
 }
 
@@ -37,7 +37,7 @@ export interface Track extends Resource {
     title: string;
 }
 
-interface Item extends Resource {
+export interface Item extends Resource {
     id?: string;
     label: string;
     image?: string;

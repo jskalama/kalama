@@ -6,7 +6,8 @@
     "scripts": {
         "start": "npm run live",
         "live": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/index.ts",
-        "once": "ts-node ./src/index.ts"
+        "once": "ts-node ./src/index.ts",
+        "compile": "tsc -p tsconfig.json"
     },
     "files": [
         "build",
