@@ -9,22 +9,20 @@
         "once": "ts-node ./src/index.ts",
         "compile": "tsc -p tsconfig.json"
     },
-    "files": [
-        "dist",
-        "src",
-        "kalama.js"
-    ],
-    "dependencies": {
+    "files": ["dist", "src", "kalama.js"],
+    "devDependencies": {
         "@types/node": "^8.0.20",
+        "nodemon": "^1.11.0",
+        "ts-node": "^3.3.0",
+        "typescript": "^2.4.2"
+    },
+    "dependencies": {
         "cheerio": "^0.22.0",
         "child-process-promise": "^2.2.0",
         "inquirer": "^3.0.2",
         "inquirer-autocomplete-prompt": "^0.11.0",
         "node-fetch": "^1.6.3",
-        "nodemon": "^1.11.0",
-        "q-io": "^1.13.2",
-        "ts-node": "^3.3.0",
-        "typescript": "^2.4.2"
+        "q-io": "^1.13.2"
     },
     "bin": {
         "kalama": "./kalama.js"
