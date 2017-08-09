@@ -10,7 +10,7 @@
         "compile": "tsc -p tsconfig.json"
     },
     "files": [
-        "build",
+        "dist",
         "src",
         "kalama.js"
     ],
