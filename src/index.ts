@@ -1,9 +1,11 @@
-import { search, getArtistAlbumsList, Album, ItemType } from './api';
+import { search, getArtistAlbumsList, getTracksList, Album, ItemType } from './api';
 import { askSearchTerm, chooseFromSearchResults } from './inquirer-ui';
+import {playTracks} from './cli-player';
 
 const main = async () => {
     const searchResultItem = await askSearchTerm();
-    console.log(searchResultItem);
+    const tracksList = await getTracksList(searchResultItem);
+    await playTracks(tracksList);
 };
 
 main();

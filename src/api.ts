@@ -32,6 +32,11 @@ interface Resource {
     url: string;
 }
 
+export interface Track extends Resource {
+    url: string;
+    title: string;
+}
+
 interface Item extends Resource {
     id?: string;
     label: string;
@@ -101,15 +106,39 @@ export const search = async (term: string | null): Promise<SearchResult> => {
     };
 };
 
-export const getArtistAlbumsList = async (artist: Resource): Promise<any> => {
+export const getArtistAlbumsList = async (
+    artist: Resource
+): Promise<Array<Album>> => {
     const url = artist.url;
     const albumsUrl = `${url}/Albums`;
     const queryResult = await fetch(albumsUrl, {
         headers: { referer: SERVER_ROOT }
     });
     const htmlText: string = await queryResult.text();
-    console.log(htmlText);
     return parseAlbumsListHtml(htmlText);
+};
+
+export const getTracksList = async (
+    resource: Resource
+): Promise<Array<Track>> => {
+    const url = resource.url;
+    const queryResult = await fetch(url, {
+        headers: { referer: SERVER_ROOT }
+    });
+    const htmlText: string = await queryResult.text();
+    return parseTracksListHtml(htmlText);
+};
+
+const parseTracksListHtml = (htmlText: string): Array<Track> => {
+    const $ = cheerio.load(htmlText);
+    const nodes = $('.play [data-url]');
+    return nodes
+        .map((i, node) => ({
+            url: $(node).attr('data-url'),
+            title: $(node).attr('data-title')
+        }))
+        .get()
+        .map(({ url, title }) => ({ url: normalizeUrl(url), title }));
 };
 
 const parseAlbumsListHtml = (htmlText: string): Array<Album> => {

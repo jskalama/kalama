@@ -4,9 +4,9 @@
     "main": "index.js",
     "license": "MIT",
     "scripts": {
-        "start": "npm run build:live",
-        "build:live": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/index.ts",
-        "build:once": "ts-node ./src/index.ts"
+        "start": "npm run live",
+        "live": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/index.ts",
+        "once": "ts-node ./src/index.ts"
     },
     "files": [
         "build",
@@ -14,6 +14,7 @@
         "kalama.js"
     ],
     "dependencies": {
+        "@types/node": "^8.0.20",
         "cheerio": "^0.22.0",
         "child-process-promise": "^2.2.0",
         "inquirer": "^3.0.2",
