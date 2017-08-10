@@ -5,7 +5,11 @@ import {
     Album,
     ItemType
 } from './api';
-import { askSearchTerm, chooseFromSearchResults } from './inquirer-ui';
+import {
+    askSearchTerm,
+    chooseFromSearchResults,
+    chooseFromAlbums
+} from './inquirer-ui';
 import { playTracks } from './cli-player';
 import { downloadTracks } from './downloader';
 import yargs = require('yargs');
@@ -18,7 +22,14 @@ const download = async (directory: string) => {
 
 const play = async () => {
     const searchResultItem = await askSearchTerm();
-    const tracksList = await getTracksList(searchResultItem);
+    let selectedItem;
+    if (searchResultItem.itemType === ItemType.Artist) {
+        const artistAlbumsList = await getArtistAlbumsList(searchResultItem);
+        selectedItem = await chooseFromAlbums(artistAlbumsList);
+    } else {
+        selectedItem = searchResultItem;
+    }
+    const tracksList = await getTracksList(selectedItem);
     await playTracks(tracksList);
 };
 
