@@ -1,6 +1,14 @@
+import _ = require('lodash');
 import inquirer = require('inquirer');
 import autocomplete = require('inquirer-autocomplete-prompt');
-import { search, SearchResult, SearchResultItem, ItemType } from './api';
+import {
+    search,
+    SearchResult,
+    SearchResultItem,
+    ItemType,
+    Album,
+    AlbumCategory
+} from './api';
 
 inquirer.registerPrompt('autocomplete', autocomplete);
 
@@ -39,9 +47,55 @@ const searchResultToChoices = (searchResult: SearchResult) => {
     };
 };
 
+const categoryOrder = [
+    AlbumCategory.StudioAlbum,
+    AlbumCategory.EP,
+    AlbumCategory.Single,
+    AlbumCategory.ArtistCollection,
+    AlbumCategory.Demo,
+    AlbumCategory.Live,
+    AlbumCategory.Bootleg,
+    AlbumCategory.SoundTrack,
+    AlbumCategory.Mixtape,
+    AlbumCategory.DJMix,
+    AlbumCategory.VariousCollection,
+    AlbumCategory.FanCollection,
+    AlbumCategory.Other
+];
+
+const sortAlbumsByCategory = (albums: Array<Album>): Array<Album> => {
+    const byCat = _(albums).groupBy('albumCategory').value();
+    const sortedAlbums = <Array<Album>>_(categoryOrder)
+        .map(cat => byCat[cat])
+        .flatten(false)
+        .filter(_.identity)
+        .value();
+    return sortedAlbums;
+};
+
+const albumsToChoices = (albums: Array<Album>) => {
+    const albumsChoices = sortAlbumsByCategory(albums).map(item => ({
+        name: `[${AlbumCategory[item.albumCategory]}] ${item.label}`,
+        value: item
+    }));
+
+    return {
+        message: 'Select album',
+        type: 'list',
+        name: 'result',
+        choices: albumsChoices
+    };
+};
+
 export const chooseFromSearchResults = async (
     searchResult: SearchResult
 ): Promise<SearchResultItem> => {
     return (await inquirer.prompt([searchResultToChoices(searchResult)]))
         .result;
+};
+
+export const chooseFromAlbums = async (
+    albums: Array<Album>
+): Promise<SearchResultItem> => {
+    return (await inquirer.prompt([albumsToChoices(albums)])).result;
 };
