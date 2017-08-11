@@ -3,7 +3,8 @@ import {
     getArtistAlbumsList,
     getTracksList,
     Album,
-    ItemType
+    ItemType,
+    Track
 } from './api';
 import {
     askSearchTerm,
@@ -14,13 +15,7 @@ import { playTracks } from './cli-player';
 import { downloadTracks } from './downloader';
 import yargs = require('yargs');
 
-const download = async (directory: string) => {
-    const searchResultItem = await askSearchTerm();
-    const tracksList = await getTracksList(searchResultItem);
-    await downloadTracks(directory, tracksList);
-};
-
-const play = async () => {
+const getTracksListInteractively = async (): Promise<Array<Track>> => {
     const searchResultItem = await askSearchTerm();
     let selectedItem;
     if (searchResultItem.itemType === ItemType.Artist) {
@@ -29,7 +24,16 @@ const play = async () => {
     } else {
         selectedItem = searchResultItem;
     }
-    const tracksList = await getTracksList(selectedItem);
+    return getTracksList(selectedItem);
+}
+
+const download = async (directory: string) => {
+    const tracksList = await getTracksListInteractively();
+    await downloadTracks(directory, tracksList);
+};
+
+const play = async () => {
+    const tracksList = await getTracksListInteractively();
     await playTracks(tracksList);
 };
 
