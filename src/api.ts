@@ -1,6 +1,5 @@
 import fetch from 'node-fetch';
-// import cheerio from 'cheerio';
-import cheerio = require('cheerio');
+import { load as loadHtml } from 'cheerio';
 import { equal } from 'assert';
 
 const SERVER_ROOT = 'https://myzuka.me';
@@ -91,6 +90,7 @@ export const search = async (term: string | null): Promise<SearchResult> => {
             songs: []
         };
     }
+
     const res = await fetch(
         `${SERVER_ROOT}/Search/Suggestions?term=${encodeURIComponent(term)}`,
         {
@@ -130,7 +130,7 @@ export const getTracksList = async (
 };
 
 const parseTracksListHtml = (htmlText: string): Array<Track> => {
-    const $ = cheerio.load(htmlText);
+    const $ = loadHtml(htmlText);
     const nodes = $('.play [data-url]');
     return nodes
         .map((i, node) => ({
@@ -142,7 +142,7 @@ const parseTracksListHtml = (htmlText: string): Array<Track> => {
 };
 
 const parseAlbumsListHtml = (htmlText: string): Array<Album> => {
-    const $ = cheerio.load(htmlText);
+    const $ = loadHtml(htmlText);
     const albumNodes = $('.album-list > .item');
     return albumNodes
         .map((i, node) => ({

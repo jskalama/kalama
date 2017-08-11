@@ -19,10 +19,12 @@
         "@types/node": "^8.0.20",
         "nodemon": "^1.11.0",
         "ts-node": "^3.3.0",
-        "typescript": "^2.4.2"
+        "typescript": "^2.4.2",
+        "@types/cheerio": "^0.22.2",
+        "@types/lodash": "^4.14.72",
+        "@types/node-fetch": "^1.6.7"
     },
     "dependencies": {
-        "@types/lodash": "^4.14.72",
         "cheerio": "^0.22.0",
         "child-process-promise": "^2.2.0",
         "download": "^6.2.5",
