@@ -12,9 +12,18 @@ npm -g install kalama
 
 ### Usage:
 
+Search and play music:
+
 ```
 kalama
 ```
+
+Search and download music:
+
+```
+kalama get ~/Music/folder-to-download
+```
+
 
 ### Demo:
 
