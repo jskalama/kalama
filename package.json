@@ -7,7 +7,8 @@
         "start": "npm run live",
         "live": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/index.ts",
         "once": "ts-node ./src/cli.ts $*",
-        "compile": "tsc -p tsconfig.json"
+        "compile": "tsc -p tsconfig.json",
+        "prepare": "npm run compile"
     },
     "files": [
         "dist",
