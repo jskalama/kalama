@@ -1,10 +1,9 @@
 import fetch from 'node-fetch';
 // import cheerio from 'cheerio';
 import cheerio = require('cheerio');
+import { equal } from 'assert';
 
 const SERVER_ROOT = 'https://myzuka.me';
-const PLAYER = 'vlc';
-const NEW_SEARCH = 'NEW_SEARCH';
 
 export enum ItemType {
     Artist,
@@ -126,7 +125,8 @@ export const getTracksList = async (
         headers: { referer: SERVER_ROOT }
     });
     const htmlText: string = await queryResult.text();
-    return parseTracksListHtml(htmlText);
+    const tracks = parseTracksListHtml(htmlText);
+    return Promise.all(tracks.map(resolveRedirectedTrack));
 };
 
 const parseTracksListHtml = (htmlText: string): Array<Track> => {
@@ -157,4 +157,16 @@ const parseAlbumsListHtml = (htmlText: string): Array<Album> => {
             url: normalizeUrl(item.url),
             image: normalizeUrl(item.image)
         }));
+};
+
+export const resolveRedirectedTrack = async (
+    resource: Track
+): Promise<Track> => {
+    const response = await fetch(resource.url, {
+        method: 'HEAD',
+        redirect: 'manual'
+    });
+    const location = response.headers.get('Location');
+    equal(response.status, 302, 'Resource should be redirected');
+    return { ...resource, url: location };
 };
