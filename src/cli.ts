@@ -15,6 +15,8 @@ import { playTracks, savePlaylistFile } from './cli-player';
 import { downloadTracks } from './downloader';
 import yargs = require('yargs');
 import Configstore = require('configstore');
+import { dir } from 'tmp-promise';
+import {startContentServer} from './server'
 
 interface Configuration {
     player: string | undefined;
@@ -51,6 +53,13 @@ const play = async (conf: Configuration) => {
     await playTracks(conf.player, tracksList);
 };
 
+const share = async (conf: Configuration) => {
+    const tracksList = await getTracksListInteractively();
+    const { path } = await dir({ unsafeCleanup: true });
+    await downloadTracks(path, tracksList);
+    startContentServer(path);
+};
+
 const main = async () => {
     const configstore = new Configstore('kalama', defaultConfig);
     const conf = <Configuration>configstore.all;
@@ -78,6 +87,14 @@ const main = async () => {
             () => {},
             argv => {
                 play(conf);
+            }
+        )
+        .command(
+            ['share', 'qr'],
+            'Share a QR code to your mobile phone',
+            () => {},
+            argv => {
+                share(conf);
             }
         )
         .help().argv;
