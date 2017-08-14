@@ -1,5 +1,5 @@
 import fetch from 'node-fetch';
-import { load as loadHtml } from 'cheerio';
+import cheerio = require('cheerio');
 import { equal } from 'assert';
 
 const SERVER_ROOT = 'https://myzuka.me';
@@ -118,19 +118,22 @@ export const getArtistAlbumsList = async (
 };
 
 export const getTracksList = async (
-    resource: Resource
+    resource: SearchResultItem
 ): Promise<Array<Track>> => {
     const url = resource.url;
     const queryResult = await fetch(url, {
         headers: { referer: SERVER_ROOT }
     });
     const htmlText: string = await queryResult.text();
-    const tracks = parseTracksListHtml(htmlText);
+    let tracks = parseTracksListHtml(htmlText);
+    if (resource.itemType === ItemType.Song) {
+        tracks = tracks.slice(0, 1);
+    }
     return Promise.all(tracks.map(resolveRedirectedTrack));
 };
 
 const parseTracksListHtml = (htmlText: string): Array<Track> => {
-    const $ = loadHtml(htmlText);
+    const $ = cheerio.load(htmlText);
     const nodes = $('.play [data-url]');
     return nodes
         .map((i, node) => ({
@@ -138,11 +141,14 @@ const parseTracksListHtml = (htmlText: string): Array<Track> => {
             title: $(node).attr('data-title')
         }))
         .get()
-        .map(({ url, title }) => ({ url: normalizeUrl(url), title }));
+        .map(({ url, title }) => ({
+            url: normalizeUrl(url),
+            title
+        }));
 };
 
 const parseAlbumsListHtml = (htmlText: string): Array<Album> => {
-    const $ = loadHtml(htmlText);
+    const $ = cheerio.load(htmlText);
     const albumNodes = $('.album-list > .item');
     return albumNodes
         .map((i, node) => ({
