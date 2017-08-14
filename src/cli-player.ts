@@ -5,6 +5,7 @@ import { exec } from 'child-process-promise';
 import { Track } from './api';
 
 const tracksToM3U = (tracks: Array<Track>): string => {
+    //TODO: prevent injection!!!!
     return (
         '#EXTM3U\n' +
         tracks.map(({ url, title }) => `#EXTINF:0,${title}\n${url}`).join('\n')
@@ -20,7 +21,7 @@ const getTmpPlaylistFile = (): string => {
 
 const makePlaylistFile = async (tracks: Array<Track>): Promise<string> => {
     const fileName = getTmpPlaylistFile();
-    await savePlaylistFile(tracks, getTmpPlaylistFile());
+    await savePlaylistFile(tracks, fileName);
     return fileName;
 };
 

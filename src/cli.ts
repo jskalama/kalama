@@ -4,7 +4,8 @@ import {
     getTracksList,
     Album,
     ItemType,
-    Track
+    Track,
+    SearchResultItem
 } from './api';
 import {
     askSearchTerm,
@@ -15,40 +16,66 @@ import { playTracks, savePlaylistFile } from './cli-player';
 import { downloadTracks } from './downloader';
 import yargs = require('yargs');
 import Configstore = require('configstore');
+import { dir as createTempDir } from 'tmp-promise';
+import { startContentServer } from './server';
+import { createArchive } from './archiver';
+import sanitize = require('sanitize-filename');
 
 interface Configuration {
     player: string | undefined;
+}
+
+interface TrackListWithTitle {
+    tracks: Array<Track>;
+    title: string;
 }
 
 const defaultConfig: Configuration = {
     player: 'vlc %'
 };
 
-const getTracksListInteractively = async (): Promise<Array<Track>> => {
+const getTracksListInteractively = async (): Promise<TrackListWithTitle> => {
     const searchResultItem = await askSearchTerm();
-    let selectedItem;
+    let selectedItem: SearchResultItem;
     if (searchResultItem.itemType === ItemType.Artist) {
         const artistAlbumsList = await getArtistAlbumsList(searchResultItem);
         selectedItem = await chooseFromAlbums(artistAlbumsList);
     } else {
         selectedItem = searchResultItem;
     }
-    return getTracksList(selectedItem);
+    const tracksList = await getTracksList(selectedItem);
+    return {
+        tracks: tracksList,
+        title: selectedItem.label
+    };
 };
 
 const download = async (conf: Configuration, directory: string) => {
     const tracksList = await getTracksListInteractively();
-    await downloadTracks(directory, tracksList);
+    await downloadTracks(directory, tracksList.tracks);
 };
 
 const playlist = async (conf: Configuration, file: string) => {
     const tracksList = await getTracksListInteractively();
-    await savePlaylistFile(tracksList, file);
+    await savePlaylistFile(tracksList.tracks, file);
 };
 
 const play = async (conf: Configuration) => {
     const tracksList = await getTracksListInteractively();
-    await playTracks(conf.player, tracksList);
+    // console.log(tracksList)
+    await playTracks(conf.player, tracksList.tracks);
+};
+
+const share = async (conf: Configuration) => {
+    const tracksList = await getTracksListInteractively();
+    const { path: tmpDir } = await createTempDir({ unsafeCleanup: true });
+    const tracksDir = `${tmpDir}/tracks`; //use path.join
+    const safeTitle = sanitize(tracksList.title);
+    const archiveFile = `${tmpDir}/${safeTitle}.zip`; //use path.join
+    await downloadTracks(tracksDir, tracksList.tracks);
+    console.log(`Creating archive: ${archiveFile}`);
+    await createArchive(tracksDir, archiveFile);
+    startContentServer(tmpDir);
 };
 
 const main = async () => {
@@ -78,6 +105,14 @@ const main = async () => {
             () => {},
             argv => {
                 play(conf);
+            }
+        )
+        .command(
+            ['share', 'qr'],
+            'Share a QR code to your mobile phone',
+            () => {},
+            argv => {
+                share(conf);
             }
         )
         .help().argv;
