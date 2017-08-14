@@ -16,13 +16,12 @@
         "kalama.js"
     ],
     "devDependencies": {
+        "@types/lodash": "^4.14.72",
         "@types/node": "^8.0.20",
+        "@types/node-fetch": "^1.6.7",
         "nodemon": "^1.11.0",
         "ts-node": "^3.3.0",
-        "typescript": "^2.4.2",
-        "@types/cheerio": "^0.22.2",
-        "@types/lodash": "^4.14.72",
-        "@types/node-fetch": "^1.6.7"
+        "typescript": "^2.4.2"
     },
     "dependencies": {
         "cheerio": "^0.22.0",
