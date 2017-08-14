@@ -14,6 +14,15 @@ import {
 import { playTracks } from './cli-player';
 import { downloadTracks } from './downloader';
 import yargs = require('yargs');
+import Configstore = require('configstore');
+
+interface Configuration {
+    player: string | undefined;
+}
+
+const defaultConfig: Configuration = {
+    player: 'vlc %'
+};
 
 const getTracksListInteractively = async (): Promise<Array<Track>> => {
     const searchResultItem = await askSearchTerm();
@@ -25,26 +34,30 @@ const getTracksListInteractively = async (): Promise<Array<Track>> => {
         selectedItem = searchResultItem;
     }
     return getTracksList(selectedItem);
-}
+};
 
-const download = async (directory: string) => {
+const download = async (conf: Configuration, directory: string) => {
     const tracksList = await getTracksListInteractively();
     await downloadTracks(directory, tracksList);
 };
 
-const play = async () => {
+const play = async (conf: Configuration) => {
     const tracksList = await getTracksListInteractively();
-    await playTracks(tracksList);
+    await playTracks(conf.player, tracksList);
 };
 
 const main = async () => {
+    const configstore = new Configstore('kalama', defaultConfig);
+    const conf = <Configuration>configstore.all;
+    console.log(conf);
+
     yargs
         .command(
             'get <directory>',
             'Download',
             () => {},
             ({ directory }) => {
-                download(directory);
+                download(conf, directory);
             }
         )
         .command(
@@ -52,7 +65,7 @@ const main = async () => {
             'Play',
             () => {},
             argv => {
-                play();
+                play(conf);
             }
         )
         .help().argv;
