@@ -4,8 +4,6 @@ import { join } from 'path';
 import { exec } from 'child-process-promise';
 import { Track } from './api';
 
-const PLAYER = 'vlc';
-
 const tracksToM3U = (tracks: Array<Track>): string => {
     return (
         '#EXTM3U\n' +
@@ -22,7 +20,19 @@ const makePlaylistFile = async (tracks: Array<Track>): Promise<string> => {
     return fileName;
 };
 
-export const playTracks = async (tracks: Array<Track>): Promise<void> => {
+const getPlayerCommandFromTemplate = (
+    commandTemplate: string,
+    file: string
+): string => {
+    return commandTemplate.replace(/%/g, file);
+};
+
+export const playTracks = async (
+    player: string,
+    tracks: Array<Track>
+): Promise<void> => {
     const playlistFileName = await makePlaylistFile(tracks);
-    await exec(`${PLAYER} ${playlistFileName}`);
+    await exec(
+        getPlayerCommandFromTemplate(player, playlistFileName)
+    );
 };
