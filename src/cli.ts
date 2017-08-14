@@ -11,7 +11,7 @@ import {
     chooseFromSearchResults,
     chooseFromAlbums
 } from './inquirer-ui';
-import { playTracks } from './cli-player';
+import { playTracks, savePlaylistFile } from './cli-player';
 import { downloadTracks } from './downloader';
 import yargs = require('yargs');
 import Configstore = require('configstore');
@@ -41,6 +41,11 @@ const download = async (conf: Configuration, directory: string) => {
     await downloadTracks(directory, tracksList);
 };
 
+const playlist = async (conf: Configuration, file: string) => {
+    const tracksList = await getTracksListInteractively();
+    await savePlaylistFile(tracksList, file);
+};
+
 const play = async (conf: Configuration) => {
     const tracksList = await getTracksListInteractively();
     await playTracks(conf.player, tracksList);
@@ -49,15 +54,22 @@ const play = async (conf: Configuration) => {
 const main = async () => {
     const configstore = new Configstore('kalama', defaultConfig);
     const conf = <Configuration>configstore.all;
-    console.log(conf);
 
     yargs
         .command(
             'get <directory>',
-            'Download',
+            'Download tracks to the directory',
             () => {},
             ({ directory }) => {
                 download(conf, directory);
+            }
+        )
+        .command(
+            'playlist <file>',
+            'Save playlist file as M3U file',
+            () => {},
+            ({ file }) => {
+                playlist(conf, file);
             }
         )
         .command(
