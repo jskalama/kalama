@@ -11,13 +11,24 @@ const tracksToM3U = (tracks: Array<Track>): string => {
     );
 };
 
-const makePlaylistFile = async (tracks: Array<Track>): Promise<string> => {
-    const fileName = join(
+const getTmpPlaylistFile = (): string => {
+    return join(
         tmpdir(),
         Math.floor(Math.random() * 1e6).toString(36) + '.m3u'
     );
-    await fs.write(fileName, tracksToM3U(tracks));
+};
+
+const makePlaylistFile = async (tracks: Array<Track>): Promise<string> => {
+    const fileName = getTmpPlaylistFile();
+    await savePlaylistFile(tracks, getTmpPlaylistFile());
     return fileName;
+};
+
+export const savePlaylistFile = async (
+    tracks: Array<Track>,
+    fileName: string
+): Promise<void> => {
+    await fs.write(fileName, tracksToM3U(tracks));
 };
 
 const getPlayerCommandFromTemplate = (
@@ -32,7 +43,5 @@ export const playTracks = async (
     tracks: Array<Track>
 ): Promise<void> => {
     const playlistFileName = await makePlaylistFile(tracks);
-    await exec(
-        getPlayerCommandFromTemplate(player, playlistFileName)
-    );
+    await exec(getPlayerCommandFromTemplate(player, playlistFileName));
 };
