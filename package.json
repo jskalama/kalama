@@ -16,9 +16,13 @@
         "kalama.js"
     ],
     "devDependencies": {
+        "@types/chai": "^4.0.4",
         "@types/lodash": "^4.14.72",
+        "@types/mocha": "^2.2.43",
         "@types/node": "^8.0.20",
         "@types/node-fetch": "^1.6.7",
+        "chai": "^4.1.2",
+        "mocha": "^4.0.0",
         "nodemon": "^1.11.0",
         "ts-node": "^3.3.0",
         "typescript": "^2.4.2"
@@ -34,6 +38,7 @@
         "inquirer": "^3.0.2",
         "inquirer-autocomplete-prompt": "^0.11.0",
         "ip": "^1.1.5",
+        "kalama-api": "^0.5.1",
         "lodash": "^4.17.4",
         "node-fetch": "^1.6.3",
         "q-io": "^1.13.2",

@@ -8,7 +8,7 @@ import {
     ItemType,
     Album,
     AlbumCategory
-} from './api';
+} from 'kalama-api';
 
 inquirer.registerPrompt('autocomplete', autocomplete);
 

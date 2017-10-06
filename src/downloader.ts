@@ -1,5 +1,5 @@
 import download = require('download');
-import { Track } from './api';
+import { Track } from 'kalama-api';
 
 export const downloadTracks = async (
     dir: string,

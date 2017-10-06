@@ -6,7 +6,7 @@ import {
     ItemType,
     Track,
     SearchResultItem
-} from './api';
+} from 'kalama-api';
 import {
     askSearchTerm,
     chooseFromSearchResults,

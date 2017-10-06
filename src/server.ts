@@ -1,4 +1,4 @@
-import { Track } from './api';
+import { Track } from 'kalama-api';
 import serve = require('serve');
 import ip = require('ip');
 import getPort = require('get-port');

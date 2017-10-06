@@ -2,7 +2,7 @@ import fs = require('q-io/fs');
 import { tmpdir } from 'os';
 import { join } from 'path';
 import { exec } from 'child-process-promise';
-import { Track } from './api';
+import { Track } from 'kalama-api';
 
 const tracksToM3U = (tracks: Array<Track>): string => {
     //TODO: prevent injection!!!!
