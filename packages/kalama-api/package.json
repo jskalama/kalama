@@ -1,0 +1,34 @@
+{
+    "name": "kalama-api",
+    "version": "0.6.1",
+    "main": "dist/api.js",
+    "license": "MIT",
+    "scripts": {
+        "compile": "tsc -p tsconfig.json",
+        "prepare": "npm run compile",
+        "test": "mocha -r ts-node/register src/tests/**/*.spec.ts --timeout 10000"
+    },
+    "files": [
+        "dist",
+        "src"
+    ],
+    "devDependencies": {
+        "@types/chai": "^4.0.4",
+        "@types/mocha": "^2.2.43",
+        "@types/node": "^8.0.20",
+        "@types/node-fetch": "^1.6.7",
+        "chai": "^4.1.2",
+        "mocha": "^4.0.0",
+        "ts-node": "^3.3.0",
+        "typescript": "^2.4.2"
+    },
+    "dependencies": {
+        "@types/configstore": "^2.1.1",
+        "cheerio": "^0.22.0",
+        "node-fetch": "^1.6.3"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/jskalama/kalama-api"
+    }
+}
