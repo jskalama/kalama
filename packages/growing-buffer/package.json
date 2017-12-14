@@ -1,0 +1,24 @@
+{
+    "name": "growing-buffer",
+    "version": "0.0.1",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "compile": "tsc -p tsconfig.json",
+        "prepare": "npm run compile",
+        "test":
+            "mocha -r ts-node/register src/tests/**/*.spec.ts --timeout 10000",
+        "once": "ts-node ./src/playground.ts $*"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/chai": "^4.0.4",
+        "@types/mocha": "^2.2.43",
+        "@types/node": "^8.0.20",
+        "chai": "^4.1.2",
+        "mocha": "^4.0.0",
+        "ts-node": "^3.3.0",
+        "typescript": "^2.4.2"
+    }
+}
