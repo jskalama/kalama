@@ -6,8 +6,7 @@
     "scripts": {
         "compile": "tsc -p tsconfig.json",
         "prepare": "npm run compile",
-        "test":
-            "mocha -r ts-node/register src/tests/**/*.spec.ts --timeout 10000",
+        "test": "mocha -r ts-node/register src/tests/**/*.spec.ts --timeout 10000",
         "once": "ts-node ./src/playground.ts $*"
     },
     "author": "",
@@ -20,5 +19,9 @@
         "mocha": "^4.0.0",
         "ts-node": "^3.3.0",
         "typescript": "^2.4.2"
+    },
+    "dependencies": {
+        "@types/lodash": "^4.14.91",
+        "lodash": "^4.17.4"
     }
 }

@@ -1,3 +1,5 @@
+import log2 from './log2';
+
 export interface GrowingBufferOptions {
     initialSize: number;
 }
@@ -73,8 +75,9 @@ export class OffsetCalculatorExponential {
         initialSize: number,
         offset: number
     ): InternalReference {
-        const bufferIndex = Math.floor(Math.log2(offset / initialSize)) + 1;
-        const localOffset =
+        let normOffset = offset / initialSize;
+        const bufferIndex = normOffset < 1 ? 0 : log2(normOffset) + 1;
+        const localOffset = normOffset < 1 ? offset :
             offset - (Math.pow(2, bufferIndex) - 1) * initialSize;
         return { bufferIndex, localOffset };
     }
