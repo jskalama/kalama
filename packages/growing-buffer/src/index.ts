@@ -1,4 +1,4 @@
-import log2 from './log2';
+import IntLog2 from './IntLog2';
 
 export interface GrowingBufferOptions {
     initialSize: number;
@@ -10,14 +10,9 @@ export interface InternalReference {
 }
 
 export interface IOffsetCalculator {
-    externalToInternal(initialSize: number, offset: number): InternalReference;
-
-    internalToExternal(
-        initialSize: number,
-        { bufferIndex, localOffset }: InternalReference
-    ): number;
-
-    bufferLength(initialSize: number, bufferIndex: number): number;
+    externalToInternal(offset: number): InternalReference;
+    internalToExternal({ bufferIndex, localOffset }: InternalReference): number;
+    bufferLength(bufferIndex: number): number;
 }
 
 export class GrowingBuffer {
@@ -34,10 +29,7 @@ export class GrowingBuffer {
     // }
 
     public allocate(offset: number) {
-        const { bufferIndex } = this.calc.externalToInternal(
-            this.initialSize,
-            offset
-        );
+        const { bufferIndex } = this.calc.externalToInternal(offset);
 
         if (bufferIndex < this.buffers.length) {
             return;
@@ -49,16 +41,13 @@ export class GrowingBuffer {
     }
 
     protected allocateNext() {
-        const bufLen = this.calc.bufferLength(
-            this.initialSize,
-            this.buffers.length
-        );
+        const bufLen = this.calc.bufferLength(this.buffers.length);
         this.buffers.push(new ArrayBuffer(bufLen));
     }
 
     constructor(options: GrowingBufferOptions) {
         this.initialSize = options.initialSize;
-        this.calc = OffsetCalculatorExponential;
+        this.calc = new OffsetCalculatorExponential(this.initialSize);
         this.buffers = [];
     }
 
@@ -71,30 +60,33 @@ export class GrowingBuffer {
 }
 
 export class OffsetCalculatorExponential {
-    public static externalToInternal(
-        initialSize: number,
-        offset: number
-    ): InternalReference {
-        let normOffset = offset / initialSize;
-        const bufferIndex = normOffset < 1 ? 0 : log2(normOffset) + 1;
-        const localOffset = normOffset < 1 ? offset :
-            offset - (Math.pow(2, bufferIndex) - 1) * initialSize;
+    private scale: number;
+    private intLog: IntLog2;
+
+    constructor(scale: number) {
+        this.scale = scale;
+        this.intLog = new IntLog2({ scale });
+    }
+
+    public externalToInternal(offset: number): InternalReference {
+        const { scale, intLog } = this;
+
+        const bufferIndex = intLog.scaledLog2(offset) + 1;
+        const localOffset = offset - (intLog.scaledPow2(bufferIndex) - scale);
+
         return { bufferIndex, localOffset };
     }
 
-    public static internalToExternal(
-        initialSize: number,
-        { bufferIndex, localOffset }: InternalReference
-    ): number {
-        const result =
-            (Math.pow(2, bufferIndex) - 1) * initialSize + localOffset;
-        return result;
+    public internalToExternal({
+        bufferIndex,
+        localOffset
+    }: InternalReference): number {
+        const { scale, intLog } = this;
+        return intLog.scaledPow2(bufferIndex) - scale + localOffset;
     }
 
-    public static bufferLength(
-        initialSize: number,
-        bufferIndex: number
-    ): number {
-        return Math.pow(2, bufferIndex) * initialSize;
+    public bufferLength(bufferIndex: number): number {
+        const { scale, intLog } = this;
+        return intLog.scaledPow2(bufferIndex);
     }
 }
