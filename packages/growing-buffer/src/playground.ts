@@ -24,7 +24,7 @@ mock.forEach(([bufferIndex, localOffset, externalOffset]) => {
     });
 });
 
-const b = new GrowingBuffer({ initialSize });
+const b = new GrowingBuffer({ initialSize, bufferConstructor: Uint8Array });
 
 b.allocate(72);
 console.log(b.getMetrics());
