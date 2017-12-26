@@ -4,47 +4,6 @@ import IntLog2 from '../IntLog2';
 import { range } from 'lodash';
 import OffsetCalculatorExponential from '../OffsetCalculator';
 
-describe('Growing Buffer', () => {
-    const initialSize = 10;
-
-    it('should allocate', () => {
-        const b = new GrowingBuffer({
-            initialSize,
-            bufferConstructor: Uint8Array
-        });
-
-        b.allocate(0);
-        expect(b.getMetrics()).to.deep.equal({
-            buffersCount: 1,
-            buffersSizes: [10]
-        });
-
-        b.allocate(72);
-        expect(b.getMetrics()).to.deep.equal({
-            buffersCount: 4,
-            buffersSizes: [10, 20, 40, 80]
-        });
-
-        b.allocate(1000);
-        expect(b.getMetrics()).to.deep.equal({
-            buffersCount: 7,
-            buffersSizes: [10, 20, 40, 80, 160, 320, 640]
-        });
-    });
-
-    it('should set and get', () => {
-        const limit = 40;
-
-        const b = new GrowingBuffer({
-            initialSize,
-            bufferConstructor: Uint8Array
-        });
-
-        range(0, limit).forEach(i => b.set(i, i % 256));
-        range(0, limit).forEach(i => expect(b.get(i)).to.equal(i % 256));
-    });
-});
-
 describe('IntLog2', () => {
     const scale = 10;
     it('should compute integer approximation of log2', () => {
@@ -80,7 +39,6 @@ describe('IntLog2', () => {
 
         expect(floatTime, 'performance').to.be.greaterThan(integerTime);
         expect(sum, 'errors').to.equal(0);
-
     });
 });
 
@@ -121,5 +79,46 @@ describe('OffsetCalculatorExponential', () => {
                 localOffset
             });
         });
+    });
+});
+
+describe('Growing Buffer', () => {
+    const initialSize = 10;
+
+    it('should allocate', () => {
+        const b = new GrowingBuffer({
+            initialSize,
+            bufferConstructor: Uint8Array
+        });
+
+        b.allocate(0);
+        expect(b.getMetrics()).to.deep.equal({
+            buffersCount: 1,
+            buffersSizes: [10]
+        });
+
+        b.allocate(72);
+        expect(b.getMetrics()).to.deep.equal({
+            buffersCount: 4,
+            buffersSizes: [10, 20, 40, 80]
+        });
+
+        b.allocate(1000);
+        expect(b.getMetrics()).to.deep.equal({
+            buffersCount: 7,
+            buffersSizes: [10, 20, 40, 80, 160, 320, 640]
+        });
+    });
+
+    it('should set and get', () => {
+        const limit = 40;
+
+        const b = new GrowingBuffer({
+            initialSize,
+            bufferConstructor: Uint8Array
+        });
+
+        range(0, limit).forEach(i => b.set(i, i % 256));
+        range(0, limit).forEach(i => expect(b.get(i)).to.equal(i % 256));
     });
 });
