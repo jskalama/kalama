@@ -22,8 +22,11 @@ export default class OffsetCalculatorExponential {
 
     public externalToInternal(offset: number): InternalReference {
         const { scale, intLog } = this;
-
-        const bufferIndex = intLog.scaledLog2(offset) + 1;
+        offset = offset | 0;
+        if (offset === 0) {
+            return { bufferIndex: 0, localOffset: 0 };
+        }
+        const bufferIndex = intLog.scaledLog2(offset);
         const localOffset = offset - (intLog.scaledPow2(bufferIndex) - scale);
 
         return { bufferIndex, localOffset };

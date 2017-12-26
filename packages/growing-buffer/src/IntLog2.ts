@@ -24,9 +24,9 @@ export default class IntLog2 {
     }
 
     scaledLog2(v: number) {
-        const { table } = this;
-        const index = sortedLastIndex(table, v);
-        const res = v < 1 ? -Infinity : index - 1;
+        const { table, scale } = this;
+        const index = sortedLastIndex(table, v + scale);
+        const res = index - 1;
         return res;
     }
 }

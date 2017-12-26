@@ -47,20 +47,21 @@ export default class GrowingBuffer {
         return this.buffers[bufferIndex][localOffset];
     }
 
-    // public set () : number {
+    public set(offset: number, data: number) {
+        const { bufferIndex, localOffset } = this.allocate(offset);
+        this.buffers[bufferIndex][localOffset] = data;
+    }
 
-    // }
+    public allocate(offset: number): InternalReference {
+        const { bufferIndex, localOffset } = this.calc.externalToInternal(
+            offset
+        );
 
-    public allocate(offset: number) {
-        const { bufferIndex } = this.calc.externalToInternal(offset);
-
-        if (bufferIndex < this.buffers.length) {
-            return;
-        }
-
-        for (let i = this.buffers.length; i < bufferIndex; i++) {
+        for (let i = this.buffers.length; i <= bufferIndex; i++) {
             this.allocateNext();
         }
+
+        return { bufferIndex, localOffset };
     }
 
     protected allocateNext() {
