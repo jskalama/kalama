@@ -6,7 +6,7 @@
     "scripts": {
         "compile": "tsc -p tsconfig.json",
         "prepare": "npm run compile",
-        "test": "mocha -r ts-node/register src/tests/**/*.spec.ts --timeout 10000",
+        "test": "mocha -r ts-node/register src/tests/**/*.spec.ts",
         "once": "ts-node ./src/playground.ts $*"
     },
     "author": "",
