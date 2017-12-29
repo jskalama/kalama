@@ -1,0 +1,31 @@
+{
+    "name": "kalama-player",
+    "version": "0.0.1",
+    "main": "index.js",
+    "scripts": {
+        "compile": "tsc -p tsconfig.json",
+        "prepare": "npm run compile",
+        "test": "mocha -r ts-node/register src/tests/**/*.spec.ts",
+        "once": "ts-node ./src/playground.ts $*"
+    },
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "@types/chai": "^4.0.4",
+        "@types/mocha": "^2.2.43",
+        "@types/node": "^8.0.20",
+        "chai": "^4.1.2",
+        "mocha": "^4.0.0",
+        "ts-node": "^3.3.0",
+        "typescript": "^2.4.2"
+    },
+    "dependencies": {
+        "@types/lodash": "^4.14.91",
+        "growing-buffer": "0.0.1",
+        "lame": "^1.2.4",
+        "lodash": "^4.17.4",
+        "q-io": "^1.13.4",
+        "speaker": "^0.4.0"
+    },
+    "description": ""
+}
