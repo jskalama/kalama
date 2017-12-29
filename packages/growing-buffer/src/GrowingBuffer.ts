@@ -3,6 +3,7 @@ import OffsetCalculatorExponential, {
     InternalReference,
     IOffsetCalculator
 } from './OffsetCalculator';
+import IIndexable from './IIndexable';
 
 export type TypedArrayConstructor =
     | typeof Int8Array
@@ -36,6 +37,25 @@ export default class GrowingBuffer {
     protected buffers: Array<TypedArray>;
     protected calc: IOffsetCalculator;
     protected bufferConstructor: TypedArrayConstructor;
+    protected _length: number = 0;
+
+    get length() {
+        return this._length;
+    }
+
+    //TODO: replace with immutable proxy
+    public slice(start: number, length: number) {
+        return makeSlice(this, start, length);
+        // const buf = new this.bufferConstructor(length);
+        // for (
+        //     let index = start, outIndex = 0;
+        //     outIndex < length;
+        //     index++, outIndex++
+        // ) {
+        //     buf[outIndex] = this.get(index);
+        // }
+        // return buf;
+    }
 
     public get(offset: number): number {
         const { bufferIndex, localOffset } = this.calc.externalToInternal(
@@ -50,6 +70,13 @@ export default class GrowingBuffer {
     public set(offset: number, data: number) {
         const { bufferIndex, localOffset } = this.allocate(offset);
         this.buffers[bufferIndex][localOffset] = data;
+        if (offset >= this._length) {
+            this._length = offset + 1;
+        }
+    }
+
+    public push(data: number) {
+        this.set(this._length, data);
     }
 
     public allocate(offset: number): InternalReference {
@@ -83,3 +110,25 @@ export default class GrowingBuffer {
         };
     }
 }
+
+const CODE_0 = '0'.charCodeAt(0);
+const CODE_9 = '9'.charCodeAt(0);
+
+const makeSlice = (
+    target: GrowingBuffer,
+    from: number,
+    length: number
+): IIndexable => {
+    return new Proxy<any>(target, {
+        get(target: GrowingBuffer, prop: string) {
+            const c = prop.charCodeAt(0);
+            if (c >= CODE_0 && c <= CODE_9) {
+                return target.get(parseInt(prop, 10) + from);
+            } else if (typeof prop === 'string' && prop === 'length') {
+                return length;
+            } else {
+                return undefined;
+            }
+        }
+    });
+};

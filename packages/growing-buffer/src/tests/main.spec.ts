@@ -121,4 +121,31 @@ describe('Growing Buffer', () => {
         range(0, limit).forEach(i => b.set(i, i % 256));
         range(0, limit).forEach(i => expect(b.get(i)).to.equal(i % 256));
     });
+
+    it('should create slices', () => {
+        const b = new GrowingBuffer({
+            initialSize,
+            bufferConstructor: Uint8Array
+        });
+        range(0, 100).forEach(i => b.push(i));
+        const s = b.slice(38, 3);
+        expect(s.length).to.equal(3);
+        expect(s[0]).to.equal(38);
+        expect(s[1]).to.equal(39);
+        expect(s[2]).to.equal(40);
+    });
+
+    it('should create buffers from slices', () => {
+        const b = new GrowingBuffer({
+            initialSize,
+            bufferConstructor: Uint8Array
+        });
+        range(0, 100).forEach(i => b.push(i));
+        const s = b.slice(38, 3);
+        const b1 = <Buffer>(<any>Buffer).from(s);
+        expect(b1.length).to.equal(3);
+        expect(b1[0]).to.equal(38);
+        expect(b1[1]).to.equal(39);
+        expect(b1[2]).to.equal(40);
+    });
 });
