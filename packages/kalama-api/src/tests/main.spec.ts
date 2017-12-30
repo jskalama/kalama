@@ -6,7 +6,7 @@ describe('search', () => {
     it('should return results', async () => {
         const { artists, albums, songs } = await search('asd');
         snapshot(artists);
-        snapshot(albums);
+        snapshot(albums[0]);
         snapshot(songs);
     });
 });

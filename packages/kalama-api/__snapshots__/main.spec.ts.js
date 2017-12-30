@@ -21,38 +21,16 @@ exports['search should return results 1'] = [
   }
 ]
 
-exports['search should return results 2'] = [
-  {
-    "id": "ASD",
-    "label": "A Skylit Drive - ASD (2015)",
-    "value": "ASD",
-    "category": "\u0410\u043B\u044C\u0431\u043E\u043C\u044B",
-    "image": "https://cs25.imyz.me/img/68/10156057/26476247.jpg",
-    "url": "https://myzuka.me/Album/653002/A-Skylit-Drive-Asd-2015",
-    "songcount": "11",
-    "itemType": 1
-  },
-  {
-    "id": "Sag Mir Wo Die Party Ist!",
-    "label": "ASD - Sag Mir Wo Die Party Ist! (2003)",
-    "value": "Sag Mir Wo Die Party Ist!",
-    "category": "\u0410\u043B\u044C\u0431\u043E\u043C\u044B",
-    "image": "https://cs285.imyz.me/img/68/12799233/33191125.jpg",
-    "url": "https://myzuka.me/Album/802749/Asd-Sag-Mir-Wo-Die-Party-Ist-2003",
-    "songcount": "2",
-    "itemType": 1
-  },
-  {
-    "id": "Hey Du (Nimm Dir Zeit) EP",
-    "label": "ASD - Hey Du (Nimm Dir Zeit) EP (2003)",
-    "value": "Hey Du (Nimm Dir Zeit) EP",
-    "category": "\u0410\u043B\u044C\u0431\u043E\u043C\u044B",
-    "image": "https://cs285.imyz.me/img/68/12799223/33191114.jpg",
-    "url": "https://myzuka.me/Album/802737/Asd-Hey-Du-Nimm-Dir-Zeit-Ep-2003",
-    "songcount": "5",
-    "itemType": 1
-  }
-]
+exports['search should return results 2'] = {
+  "id": "ASD",
+  "label": "A Skylit Drive - ASD (2015)",
+  "value": "ASD",
+  "category": "\u0410\u043B\u044C\u0431\u043E\u043C\u044B",
+  "image": "https://cs25.imyz.me/img/68/10156057/26476247.jpg",
+  "url": "https://myzuka.me/Album/653002/A-Skylit-Drive-Asd-2015",
+  "songcount": "11",
+  "itemType": 1
+}
 
 exports['search should return results 3'] = [
   {
@@ -131,42 +109,49 @@ exports['getArtistAlbumsList should get a list of artist\'s albums 1'] = [
   {
     "url": "https://myzuka.me/Album/291418/Viva-Hits-Vol-20-Cd-1-2003",
     "label": "Viva Hits, Vol.20 [CD 1]",
+    "year": null,
     "albumCategory": 7,
     "image": "https://cs9.imyz.me/img/68/3335691/16152697.jpg"
   },
   {
     "url": "https://myzuka.me/Album/802749/Asd-Sag-Mir-Wo-Die-Party-Ist-2003",
     "label": "Sag Mir Wo Die Party Ist!",
+    "year": 2003,
     "albumCategory": 3,
     "image": "https://cs285.imyz.me/img/68/12799231/33191121.jpg"
   },
   {
     "url": "https://myzuka.me/Album/802737/Asd-Hey-Du-Nimm-Dir-Zeit-Ep-2003",
     "label": "Hey Du (Nimm Dir Zeit) EP",
+    "year": 2003,
     "albumCategory": 3,
     "image": "https://cs285.imyz.me/img/68/12799221/33191110.jpg"
   },
   {
     "url": "https://myzuka.me/Album/802736/Asd-Wer-Hatte-Das-Gedacht-2003",
     "label": "Wer H\u00E4tte Das Gedacht?",
+    "year": 2003,
     "albumCategory": 2,
     "image": "https://cs285.imyz.me/img/68/12799166/33191058.jpg"
   },
   {
     "url": "https://myzuka.me/Album/291463/Viva-Hits-Vol-21-Cd-1-2003",
     "label": "Viva Hits, Vol.21 [CD 1]",
+    "year": null,
     "albumCategory": 7,
     "image": "https://cs9.imyz.me/img/68/3336337/16151894.jpg"
   },
   {
     "url": "https://myzuka.me/Album/639833/Asd-Asd-Comeback-2015",
     "label": "ASD Comeback",
+    "year": 2015,
     "albumCategory": 8,
     "image": "https://cs0.imyz.me/img/71/9890979/25867344.jpg"
   },
   {
     "url": "https://myzuka.me/Album/802734/Asd-Blockbasta-Deluxe-Edition-2015",
     "label": "Blockbasta (Deluxe Edition)",
+    "year": 2015,
     "albumCategory": 2,
     "image": "https://cs285.imyz.me/img/68/12799193/33191084.jpg"
   }
@@ -174,83 +159,103 @@ exports['getArtistAlbumsList should get a list of artist\'s albums 1'] = [
 
 exports['getTracksList should get a list of artist\'s albums 1'] = [
   {
-    "url": "https://myzuka.club/Song/Play/7223937?t=636502657952822294&s=2eea1163828b943413598b997d28fcae",
-    "title": "ASD - Die Partei"
+    "url": "https://myzuka.club/Song/Play/7223937?t=636502695646068490&s=133b72cf713ec129e5aa9c112e6a519b",
+    "title": "ASD - Die Partei",
+    "duration": 173
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223938?t=636502657952822294&s=34e020742db88566df2a8a8ca9486425",
-    "title": "ASD - Blockbasta"
+    "url": "https://myzuka.club/Song/Play/7223938?t=636502695646224745&s=0d18c331f958e3c362487f8c79a2f50f",
+    "title": "ASD - Blockbasta",
+    "duration": 220
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223939?t=636502657952822294&s=5ad5d749fe60269e3e42da3488c8b625",
-    "title": "ASD - Mittelfinga Hoch"
+    "url": "https://myzuka.club/Song/Play/7223939?t=636502695646224745&s=178c9568edc0881b23b673e191a998a2",
+    "title": "ASD - Mittelfinga Hoch",
+    "duration": 164
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223940?t=636502657952822294&s=3526947ae4374b0d3e4a61b5da0d089a",
-    "title": "ASD - Deadline (Feat. Max Herre)"
+    "url": "https://myzuka.club/Song/Play/7223940?t=636502695646224745&s=42b9a8bed67932c674372c57a6fa7359",
+    "title": "ASD - Deadline (Feat. Max Herre)",
+    "duration": 239
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223941?t=636502657952822294&s=f1c1919cc89a49fb3110a7ba197ca868",
-    "title": "ASD - Bruda"
+    "url": "https://myzuka.club/Song/Play/7223941?t=636502695646224745&s=6b9fa7cd8447fae9ac87a29623bc39d6",
+    "title": "ASD - Bruda",
+    "duration": 233
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223942?t=636502657952978541&s=a5ea634ff48f3eab1e475696d55350ba",
-    "title": "ASD - \u00DCeberall Is Krieg"
+    "url": "https://myzuka.club/Song/Play/7223942?t=636502695646224745&s=1d0ac25b65c5264220f74df66485b23f",
+    "title": "ASD - \u00DCeberall Is Krieg",
+    "duration": 220
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223943?t=636502657952978541&s=5270a54e87ac99f97b8de379bf5273df",
-    "title": "ASD - Tortellini Augen"
+    "url": "https://myzuka.club/Song/Play/7223943?t=636502695646224745&s=b44e22daae41ec55a738620d75548351",
+    "title": "ASD - Tortellini Augen",
+    "duration": 214
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223944?t=636502657952978541&s=9c4fc20dec2fc6e7421ba37504ece956",
-    "title": "ASD - Legend\u00E4r / Popul\u00E4r"
+    "url": "https://myzuka.club/Song/Play/7223944?t=636502695646380996&s=2367ba754796ffe5956d117e7c79b2c6",
+    "title": "ASD - Legend\u00E4r / Popul\u00E4r",
+    "duration": 255
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223945?t=636502657952978541&s=24de6e81f70ac9d8a3f498cf107f01e9",
-    "title": "ASD - Ausrasta"
+    "url": "https://myzuka.club/Song/Play/7223945?t=636502695646380996&s=eb183d5c1308f7d0e685c42e17793b0a",
+    "title": "ASD - Ausrasta",
+    "duration": 223
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223946?t=636502657952978541&s=9a4d87377777ac6d2932a45a3b7f611d",
-    "title": "ASD - Airhorn"
+    "url": "https://myzuka.club/Song/Play/7223946?t=636502695646380996&s=eb4838ac5f3079e31804aadf7e3f63b1",
+    "title": "ASD - Airhorn",
+    "duration": 177
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223947?t=636502657953134791&s=4853535dfa9ca73464ed5ea0045816a8",
-    "title": "ASD - Antihaltung"
+    "url": "https://myzuka.club/Song/Play/7223947?t=636502695646380996&s=01904eaa30bc01e461698a33d1408a6b",
+    "title": "ASD - Antihaltung",
+    "duration": 222
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223948?t=636502657953134791&s=00946591ab9d63f0b97865b6b8f6ab61",
-    "title": "ASD - Mensch Gegen Maschine"
+    "url": "https://myzuka.club/Song/Play/7223948?t=636502695646537260&s=fdf20b9068347003ded3f1bd7afc7e7a",
+    "title": "ASD - Mensch Gegen Maschine",
+    "duration": 245
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223949?t=636502657953134791&s=764542769b42065c7df273595d88cc1a",
-    "title": "ASD - Non"
+    "url": "https://myzuka.club/Song/Play/7223949?t=636502695646537260&s=1d4bf2ab92d7cded17d91d0d68267ac2",
+    "title": "ASD - Non",
+    "duration": 203
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223950?t=636502657953134791&s=aaf808beb928ea92cfed70b58bc28205",
-    "title": "ASD - Grosses Finale"
+    "url": "https://myzuka.club/Song/Play/7223950?t=636502695646537260&s=bf428b4b9f4af0061fd1758d3ad19241",
+    "title": "ASD - Grosses Finale",
+    "duration": 228
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223951?t=636502657953134791&s=4732ec0e14c809d5feb7a0f562f2b0d0",
-    "title": "ASD - Ich Seh Was (Feat. Nena)"
+    "url": "https://myzuka.club/Song/Play/7223951?t=636502695646537260&s=f3369ea651a6e566037f296fc2b96ef9",
+    "title": "ASD - Ich Seh Was (Feat. Nena)",
+    "duration": 201
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223952?t=636502657953134791&s=3763e86f2e801cd2fead47133d3be000",
-    "title": "ASD - Guck Dir Diese Jungs An"
+    "url": "https://myzuka.club/Song/Play/7223952?t=636502695646693507&s=cc8b742ef671f5b138d228acb23b0469",
+    "title": "ASD - Guck Dir Diese Jungs An",
+    "duration": 222
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223953?t=636502657953291639&s=5ae7594a39a81462c3f9867e08e69868",
-    "title": "ASD - Goldk\u00FCste (Feat. Megaloh)"
+    "url": "https://myzuka.club/Song/Play/7223953?t=636502695646693507&s=17ecf2ada2c24ce96af500556cb12e86",
+    "title": "ASD - Goldk\u00FCste (Feat. Megaloh)",
+    "duration": 166
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223954?t=636502657953291639&s=770558b3091779235601b0fd944608de",
-    "title": "ASD - Mittelfinga Hoch (RMX) (Feat. Eko Fresh, Ali As & Curse)"
+    "url": "https://myzuka.club/Song/Play/7223954?t=636502695646693507&s=dad36139ac2128a78fc1e0e9e93422eb",
+    "title": "ASD - Mittelfinga Hoch (RMX) (Feat. Eko Fresh, Ali As & Curse)",
+    "duration": 204
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223955?t=636502657953291639&s=b7926a135cd20df37d65f6728e77710c",
-    "title": "ASD - Rap Tag Team"
+    "url": "https://myzuka.club/Song/Play/7223955?t=636502695646693507&s=34d8263abe680f1c2dceaeb58335d903",
+    "title": "ASD - Rap Tag Team",
+    "duration": 167
   },
   {
-    "url": "https://myzuka.club/Song/Play/7223956?t=636502657953291639&s=52df18ef9559e7a04da247768ad9cc7b",
-    "title": "ASD - Hase"
+    "url": "https://myzuka.club/Song/Play/7223956?t=636502695646693507&s=64cd786a99c8f5822d8dd363ef62c1da",
+    "title": "ASD - Hase",
+    "duration": 231
   }
 ]
