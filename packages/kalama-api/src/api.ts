@@ -33,6 +33,7 @@ export interface Resource {
 export interface Track extends Resource {
     url: string;
     title: string;
+    duration?: number;
 }
 
 export interface Item extends Resource {
@@ -53,6 +54,7 @@ export interface Artist extends SearchResultItem {
 export interface Album extends SearchResultItem {
     albumCategory?: AlbumCategory;
     itemType: ItemType.Album;
+    year?: number;
 }
 
 export interface Song extends SearchResultItem {
@@ -132,18 +134,49 @@ export const getTracksList = async (
     return Promise.all(tracks.map(resolveRedirectedTrack));
 };
 
+const parseDurationDOM = (durationBitrateDiv: any): number => {
+    const mmss = durationBitrateDiv
+        .text()
+        .trim()
+        .match(/^(\d\d):(\d\d)/);
+    if (!mmss) {
+        return null;
+    }
+    const [, m, s] = mmss;
+    const seconds = parseInt(m, 10) * 60 + parseInt(s, 10);
+    return seconds;
+};
+
+const parseYearDOM = (albumDiv: any): number => {
+    const yearStr = albumDiv
+        .find('.info > .tags > a[href^="/Albums/"]')
+        .text()
+        .trim();
+
+    if (!yearStr || !yearStr.length || !yearStr.match(/^\d{4}$/)) {
+        return null;
+    }
+    return parseInt(yearStr, 10);
+};
+
 const parseTracksListHtml = (htmlText: string): Array<Track> => {
     const $ = cheerio.load(htmlText);
-    const nodes = $('.play [data-url]');
+    const nodes = $('[itemtype="http://schema.org/MusicRecording"]');
     return nodes
-        .map((i, node) => ({
-            url: $(node).attr('data-url'),
-            title: $(node).attr('data-title')
-        }))
+        .map((i, node) => {
+            const playButton = $(node).find('.play [data-url]');
+            const durationBitrateDiv = $(node).find('.options .data');
+            return {
+                url: playButton.attr('data-url'),
+                title: playButton.attr('data-title'),
+                duration: parseDurationDOM(durationBitrateDiv)
+            };
+        })
         .get()
-        .map(({ url, title }) => ({
+        .map(({ url, title, duration }) => ({
             url: normalizeUrl(url),
-            title
+            title,
+            duration
         }));
 };
 
@@ -151,12 +184,16 @@ const parseAlbumsListHtml = (htmlText: string): Array<Album> => {
     const $ = cheerio.load(htmlText);
     const albumNodes = $('.album-list > .item');
     return albumNodes
-        .map((i, node) => ({
-            url: $(node).find('.info > .title > a').attr('href'),
-            label: $(node).find('.info > .title > a').text(),
-            albumCategory: parseInt($(node).attr('data-type'), 10),
-            image: $(node).find('.vis > a > img').attr('src')
-        }))
+        .map((i, node) => {
+            const $node = $(node);
+            return {
+                url: $node.find('.info > .title > a').attr('href'),
+                label: $node.find('.info > .title > a').text(),
+                year: parseYearDOM($node),
+                albumCategory: parseInt($node.attr('data-type'), 10),
+                image: $node.find('.vis > a > img').attr('src')
+            };
+        })
         .get()
         .map(item => ({
             ...item,
