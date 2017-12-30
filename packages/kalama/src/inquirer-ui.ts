@@ -65,7 +65,7 @@ const categoryOrder = [
     AlbumCategory.Other
 ];
 
-const sortAlbumsByCategory = (albums: Array<Album>): Array<Album> => {
+const sortAlbumsByCategoryAndYear = (albums: Array<Album>): Array<Album> => {
     const byCat = _(albums)
         .orderBy('year', 'desc')
         .groupBy('albumCategory')
@@ -79,7 +79,7 @@ const sortAlbumsByCategory = (albums: Array<Album>): Array<Album> => {
 };
 
 const albumsToChoices = (albums: Array<Album>) => {
-    const albumsChoices = sortAlbumsByCategory(albums).map(item => ({
+    const albumsChoices = sortAlbumsByCategoryAndYear(albums).map(item => ({
         name: `[${AlbumCategory[item.albumCategory]}] ${chalk.yellow(
             item.year || '....'
         )} ${item.label}`,
