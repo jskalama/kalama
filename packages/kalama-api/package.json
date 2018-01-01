@@ -1,6 +1,6 @@
 {
     "name": "kalama-api",
-    "version": "0.6.1",
+    "version": "0.7.0",
     "main": "dist/api.js",
     "license": "MIT",
     "scripts": {
@@ -19,6 +19,7 @@
         "@types/node-fetch": "^1.6.7",
         "chai": "^4.1.2",
         "mocha": "^4.0.0",
+        "snap-shot-it": "^4.0.1",
         "ts-node": "^3.3.0",
         "typescript": "^2.4.2"
     },

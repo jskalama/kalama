@@ -1,6 +1,8 @@
 import _ = require('lodash');
 import inquirer = require('inquirer');
 import autocomplete = require('inquirer-autocomplete-prompt');
+import chalk from 'chalk';
+
 import {
     search,
     SearchResult,
@@ -63,8 +65,11 @@ const categoryOrder = [
     AlbumCategory.Other
 ];
 
-const sortAlbumsByCategory = (albums: Array<Album>): Array<Album> => {
-    const byCat = _(albums).groupBy('albumCategory').value();
+const sortAlbumsByCategoryAndYear = (albums: Array<Album>): Array<Album> => {
+    const byCat = _(albums)
+        .orderBy('year', 'desc')
+        .groupBy('albumCategory')
+        .value();
     const sortedAlbums = <Array<Album>>_(categoryOrder)
         .map(cat => byCat[cat])
         .flatten(false)
@@ -74,8 +79,10 @@ const sortAlbumsByCategory = (albums: Array<Album>): Array<Album> => {
 };
 
 const albumsToChoices = (albums: Array<Album>) => {
-    const albumsChoices = sortAlbumsByCategory(albums).map(item => ({
-        name: `[${AlbumCategory[item.albumCategory]}] ${item.label}`,
+    const albumsChoices = sortAlbumsByCategoryAndYear(albums).map(item => ({
+        name: `[${AlbumCategory[item.albumCategory]}] ${chalk.yellow(
+            item.year || '....'
+        )} ${item.label}`,
         value: item
     }));
 
