@@ -1,13 +1,36 @@
+import { parse as urlParse, format as urlFormat } from 'url';
 import { expect } from 'chai';
-import { ItemType, search, getArtistAlbumsList, getTracksList } from '../api';
+import {
+    ItemType,
+    search,
+    getArtistAlbumsList,
+    getTracksList,
+    Track
+} from '../api';
 import snapshot = require('snap-shot-it');
+
+const removeTimestampsFromUrl = (url: string) => {
+    const parsedUrl = urlParse(url);
+    parsedUrl.search = null;
+    parsedUrl.query = null;
+    return urlFormat(parsedUrl);
+};
+
+const makeTrackDetermistic = (track: Track): Track => {
+    return {
+        ...track,
+        url: removeTimestampsFromUrl(track.url)
+    };
+};
 
 describe('search', () => {
     it('should return results', async () => {
         const { artists, albums, songs } = await search('asd');
-        snapshot(artists);
-        snapshot(albums[0]);
-        snapshot(songs);
+        snapshot(artists.find(artist => artist.label === 'ASD'));
+        snapshot(
+            albums.find(album => album.label === 'A Skylit Drive - ASD (2015)')
+        );
+        snapshot(songs.find(song => song.label === 'Scann-Tec - ASD'));
     });
 });
 
@@ -16,7 +39,9 @@ describe('getArtistAlbumsList', () => {
         const albums = await getArtistAlbumsList({
             url: 'https://myzuka.me/Artist/142641/Asd'
         });
-        snapshot(albums);
+        snapshot(
+            albums.find(album => album.label === 'Sag Mir Wo Die Party Ist!')
+        );
     });
 });
 
@@ -28,6 +53,10 @@ describe('getTracksList', () => {
             url:
                 'https://myzuka.me/Album/802734/Asd-Blockbasta-Deluxe-Edition-2015'
         });
-        snapshot(tracks);
+        snapshot(
+            makeTrackDetermistic(
+                tracks.find(track => track.title === 'ASD - Die Partei')
+            )
+        );
     });
 });
