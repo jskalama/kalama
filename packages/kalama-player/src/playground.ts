@@ -26,7 +26,7 @@ const decoder = new lame.Decoder();
 httpStream.pipe(decoder);
 
 const receiver = new GrowingBuffer({
-    initialSize: 500000,
+    initialSize: 1e6,
     bufferConstructor: Uint8Array
 });
 
@@ -40,8 +40,8 @@ const reader = new BufferReader({
     buffer: receiver,
     output: speaker,
     input: decoder,
-    preBufferSize: 1000000,
-    blockSize: 4096
+    preBufferSize: 1e6,
+    blockSize: 256
 });
 
 reader.play();
