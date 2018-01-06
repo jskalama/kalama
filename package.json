@@ -1,5 +1,24 @@
 {
-	"devDependencies": {
-		"lerna": "^2.5.1"
-	}
+    "version": "0.0.0",
+    "main": "index.js",
+    "dependencies": {},
+    "devDependencies": {
+        "lerna": "^2.5.1"
+    },
+    "name": "kalama-monorepo",
+    "scripts": {
+        "postinstall": "lerna bootstrap",
+        "test": "lerna run test"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/jskalama/kalama.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/jskalama/kalama/issues"
+    },
+    "homepage": "https://github.com/jskalama/kalama#readme",
+    "description": ""
 }
