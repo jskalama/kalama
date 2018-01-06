@@ -2,6 +2,7 @@ import _ = require('lodash');
 import inquirer = require('inquirer');
 import autocomplete = require('inquirer-autocomplete-prompt');
 import chalk from 'chalk';
+import { CancelError, cancellable } from './cancellablePrompt';
 
 import {
     search,
@@ -15,17 +16,22 @@ import {
 inquirer.registerPrompt('autocomplete', autocomplete);
 
 export const askSearchTerm = async (): Promise<SearchResultItem> => {
-    return (await inquirer.prompt([
-        {
-            message: 'Search',
-            type: 'autocomplete',
-            name: 'result',
-            source: async function(answersSoFar, input) {
-                const searchResult = await search(input);
-                return searchResultToChoices(searchResult).choices;
+    return await inquirer
+        .prompt([
+            {
+                message: 'Search',
+                type: 'autocomplete',
+                name: 'result',
+                source: async function(answersSoFar, input) {
+                    if (!input || input.trim() === '') {
+                        return [];
+                    }
+                    const searchResult = await search(input);
+                    return searchResultToChoices(searchResult).choices;
+                }
             }
-        }
-    ])).result;
+        ])
+        .then(({ result }) => result);
 };
 
 const searchResultToChoices = (searchResult: SearchResult) => {
@@ -104,5 +110,7 @@ export const chooseFromSearchResults = async (
 export const chooseFromAlbums = async (
     albums: Array<Album>
 ): Promise<SearchResultItem> => {
-    return (await inquirer.prompt([albumsToChoices(albums)])).result;
+    return await cancellable(inquirer.prompt([albumsToChoices(albums)])).then(
+        ({ result }) => result
+    );
 };
