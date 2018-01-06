@@ -40,6 +40,7 @@
         "inquirer-autocomplete-prompt": "^0.11.0",
         "ip": "^1.1.5",
         "kalama-api": "^0.7.0",
+        "keypress": "^0.2.1",
         "lodash": "^4.17.4",
         "node-fetch": "^1.6.3",
         "q-io": "^1.13.2",

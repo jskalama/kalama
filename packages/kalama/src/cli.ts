@@ -35,14 +35,24 @@ const defaultConfig: Configuration = {
 };
 
 const getTracksListInteractively = async (): Promise<TrackListWithTitle> => {
-    const searchResultItem = await askSearchTerm();
     let selectedItem: SearchResultItem;
-    if (searchResultItem.itemType === ItemType.Artist) {
-        const artistAlbumsList = await getArtistAlbumsList(searchResultItem);
-        selectedItem = await chooseFromAlbums(artistAlbumsList);
-    } else {
-        selectedItem = searchResultItem;
-    }
+
+    do {
+        const searchResultItem = await askSearchTerm();
+        if (searchResultItem.itemType === ItemType.Artist) {
+            const artistAlbumsList = await getArtistAlbumsList(
+                searchResultItem
+            );
+            try {
+                selectedItem = await chooseFromAlbums(artistAlbumsList);
+            } catch (e) {
+                console.log('\n\n');
+                selectedItem = null;
+            }
+        } else {
+            selectedItem = searchResultItem;
+        }
+    } while (!selectedItem);
     const tracksList = await getTracksList(selectedItem);
     return {
         tracks: tracksList,
@@ -62,7 +72,6 @@ const playlist = async (conf: Configuration, file: string) => {
 
 const play = async (conf: Configuration) => {
     const tracksList = await getTracksListInteractively();
-    // console.log(tracksList)
     await playTracks(conf.player, tracksList.tracks);
 };
 
