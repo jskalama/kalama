@@ -15,26 +15,14 @@ const speaker: Writable = new Speaker();
 
 const httpStream = request(samples.aviamarch);
 
-// const fstream = createReadStream(
-//     './src/samples/kid-a/01_radiohead_everything_in_its_right_place_myzuka.me.mp3'
-//     // './src/samples/Цинга/01_adaptatsiya_leto_lubvi_myzuka.me.mp3'
-//     // './src/samples/1995-2013-CD1/01_boris_grebenshikov_akvarium_severnii_tsvet_bloom_of_the_north_floraiso_myzuka.me.mp3'
-// );
 const decoder = new lame.Decoder();
 
-// fstream.pipe(decoder);
 httpStream.pipe(decoder);
 
 const receiver = new GrowingBuffer({
     initialSize: 1e6,
     bufferConstructor: Uint8Array
 });
-
-// decoder.on('data', function(chunk: Buffer) {
-//     for (let i = 0; i < chunk.length; i++) {
-//         receiver.push(chunk[i]);
-//     }
-// });
 
 const reader = new BufferReader({
     buffer: receiver,

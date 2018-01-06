@@ -106,9 +106,10 @@ export default class BufferReader {
 
     private read() {
         this.input.on('data', (chunk: Buffer) => {
-            for (let i = 0; i < chunk.length; i++) {
-                this.buffer.push(chunk[i]); //TODO: implement blockWrite
-            }
+            // for (let i = 0; i < chunk.length; i++) {
+            //     this.buffer.push(chunk[i]); //TODO: implement blockWrite
+            // }
+            this.buffer.pushBlock(chunk);
             this.setState({ bufferLength: this.buffer.length });
         });
 

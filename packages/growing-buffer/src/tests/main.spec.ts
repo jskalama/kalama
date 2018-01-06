@@ -148,4 +148,69 @@ describe('Growing Buffer', () => {
         expect(b1[1]).to.equal(39);
         expect(b1[2]).to.equal(40);
     });
+
+    it('should create slices which are treated as iterables', () => {
+        const b = new GrowingBuffer({
+            initialSize,
+            bufferConstructor: Uint8Array
+        });
+        range(0, 100).forEach(i => b.push(i));
+        const s = b.slice(38, 3);
+        const a = Array.from(s);
+        expect(s.length).to.equal(3);
+        expect(s[0]).to.equal(38);
+        expect(s[1]).to.equal(39);
+        expect(s[2]).to.equal(40);
+    });
+
+    it('should allocate for cross-buffer blocks', () => {
+        const b = new GrowingBuffer({
+            initialSize,
+            bufferConstructor: Uint8Array
+        });
+
+        const start = 5;
+        const length = 7;
+
+        const descriptor = b.allocateBlock(start, length);
+        expect(descriptor).to.eql({
+            boundary: 5,
+            bufferIndex: 0,
+            offset: 5,
+            secondaryBufferIndex: 1,
+            secondaryOffset: -5
+        });
+    });
+
+    it('should allocate for single-buffer blocks', () => {
+        const b = new GrowingBuffer({
+            initialSize,
+            bufferConstructor: Uint8Array
+        });
+
+        const start = 12;
+        const length = 7;
+
+        const descriptor = b.allocateBlock(start, length);
+        expect(descriptor).to.eql({
+            boundary: null,
+            offset: 2,
+            bufferIndex: 1
+        });
+    });
+
+    it('should push buffer to cross-buffer alocated area', () => {
+        const b = new GrowingBuffer({
+            initialSize,
+            bufferConstructor: Uint8Array
+        });
+
+        const start = 5;
+        const length = 7;
+        const buffer = Buffer.from([1, 2, 3, 4, 5, 6, 7]);
+
+        b.set(start - 1, 0); //setting length to 4
+        b.pushBlock(buffer);
+        expect(Array.from(b.slice(5, 7))).to.eql([1, 2, 3, 4, 5, 6, 7]);
+    });
 });

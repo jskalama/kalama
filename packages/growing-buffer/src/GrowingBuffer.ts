@@ -4,6 +4,7 @@ import OffsetCalculatorExponential, {
     IOffsetCalculator
 } from './OffsetCalculator';
 import IIndexable from './IIndexable';
+import { ok as assertOk } from 'assert';
 
 export type TypedArrayConstructor =
     | typeof Int8Array
@@ -32,6 +33,14 @@ export interface GrowingBufferOptions {
     bufferConstructor: TypedArrayConstructor;
 }
 
+export interface IBlockAllocationDescriptor {
+    boundary: number | null;
+    bufferIndex: number;
+    offset: number;
+    secondaryBufferIndex?: number;
+    secondaryOffset?: number;
+}
+
 export default class GrowingBuffer {
     protected initialSize: number;
     protected buffers: Array<TypedArray>;
@@ -43,18 +52,8 @@ export default class GrowingBuffer {
         return this._length;
     }
 
-    //TODO: replace with immutable proxy
     public slice(start: number, length: number) {
         return makeSlice(this, start, length);
-        // const buf = new this.bufferConstructor(length);
-        // for (
-        //     let index = start, outIndex = 0;
-        //     outIndex < length;
-        //     index++, outIndex++
-        // ) {
-        //     buf[outIndex] = this.get(index);
-        // }
-        // return buf;
     }
 
     public get(offset: number): number {
@@ -77,6 +76,75 @@ export default class GrowingBuffer {
 
     public push(data: number) {
         this.set(this._length, data);
+    }
+
+    public pushBlock(inputBuffer: Buffer) {
+        const inputBufferLength = inputBuffer.length;
+
+        const {
+            boundary,
+            bufferIndex,
+            offset,
+            secondaryBufferIndex,
+            secondaryOffset
+        } = this.allocateBlock(this._length, inputBufferLength);
+
+        const buffer = this.buffers[bufferIndex];
+
+        if (boundary === null) {
+            for (let i = 0; i < inputBufferLength; i++) {
+                buffer[i + offset] = inputBuffer[i];
+            }
+        } else if (
+            typeof secondaryBufferIndex === 'number' &&
+            typeof secondaryOffset === 'number'
+        ) {
+            for (let i = 0; i < boundary; i++) {
+                buffer[i + offset] = inputBuffer[i];
+            }
+
+            const secondaryBuffer = this.buffers[secondaryBufferIndex];
+
+            for (let i = boundary; i < inputBufferLength; i++) {
+                secondaryBuffer[i + secondaryOffset] = inputBuffer[i];
+            }
+        } else {
+            throw new Error('Block allocation descriptor corrupted');
+        }
+
+        this._length += inputBufferLength;
+    }
+
+    public allocateBlock(
+        start: number,
+        length: number
+    ): IBlockAllocationDescriptor {
+        assertOk(length < this.initialSize, 'length < this.initialSize');
+        const secondaryBufferReference = this.allocate(start + length - 1);
+        const boundary = this.calc.internalToExternal({
+            ...secondaryBufferReference,
+            localOffset: 0
+        });
+        const offset = this.calc.externalToInternal(start).localOffset;
+        if (boundary <= start) {
+            return {
+                boundary: null,
+                offset,
+                bufferIndex: secondaryBufferReference.bufferIndex
+            };
+        } else {
+            assertOk(
+                secondaryBufferReference.bufferIndex >= 1,
+                'secondaryBufferReference.bufferIndex >= 1'
+            );
+            return {
+                boundary: boundary - start,
+                offset,
+                bufferIndex: secondaryBufferReference.bufferIndex - 1,
+                secondaryOffset: start - boundary,
+                secondaryBufferIndex: secondaryBufferReference.bufferIndex
+            };
+        }
     }
 
     public allocate(offset: number): InternalReference {
@@ -114,16 +182,30 @@ export default class GrowingBuffer {
 const CODE_0 = '0'.charCodeAt(0);
 const CODE_9 = '9'.charCodeAt(0);
 
+const isIterator = (v: any): boolean => {
+    return v === Symbol.iterator;
+};
+
 const makeSlice = (
     target: GrowingBuffer,
-    from: number,
+    start: number,
     length: number
 ): IIndexable => {
+    const iter = function*() {
+        const end = start + length - 1;
+        for (let i = start; i <= end; i++) {
+            yield target.get(i);
+        }
+    };
+
     return new Proxy<any>(target, {
         get(target: GrowingBuffer, prop: string) {
+            if (isIterator(prop)) {
+                return iter;
+            }
             const c = prop.charCodeAt(0);
             if (c >= CODE_0 && c <= CODE_9) {
-                return target.get(parseInt(prop, 10) + from);
+                return target.get(parseInt(prop, 10) + start);
             } else if (typeof prop === 'string' && prop === 'length') {
                 return length;
             } else {
