@@ -13,25 +13,40 @@ import {
     AlbumCategory
 } from 'kalama-api';
 
+interface SearchAnswer {
+    item: SearchResultItem;
+    searchTerm: string;
+}
+
 inquirer.registerPrompt('autocomplete', autocomplete);
 
-export const askSearchTerm = async (): Promise<SearchResultItem> => {
-    return await inquirer
-        .prompt([
-            {
-                message: 'Search',
-                type: 'autocomplete',
-                name: 'result',
-                source: async function(answersSoFar, input) {
-                    if (!input || input.trim() === '') {
-                        return [];
-                    }
-                    const searchResult = await search(input);
-                    return searchResultToChoices(searchResult).choices;
+export const askSearchTerm = async ({ defaultTerm }): Promise<SearchAnswer> => {
+    let searchTerm = '';
+    const autocomplete = inquirer.prompt([
+        {
+            message: 'Search',
+            type: 'autocomplete',
+            name: 'result',
+            source: async function(answersSoFar, input) {
+                if (!input || input.trim() === '') {
+                    return [];
                 }
+                const term = input.trim();
+                searchTerm = term;
+                const searchResult = await search(term);
+                return searchResultToChoices(searchResult).choices;
             }
-        ])
-        .then(({ result }) => result);
+        }
+    ]);
+
+    if (defaultTerm) {
+        const { ui: { activePrompt, rl } } = autocomplete;
+        rl.line = defaultTerm;
+        rl.cursor = defaultTerm.length;
+        activePrompt.search(defaultTerm);
+    }
+    const answer = await autocomplete;
+    return { item: answer.result, searchTerm };
 };
 
 const searchResultToChoices = (searchResult: SearchResult) => {

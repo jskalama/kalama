@@ -36,9 +36,16 @@ const defaultConfig: Configuration = {
 
 const getTracksListInteractively = async (): Promise<TrackListWithTitle> => {
     let selectedItem: SearchResultItem;
+    let lastSearchTerm = '';
 
     do {
-        const searchResultItem = await askSearchTerm();
+        const searchAnswer = await askSearchTerm({
+            defaultTerm: lastSearchTerm
+        });
+
+        const searchResultItem = searchAnswer.item;
+        lastSearchTerm = searchAnswer.searchTerm;
+
         if (searchResultItem.itemType === ItemType.Artist) {
             const artistAlbumsList = await getArtistAlbumsList(
                 searchResultItem
