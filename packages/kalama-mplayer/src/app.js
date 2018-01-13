@@ -4,6 +4,7 @@ import { render } from 'react-blessed';
 import { Provider } from 'react-redux';
 import store from './store';
 import PlayerScreen from './containers/PlayerScreen';
+import { appSetScreen } from './side-effects/app';
 
 class App extends Component {
     render() {
@@ -21,8 +22,7 @@ const screen = blessed.screen({
     title: 'kalama player'
 });
 
-screen.key(['escape', 'q', 'C-c'], function(ch, key) {
-    return process.exit(0);
-});
+appSetScreen(screen);
+
 
 render(<App />, screen);

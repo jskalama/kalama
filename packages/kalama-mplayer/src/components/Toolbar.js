@@ -32,6 +32,7 @@ export default class Toolbar extends Component {
         const left = width * index;
         return (
             <button
+                key={index}
                 mouse
                 onPress={this.props.actions[command.action]}
                 style={btnStyle}

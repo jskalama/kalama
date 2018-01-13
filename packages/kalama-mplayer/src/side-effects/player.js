@@ -4,17 +4,22 @@ let player, playerItem;
 
 export const playerSetTrack = async (
     dispatch,
-    { onPlayerPlaying, onPlayerPlayend },
+    { onPlayerPlaying, onPlayerEnd, onPlayerPrematureEnd },
     track
 ) => {
     if (playerItem) {
         await playerItem.stop(); //TODO: is needed?
     }
     playerItem = await player.openFile(track.url);
-    playerItem.listen().then(() => {
-        playerItem = null;
-        dispatch(onPlayerPlayend());
-    });
+    playerItem.listen().then(
+        () => {
+            playerItem = null;
+            dispatch(onPlayerEnd());
+        },
+        () => {
+            dispatch(onPlayerPrematureEnd());
+        }
+    );
     dispatch(onPlayerPlaying());
 };
 
@@ -34,4 +39,8 @@ export const playerSetPaused = async (
 
 export const playerInit = dispatch => {
     player = new MPlayer();
+};
+export const playerShutdown = async (dispatch, { onPlayerShutdown }) => {
+    await player.shutdown();
+    dispatch(onPlayerShutdown());
 };
