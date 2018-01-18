@@ -8,7 +8,8 @@ export default class TrackInfo extends Component {
     static propTypes = {
         track: TrackShape,
         isPlaying: PropTypes.bool,
-        isPaused: PropTypes.bool
+        isPaused: PropTypes.bool,
+        currentTime: PropTypes.number
     };
 
     style = {
@@ -16,11 +17,17 @@ export default class TrackInfo extends Component {
     };
 
     render() {
-        const { props: { track, isPlaying, isPaused }, style } = this;
+        const {
+            props: { track, isPlaying, isPaused, currentTime },
+            style
+        } = this;
         return (
             <box style={style}>
                 {track ? track.title : '-'} {isPaused ? '(paused)' : null}
                 {isPlaying ? '(playing)' : null}
+                <box style={style} top="100%-2">
+                    {currentTime}
+                </box>
             </box>
         );
     }

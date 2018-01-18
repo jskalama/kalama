@@ -5,10 +5,12 @@ import {
     playerSetTrack,
     playerInit,
     playerSetPaused,
-    playerShutdown
+    playerShutdown,
+    playerGetTime
 } from '../side-effects/player';
 
 import { appKeyboardInit, appExit } from '../side-effects/app';
+import { pollerStart, pollerEnd } from '../side-effects/poller';
 
 // Actions
 const INIT = 'kalama-player/tracks/INIT';
@@ -16,12 +18,17 @@ const SHUTDOWN = 'kalama-player/tracks/SHUTDOWN';
 const SET_TRACKS = 'kalama-player/tracks/SET_TRACKS';
 const SET_CURRENT_TRACK_INDEX = 'kalama-player/tracks/SET_CURRENT_TRACK_INDEX';
 const TOGGLE_PAUSE = 'kalama-player/tracks/TOGGLE_PAUSE';
+
 const ON_PLAYER_END = 'kalama-player/tracks/ON_PLAYER_END';
 const ON_PLAYER_ERROR = 'kalama-player/tracks/ON_PLAYER_ERROR';
 const ON_PLAYER_PLAYING = 'kalama-player/tracks/ON_PLAYER_PLAYING';
 const ON_PLAYER_PAUSED = 'kalama-player/tracks/ON_PLAYER_PAUSED';
 const ON_PLAYER_PREMATURE_END = 'kalama-player/tracks/ON_PLAYER_PREMATURE_END';
 const ON_PLAYER_SHUTDOWN = 'kalama-player/tracks/ON_PLAYER_SHUTDOWN';
+const ON_PLAYER_CURRENT_TIME_CHANGED =
+    'kalama-player/tracks/ON_PLAYER_CURRENT_TIME_CHANGED';
+
+const ON_POLLER_TICK = 'kalama-player/tracks/ON_POLLER_TICK';
 
 // Action creators
 
@@ -59,29 +66,12 @@ export const onPlayerPrematureEnd = () => {
 export const onPlayerShutdown = () => {
     return { type: ON_PLAYER_SHUTDOWN };
 };
-
-//player actions
-
-const playerActions = {
-    onPlayerEnd,
-    onPlayerPlaying,
-    onPlayerPaused,
-    onPlayerError,
-    onPlayerPrematureEnd,
-    onPlayerShutdown
+export const onPollerTick = () => {
+    return { type: ON_POLLER_TICK };
 };
-
-const playerCommand = (command, ...args) =>
-    sideEffect(command, playerActions, ...args);
-
-//app actions
-const appActions = {
-    togglePause,
-    shutdown
+export const onPlayerCurrentTimeChanged = time => {
+    return { type: ON_PLAYER_CURRENT_TIME_CHANGED, payload: time };
 };
-
-const appComand = (command, ...args) =>
-    sideEffect(command, appActions, ...args);
 
 // Reducer
 
@@ -89,19 +79,20 @@ const INITIAL_STATE = {
     tracks: mockTracks,
     current: null,
     isPlaying: false,
-    isPaused: false
+    isPaused: false,
+    currentTime: null
 };
 
 export const reducer = function*(state = INITIAL_STATE, action) {
     switch (action.type) {
         case INIT: {
-            yield playerCommand(playerInit);
-            yield appComand(appKeyboardInit);
+            yield sideEffect(playerInit);
+            yield sideEffect(appKeyboardInit);
             return state;
         }
 
         case SHUTDOWN: {
-            yield playerCommand(playerShutdown);
+            yield sideEffect(playerShutdown);
             return state;
         }
 
@@ -110,7 +101,7 @@ export const reducer = function*(state = INITIAL_STATE, action) {
         }
 
         case TOGGLE_PAUSE: {
-            yield playerCommand(playerSetPaused, !state.isPaused);
+            yield sideEffect(playerSetPaused, !state.isPaused);
 
             return { ...state, isPaused: !state.isPaused };
         }
@@ -119,15 +110,17 @@ export const reducer = function*(state = INITIAL_STATE, action) {
             const { payload: current } = action;
             const { tracks } = state;
             const track = tracks[current];
-            yield playerCommand(playerSetTrack, track);
+            yield sideEffect(playerSetTrack, track);
             return { ...state, current: action.payload };
         }
 
         case ON_PLAYER_PLAYING: {
+            yield sideEffect(pollerStart);
             return { ...state, isPlaying: true, isPaused: false };
         }
 
         case ON_PLAYER_END: {
+            yield sideEffect(pollerEnd);
             return { ...state, isPlaying: false, isPaused: false };
         }
 
@@ -140,8 +133,16 @@ export const reducer = function*(state = INITIAL_STATE, action) {
         }
 
         case ON_PLAYER_SHUTDOWN: {
-            yield appComand(appExit);
+            yield sideEffect(appExit);
             return state;
+        }
+
+        case ON_POLLER_TICK: {
+            yield sideEffect(playerGetTime);
+            return state;
+        }
+        case ON_PLAYER_CURRENT_TIME_CHANGED: {
+            return { ...state, currentTime: action.payload };
         }
 
         default:

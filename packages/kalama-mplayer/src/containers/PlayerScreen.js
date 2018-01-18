@@ -11,7 +11,8 @@ const mapStateToProps = state => {
         tracks: state.tracks.tracks,
         current: state.tracks.current,
         isPlaying: state.tracks.isPlaying,
-        isPaused: state.tracks.isPaused
+        isPaused: state.tracks.isPaused,
+        currentTime: state.tracks.currentTime
     };
 };
 const mapDispatchToProps = dispatch => {
@@ -38,7 +39,14 @@ class PlayerScreen extends Component {
 
     render() {
         const {
-            props: { tracks, current, togglePause, isPlaying, isPaused },
+            props: {
+                tracks,
+                current,
+                togglePause,
+                isPlaying,
+                isPaused,
+                currentTime
+            },
             handleTrackSelect
         } = this;
 
@@ -49,6 +57,8 @@ class PlayerScreen extends Component {
                 <box height="100%-2">
                     <TracksList
                         tracks={tracks}
+                        isPlaying={isPlaying}
+                        isPaused={isPaused}
                         current={current}
                         onTrackSelect={handleTrackSelect}
                     />
@@ -58,11 +68,16 @@ class PlayerScreen extends Component {
                         track={tracks[current]}
                         isPlaying={isPlaying}
                         isPaused={isPaused}
+                        currentTime={currentTime}
                     />
                 </box>
 
                 <box top="100%-1">
-                    <Toolbar actions={toolbarActions} />
+                    <Toolbar
+                        actions={toolbarActions}
+                        isPlaying={isPlaying}
+                        isPaused={isPaused}
+                    />
                 </box>
             </element>
         );

@@ -22,9 +22,9 @@
         "blessed": "^0.1.81",
         "figures": "^2.0.0",
         "mplayer-as-promised": "0.0.5",
+        "promise-retry": "^1.1.1",
         "react": "^0.14.9",
         "react-blessed": "^0.1.8",
-        "react-blessed-contrib": "^0.1.2",
         "react-redux": "^5.0.6",
         "redux": "^3.7.2",
         "redux-side-effects": "^1.1.1"

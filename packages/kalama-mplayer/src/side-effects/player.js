@@ -1,16 +1,21 @@
 import { MPlayer } from 'mplayer-as-promised';
+import {
+    onPlayerEnd,
+    onPlayerPaused,
+    onPlayerPlaying,
+    onPlayerPrematureEnd,
+    onPlayerShutdown,
+    onPlayerCurrentTimeChanged
+} from '../ducks/tracks';
+import { retryIfBusy, ignoreWhatever } from '../lib/asyncHelpers';
 
 let player, playerItem;
 
-export const playerSetTrack = async (
-    dispatch,
-    { onPlayerPlaying, onPlayerEnd, onPlayerPrematureEnd },
-    track
-) => {
+export const playerSetTrack = async (dispatch, track) => {
     if (playerItem) {
-        await playerItem.stop(); //TODO: is needed?
+        await retryIfBusy(() => playerItem.stop()); //TODO: is needed?
     }
-    playerItem = await player.openFile(track.url);
+    playerItem = await retryIfBusy(() => player.openFile(track.url));
     playerItem.listen().then(
         () => {
             playerItem = null;
@@ -23,24 +28,28 @@ export const playerSetTrack = async (
     dispatch(onPlayerPlaying());
 };
 
-export const playerSetPaused = async (
-    dispatch,
-    { onPlayerPlaying, onPlayerPaused },
-    isPaused
-) => {
+export const playerSetPaused = async (dispatch, isPaused) => {
     if (isPaused) {
-        await playerItem.pause();
+        await retryIfBusy(() => playerItem.pause());
+        // await playerItem.pause();
         dispatch(onPlayerPaused());
     } else {
-        await playerItem.play();
+        await retryIfBusy(() => playerItem.play());
+        // await playerItem.play();
         dispatch(onPlayerPlaying());
     }
 };
 
-export const playerInit = dispatch => {
+export const playerGetTime = async dispatch => {
+    const timeSeconds = await ignoreWhatever(() => playerItem.getCurrentTime());
+    dispatch(onPlayerCurrentTimeChanged(timeSeconds));
+};
+
+export const playerInit = () => {
     player = new MPlayer();
 };
-export const playerShutdown = async (dispatch, { onPlayerShutdown }) => {
-    await player.shutdown();
+
+export const playerShutdown = async dispatch => {
+    await retryIfBusy(() => player.shutdown());
     dispatch(onPlayerShutdown());
 };

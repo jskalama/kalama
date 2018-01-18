@@ -1,5 +1,13 @@
 export default [
     {
+        title: 'Wave',
+        url: 'http://www.sample-videos.com/audio/mp3/wave.mp3'
+    },
+    {
+        title: 'Crowd',
+        url: 'http://www.sample-videos.com/audio/mp3/crowd-cheering.mp3'
+    },
+    {
         title: 'Aviamarch',
         url: 'http://www.noiseaddicts.com/samples_1w72b820/1453.mp3'
     },

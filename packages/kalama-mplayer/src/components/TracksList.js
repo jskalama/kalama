@@ -34,6 +34,17 @@ export default class TracksList extends Component {
         });
     }
 
+    shouldComponentUpdate(nextProps, nextState) {
+        const { props } = this;
+        if (nextProps.tracks !== props.tracks) {
+            return true;
+        }
+        if (nextProps.current !== props.current) {
+            return true;
+        }
+        return false;
+    }
+
     render() {
         const {
             style,
