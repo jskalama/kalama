@@ -19,21 +19,21 @@ export default class Toolbar extends Component {
             action: null
         },
         {
-            label: ' <<',
+            label: ' <-',
             action: 'stepBack'
         },
         {
-            label: ' >>',
+            label: ' ->',
             action: 'stepForward'
         },
         {
             visibleIf: props => !props.isPlaying,
-            label: ' ▶',
+            label: ' ▶ [space]',
             action: 'togglePause'
         },
         {
             visibleIf: props => props.isPlaying,
-            label: ' ||',
+            label: ' || [space]',
             action: 'togglePause'
         }
     ];

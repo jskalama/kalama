@@ -1,4 +1,4 @@
-import { shutdown, stepBack, stepForward } from '../ducks/tracks';
+import { shutdown, stepBack, stepForward, togglePause } from '../ducks/tracks';
 
 let screen;
 export const appSetScreen = s => {
@@ -14,8 +14,13 @@ export const appKeyboardInit = dispatch => {
     screen.key(['left'], function(ch, key) {
         dispatch(stepBack());
     });
+
     screen.key(['right'], function(ch, key) {
         dispatch(stepForward());
+    });
+
+    screen.key(['space'], function(ch, key) {
+        dispatch(togglePause());
     });
 };
 
