@@ -13,16 +13,18 @@ export default class Toolbar extends Component {
         {
             label: ' Prev',
             action: null
-            // callback: () => {
-            //     console.log('Prev');
-            // }
         },
         {
             label: ' Next',
             action: null
-            // callback: () => {
-            //     console.log('Next');
-            // }
+        },
+        {
+            label: ' <<',
+            action: 'stepBack'
+        },
+        {
+            label: ' >>',
+            action: 'stepForward'
         },
         {
             visibleIf: props => !props.isPlaying,

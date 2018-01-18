@@ -40,8 +40,18 @@ export const playerSetPaused = async (dispatch, isPaused) => {
     }
 };
 
+export const playerStepBack = async () => {
+    ignoreWhatever(() => playerItem.seekBy(-10));
+};
+
+export const playerStepForward = async () => {
+    ignoreWhatever(() => playerItem.seekBy(10));
+};
+
 export const playerGetTime = async dispatch => {
-    const timeSeconds = await ignoreWhatever(() => playerItem.getCurrentTime());
+    const timeSeconds = await ignoreWhatever(() =>
+        playerItem.getCurrentPercent()
+    );
     dispatch(onPlayerCurrentTimeChanged(timeSeconds));
 };
 

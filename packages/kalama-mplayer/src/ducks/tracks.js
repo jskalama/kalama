@@ -6,7 +6,9 @@ import {
     playerInit,
     playerSetPaused,
     playerShutdown,
-    playerGetTime
+    playerGetTime,
+    playerStepBack,
+    playerStepForward
 } from '../side-effects/player';
 
 import { appKeyboardInit, appExit } from '../side-effects/app';
@@ -18,6 +20,8 @@ const SHUTDOWN = 'kalama-player/tracks/SHUTDOWN';
 const SET_TRACKS = 'kalama-player/tracks/SET_TRACKS';
 const SET_CURRENT_TRACK_INDEX = 'kalama-player/tracks/SET_CURRENT_TRACK_INDEX';
 const TOGGLE_PAUSE = 'kalama-player/tracks/TOGGLE_PAUSE';
+const STEP_BACK = 'kalama-player/tracks/STEP_BACK';
+const STEP_FORWARD = 'kalama-player/tracks/STEP_FORWARD';
 
 const ON_PLAYER_END = 'kalama-player/tracks/ON_PLAYER_END';
 const ON_PLAYER_ERROR = 'kalama-player/tracks/ON_PLAYER_ERROR';
@@ -44,7 +48,12 @@ export const setCurrentTrackIndex = idx => {
 export const togglePause = () => {
     return { type: TOGGLE_PAUSE };
 };
-
+export const stepBack = () => {
+    return { type: STEP_BACK };
+};
+export const stepForward = () => {
+    return { type: STEP_FORWARD };
+};
 export const shutdown = () => {
     return { type: SHUTDOWN };
 };
@@ -105,7 +114,14 @@ export const reducer = function*(state = INITIAL_STATE, action) {
 
             return { ...state, isPaused: !state.isPaused };
         }
-
+        case STEP_BACK: {
+            yield sideEffect(playerStepBack);
+            return state;
+        }
+        case STEP_FORWARD: {
+            yield sideEffect(playerStepForward);
+            return state;
+        }
         case SET_CURRENT_TRACK_INDEX: {
             const { payload: current } = action;
             const { tracks } = state;
