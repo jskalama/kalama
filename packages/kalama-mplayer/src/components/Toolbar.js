@@ -21,20 +21,20 @@ export default class Toolbar extends Component {
             action: 'togglePause'
         },
         {
-            label: ' Prev',
+            label: ' Prev [C ->]',
             action: 'goToPrevTrack'
         },
         {
-            label: ' Next',
+            label: ' Next [C <-]',
             action: 'goToNextTrack'
         },
         {
-            label: ' <-',
+            label: ' -10s [<-]',
             action: 'stepBack',
             visibleIf: props => props.isPlaying || props.isPaused
         },
         {
-            label: ' ->',
+            label: ' +10s [->]',
             action: 'stepForward',
             visibleIf: props => props.isPlaying || props.isPaused
         }
@@ -47,7 +47,7 @@ export default class Toolbar extends Component {
                 key={index}
                 mouse
                 onPress={() => {
-                    this.props.actions[command.action]();
+                    command.action && this.props.actions[command.action]();
                 }}
                 style={btnStyle}
                 width={`${width}%-1`}
