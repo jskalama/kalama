@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 
-const btnStyle = { bg: 'blue', fg: 'white' };
+const btnStyle = { bg: 'blue', fg: 'white', hover: { bg: 'yellow' } };
 
 export default class Toolbar extends Component {
     static propTypes = {
@@ -11,22 +11,6 @@ export default class Toolbar extends Component {
 
     commands = [
         {
-            label: ' Prev',
-            action: null
-        },
-        {
-            label: ' Next',
-            action: null
-        },
-        {
-            label: ' <-',
-            action: 'stepBack'
-        },
-        {
-            label: ' ->',
-            action: 'stepForward'
-        },
-        {
             visibleIf: props => !props.isPlaying,
             label: ' ▶ [space]',
             action: 'togglePause'
@@ -35,6 +19,24 @@ export default class Toolbar extends Component {
             visibleIf: props => props.isPlaying,
             label: ' || [space]',
             action: 'togglePause'
+        },
+        {
+            label: ' Prev',
+            action: 'goToPrevTrack'
+        },
+        {
+            label: ' Next',
+            action: 'goToNextTrack'
+        },
+        {
+            label: ' <-',
+            action: 'stepBack',
+            visibleIf: props => props.isPlaying || props.isPaused
+        },
+        {
+            label: ' ->',
+            action: 'stepForward',
+            visibleIf: props => props.isPlaying || props.isPaused
         }
     ];
     commandToButton = (command, index, allCommands) => {
@@ -44,7 +46,9 @@ export default class Toolbar extends Component {
             <button
                 key={index}
                 mouse
-                onPress={this.props.actions[command.action]}
+                onPress={() => {
+                    this.props.actions[command.action]();
+                }}
                 style={btnStyle}
                 width={`${width}%-1`}
                 left={`${left}%`}
@@ -54,7 +58,7 @@ export default class Toolbar extends Component {
         );
     };
     getCommands = () => {
-        const { props, commands, commandToButton } = this;
+        const { props, commands } = this;
         return commands.filter(cmd => {
             if (!cmd.visibleIf) {
                 return true;
@@ -62,6 +66,12 @@ export default class Toolbar extends Component {
             return !!cmd.visibleIf(props);
         });
     };
+    shouldComponentUpdate(nextProps, nextState) {
+        return (
+            nextProps.isPlaying !== this.props.isPlaying ||
+            nextProps.isPaused !== this.props.isPaused
+        );
+    }
     render() {
         const { commands, commandToButton, getCommands } = this;
         return <element>{getCommands(commands).map(commandToButton)}</element>;

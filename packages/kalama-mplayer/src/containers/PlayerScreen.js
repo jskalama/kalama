@@ -4,7 +4,15 @@ import { bindActionCreators } from 'redux';
 import TracksList from '../components/TracksList';
 import TrackInfo from '../components/TrackInfo';
 import Toolbar from '../components/Toolbar';
-import { setCurrentTrackIndex, init, togglePause } from '../ducks/tracks';
+import {
+    setCurrentTrackIndex,
+    init,
+    togglePause,
+    stepBack,
+    stepForward,
+    goToPrevTrack,
+    goToNextTrack
+} from '../ducks/tracks';
 
 const mapStateToProps = state => {
     return {
@@ -20,6 +28,10 @@ const mapDispatchToProps = dispatch => {
         {
             setCurrentTrackIndex,
             togglePause,
+            stepBack,
+            stepForward,
+            goToNextTrack,
+            goToPrevTrack,
             init
         },
         dispatch
@@ -45,12 +57,22 @@ class PlayerScreen extends Component {
                 togglePause,
                 isPlaying,
                 isPaused,
-                currentTime
+                currentTime,
+                stepBack,
+                stepForward,
+                goToPrevTrack,
+                goToNextTrack
             },
             handleTrackSelect
         } = this;
 
-        const toolbarActions = { togglePause };
+        const toolbarActions = {
+            togglePause,
+            stepForward,
+            stepBack,
+            goToNextTrack,
+            goToPrevTrack
+        };
 
         return (
             <element>

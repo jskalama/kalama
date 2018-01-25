@@ -26,7 +26,11 @@ export default class TrackInfo extends Component {
                 {track ? track.title : '-'} {isPaused ? '(paused)' : null}
                 {isPlaying ? '(playing)' : null}
                 <box style={style} top="100%-2">
-                    {currentTime}
+                    <progressbar
+                        label={`${currentTime}%`}
+                        filled={currentTime}
+                        style={{ bar: { bg: 'green' } }}
+                    />
                 </box>
             </box>
         );
