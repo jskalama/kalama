@@ -22,6 +22,8 @@ const SET_CURRENT_TRACK_INDEX = 'kalama-player/tracks/SET_CURRENT_TRACK_INDEX';
 const TOGGLE_PAUSE = 'kalama-player/tracks/TOGGLE_PAUSE';
 const STEP_BACK = 'kalama-player/tracks/STEP_BACK';
 const STEP_FORWARD = 'kalama-player/tracks/STEP_FORWARD';
+const GO_TO_NEXT_TRACK = 'kalama-player/tracks/GO_TO_NEXT_TRACK';
+const GO_TO_PREV_TRACK = 'kalama-player/tracks/GO_TO_PREV_TRACK';
 
 const ON_PLAYER_END = 'kalama-player/tracks/ON_PLAYER_END';
 const ON_PLAYER_ERROR = 'kalama-player/tracks/ON_PLAYER_ERROR';
@@ -53,6 +55,12 @@ export const stepBack = () => {
 };
 export const stepForward = () => {
     return { type: STEP_FORWARD };
+};
+export const goToNextTrack = () => {
+    return { type: GO_TO_NEXT_TRACK };
+};
+export const goToPrevTrack = () => {
+    return { type: GO_TO_PREV_TRACK };
 };
 export const shutdown = () => {
     return { type: SHUTDOWN };
@@ -114,20 +122,44 @@ export const reducer = function*(state = INITIAL_STATE, action) {
 
             return { ...state, isPaused: !state.isPaused };
         }
+
         case STEP_BACK: {
             yield sideEffect(playerStepBack);
             return state;
         }
+
         case STEP_FORWARD: {
             yield sideEffect(playerStepForward);
             return state;
         }
+
         case SET_CURRENT_TRACK_INDEX: {
             const { payload: current } = action;
             const { tracks } = state;
             const track = tracks[current];
             yield sideEffect(playerSetTrack, track);
             return { ...state, current: action.payload };
+        }
+
+        case GO_TO_NEXT_TRACK: {
+            const { tracks } = state;
+            const { current: oldCurrent } = state;
+            const newCurrent =
+                ((oldCurrent | 0) + 1 + tracks.length) % tracks.length;
+
+            const track = tracks[newCurrent];
+            yield sideEffect(playerSetTrack, track);
+            return { ...state, current: newCurrent };
+        }
+
+        case GO_TO_PREV_TRACK: {
+            const { tracks } = state;
+            const { current: oldCurrent } = state;
+            const newCurrent =
+                ((oldCurrent | 0) - 1 + tracks.length) % tracks.length;
+            const track = tracks[newCurrent];
+            yield sideEffect(playerSetTrack, track);
+            return { ...state, current: newCurrent };
         }
 
         case ON_PLAYER_PLAYING: {
