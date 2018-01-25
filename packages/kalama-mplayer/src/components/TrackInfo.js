@@ -32,7 +32,7 @@ export default class TrackInfo extends Component {
                         left={4}
                         height={1}
                         filled={currentTime}
-                        style={{ fg: 'red', bar: { fg: 'red', bg: 'green' } }}
+                        style={{ bar: { bg: 'green' } }}
                     />
                 </box>
             </box>
