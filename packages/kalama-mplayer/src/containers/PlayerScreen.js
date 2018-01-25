@@ -76,7 +76,7 @@ class PlayerScreen extends Component {
 
         return (
             <element>
-                <box height="100%-2">
+                <box height="100%-5">
                     <TracksList
                         tracks={tracks}
                         isPlaying={isPlaying}
@@ -85,7 +85,7 @@ class PlayerScreen extends Component {
                         onTrackSelect={handleTrackSelect}
                     />
                 </box>
-                <box top="100%-4">
+                <box top="100%-5">
                     <TrackInfo
                         track={tracks[current]}
                         isPlaying={isPlaying}
