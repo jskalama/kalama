@@ -52,15 +52,18 @@ export default class TracksList extends Component {
             tracksListToListItems
         } = this;
         return (
-            <list
-                ref="list"
-                interactive
-                keys
-                mouse
-                selected={current}
-                style={style}
-                items={tracksListToListItems(tracks, current)}
-            />
+            <element>
+                <list
+                    ref="list"
+                    interactive
+                    keys
+                    mouse
+                    selected={current}
+                    style={style}
+                    items={tracksListToListItems(tracks, current)}
+                />
+                ads
+            </element>
         );
     }
 }

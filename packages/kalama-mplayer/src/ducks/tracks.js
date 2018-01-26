@@ -13,6 +13,7 @@ import {
 
 import { appKeyboardInit, appExit } from '../side-effects/app';
 import { pollerStart, pollerEnd } from '../side-effects/poller';
+import { redispatch } from '../side-effects/redispatch';
 
 // Actions
 const INIT = 'kalama-player/tracks/INIT';
@@ -100,6 +101,20 @@ const INITIAL_STATE = {
     currentTime: null
 };
 
+const getTrackIndex = (state, trackNumber) => {
+    const { tracks } = state;
+    const { current: oldCurrent } = state;
+
+    const newCurrent =
+        trackNumber === 'next'
+            ? ((oldCurrent | 0) + 1 + tracks.length) % tracks.length
+            : trackNumber === 'prev'
+              ? ((oldCurrent | 0) - 1 + tracks.length) % tracks.length
+              : trackNumber;
+
+    return newCurrent;
+};
+
 export const reducer = function*(state = INITIAL_STATE, action) {
     switch (action.type) {
         case INIT: {
@@ -134,32 +149,21 @@ export const reducer = function*(state = INITIAL_STATE, action) {
         }
 
         case SET_CURRENT_TRACK_INDEX: {
-            const { payload: current } = action;
-            const { tracks } = state;
-            const track = tracks[current];
-            yield sideEffect(playerSetTrack, track);
-            return { ...state, current: action.payload };
+            const current = action.payload;
+            yield sideEffect(playerSetTrack, state.tracks[current]);
+            return { ...state, current: current };
         }
 
         case GO_TO_NEXT_TRACK: {
-            const { tracks } = state;
-            const { current: oldCurrent } = state;
-            const newCurrent =
-                ((oldCurrent | 0) + 1 + tracks.length) % tracks.length;
-
-            const track = tracks[newCurrent];
-            yield sideEffect(playerSetTrack, track);
-            return { ...state, current: newCurrent };
+            const current = getTrackIndex(state, 'next');
+            yield sideEffect(playerSetTrack, state.tracks[current]);
+            return { ...state, current };
         }
 
         case GO_TO_PREV_TRACK: {
-            const { tracks } = state;
-            const { current: oldCurrent } = state;
-            const newCurrent =
-                ((oldCurrent | 0) - 1 + tracks.length) % tracks.length;
-            const track = tracks[newCurrent];
-            yield sideEffect(playerSetTrack, track);
-            return { ...state, current: newCurrent };
+            const current = getTrackIndex(state, 'prev');
+            yield sideEffect(playerSetTrack, state.tracks[current]);
+            return { ...state, current };
         }
 
         case ON_PLAYER_PLAYING: {
@@ -169,6 +173,7 @@ export const reducer = function*(state = INITIAL_STATE, action) {
 
         case ON_PLAYER_END: {
             yield sideEffect(pollerEnd);
+            yield sideEffect(redispatch, goToNextTrack);
             return { ...state, isPlaying: false, isPaused: false };
         }
 

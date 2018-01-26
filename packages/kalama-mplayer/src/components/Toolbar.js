@@ -11,8 +11,8 @@ export default class Toolbar extends Component {
 
     commands = [
         {
-            visibleIf: props => !props.isPlaying,
-            label: ' ▶ [space]',
+            visibleIf: props => props.isPaused && !props.isPlaying,
+            label: ' |> [space]',
             action: 'togglePause'
         },
         {
@@ -21,12 +21,14 @@ export default class Toolbar extends Component {
             action: 'togglePause'
         },
         {
-            label: ' Prev [C ->]',
-            action: 'goToPrevTrack'
+            label: ' Prev [C <-]',
+            action: 'goToPrevTrack',
+            visibleIf: props => props.isPlaying || props.isPaused
         },
         {
-            label: ' Next [C <-]',
-            action: 'goToNextTrack'
+            label: ' Next [C ->]',
+            action: 'goToNextTrack',
+            visibleIf: props => props.isPlaying || props.isPaused
         },
         {
             label: ' -10s [<-]',
@@ -40,7 +42,8 @@ export default class Toolbar extends Component {
         }
     ];
     commandToButton = (command, index, allCommands) => {
-        const width = Math.round(100 / allCommands.length);
+        // const width = Math.round(100 / allCommands.length);
+        const width = 13;
         const left = width * index;
         return (
             <button
@@ -50,8 +53,8 @@ export default class Toolbar extends Component {
                     command.action && this.props.actions[command.action]();
                 }}
                 style={btnStyle}
-                width={`${width}%-1`}
-                left={`${left}%`}
+                width={width - 1}
+                left={left}
             >
                 {command.label}
             </button>
