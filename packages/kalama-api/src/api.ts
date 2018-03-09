@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import cheerio = require('cheerio');
 import { equal } from 'assert';
 
-const SERVER_ROOT = 'https://myzuka.me';
+const SERVER_ROOT = 'https://myzuka.club';
 
 export enum ItemType {
     Artist,
@@ -210,6 +210,6 @@ export const resolveRedirectedTrack = async (
         redirect: 'manual'
     });
     const location = response.headers.get('Location');
-    equal(response.status, 301, 'Resource should be redirected');
+    equal(response.status, 302, 'Resource should be redirected');
     return { ...resource, url: location };
 };
