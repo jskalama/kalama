@@ -49,9 +49,7 @@ function* playerSaga() {
             );
 
             yield put(onPlayerPlaying());
-            const positionPollerTask = yield fork(
-                createPositionPoller(playerItem)
-            );
+            const positionPollerTask = yield fork(positionPoller, playerItem);
             try {
                 yield call(::playerItem.listen);
                 playerItem = null;
@@ -73,18 +71,19 @@ function* playerSaga() {
     });
 }
 
-const createPositionPoller = playerItem =>
-    function* positionPoller() {
-        try {
-            while (true) {
-                const timeSeconds = yield call(ignoreWhatever, () =>
-                    playerItem.getCurrentPercent()
-                );
-                yield put(onPlayerCurrentTimeChanged(timeSeconds));
-                yield call(sleep, 1000);
-            }
-        } finally {
+function* positionPoller(playerItem) {
+    try {
+        yield put(onPlayerCurrentTimeChanged(0));
+        while (true) {
+            const percent = yield call(ignoreWhatever, () =>
+                playerItem.getCurrentPercent()
+            );
+            yield put(onPlayerCurrentTimeChanged(percent));
+            yield call(sleep, 1000);
         }
-    };
+    } finally {
+        yield put(onPlayerCurrentTimeChanged(0));
+    }
+}
 
 export default playerSaga;
