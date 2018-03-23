@@ -1,6 +1,5 @@
 import { takeEvery, select, call, put, fork, cancel } from 'redux-saga/effects';
 import {
-    INIT,
     TOGGLE_PAUSE,
     onPlayerPaused,
     onPlayerPlaying,
@@ -11,26 +10,20 @@ import {
     GO_TO_PREV_TRACK,
     STEP_BACK,
     STEP_FORWARD,
-    onPlayerCurrentTimeChanged
+    onPlayerCurrentTimeChanged,
+    goToNextTrack
 } from '../ducks/tracks';
-import { MPlayer } from 'mplayer-as-promised';
-import { retryIfBusy, ignoreWhatever } from '../lib/asyncHelpers';
 import sleep from 'sleep-promise';
+import * as P from '../services/player';
 
 function* playerSaga() {
-    let player, playerItem;
-
-    yield takeEvery(INIT, function() {
-        player = new MPlayer();
-    });
-
     yield takeEvery(TOGGLE_PAUSE, function*() {
         const isPaused = (yield select()).tracks.isPaused;
         if (isPaused) {
-            yield call(retryIfBusy, ::playerItem.pause);
+            yield call(P.pause);
             yield put(onPlayerPaused());
         } else {
-            yield call(retryIfBusy, ::playerItem.play);
+            yield call(P.play);
             yield put(onPlayerPlaying());
         }
     });
@@ -41,19 +34,15 @@ function* playerSaga() {
             const state = yield select();
             const tracks = state.tracks.tracks;
             const track = tracks[state.tracks.current];
-            if (playerItem) {
-                yield call(retryIfBusy, ::playerItem.stop); //TODO: is needed?
-            }
-            playerItem = yield call(retryIfBusy, () =>
-                player.openFile(track.url)
-            );
+
+            yield call(P.openFile, track.url);
 
             yield put(onPlayerPlaying());
-            const positionPollerTask = yield fork(positionPoller, playerItem);
+            const positionPollerTask = yield fork(positionPoller);
             try {
-                yield call(::playerItem.listen);
-                playerItem = null;
+                yield call(P.waitForTrackEnd);
                 yield put(onPlayerEnd());
+                yield put(goToNextTrack());
             } catch (e) {
                 yield put(onPlayerPrematureEnd());
             } finally {
@@ -63,22 +52,22 @@ function* playerSaga() {
     );
 
     yield takeEvery(STEP_BACK, function*() {
-        yield call(ignoreWhatever, () => playerItem.seekBy(-10));
+        yield call(P.seekBy, -10);
     });
 
     yield takeEvery(STEP_FORWARD, function*() {
-        yield call(ignoreWhatever, () => playerItem.seekBy(10));
+        yield call(P.seekBy, 10);
     });
 }
 
-function* positionPoller(playerItem) {
+function* positionPoller() {
     try {
         yield put(onPlayerCurrentTimeChanged(0));
         while (true) {
-            const percent = yield call(ignoreWhatever, () =>
-                playerItem.getCurrentPercent()
-            );
-            yield put(onPlayerCurrentTimeChanged(percent));
+            const percent = yield call(P.getPercent);
+            if (percent !== null) {
+                yield put(onPlayerCurrentTimeChanged(percent));
+            }
             yield call(sleep, 1000);
         }
     } finally {
