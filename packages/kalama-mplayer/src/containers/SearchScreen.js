@@ -1,10 +1,30 @@
 import React, { Component } from 'react';
+import Autocomplete from '../components/Autocomplete';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { OnQueryChange, getQueryResult } from '../ducks/search';
 
-export default class SearchScreen extends Component {
+const mapStateToProps = state => {
+    return {
+        suggestions: getQueryResult(state)
+    };
+};
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators(
+        {
+            OnQueryChange
+        },
+        dispatch
+    );
+};
+
+class SearchScreen extends Component {
     componentDidMount() {
-        this.refs.searchInput && this.refs.searchInput.focus();
+        this.refs.autocomplete && this.refs.autocomplete.focus();
     }
+
     render() {
+        const { props: { OnQueryChange, suggestions } } = this;
         return (
             <element>
                 <box height="100%">
@@ -13,16 +33,13 @@ export default class SearchScreen extends Component {
                         border={{ type: 'line' }}
                         style={{ border: { fg: 'blue' } }}
                     >
-                        <box width={8} height={1}>
-                            Search:
-                        </box>
-                        <textbox
-                            keys
-                            mouse
-                            left={8}
-                            height={1}
-                            inputOnFocus
-                            ref="searchInput"
+                        <Autocomplete
+                            onInput={OnQueryChange}
+                            items={suggestions.map(s => ({
+                                value: s,
+                                title: s.label
+                            }))}
+                            ref="autocomplete"
                         />
                     </form>
                     search
@@ -31,3 +48,5 @@ export default class SearchScreen extends Component {
         );
     }
 }
+
+export default connect(mapStateToProps, mapDispatchToProps)(SearchScreen);

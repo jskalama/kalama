@@ -22,8 +22,10 @@
     "dependencies": {
         "blessed": "^0.1.81",
         "figures": "^2.0.0",
+        "kalama-api": "^0.7.1",
         "mplayer-as-promised": "0.0.5",
         "promise-retry": "^1.1.1",
+        "prop-types": "^15.6.1",
         "react": "^0.14.9",
         "react-blessed": "^0.1.8",
         "react-redux": "^5.0.6",
