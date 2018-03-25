@@ -117,7 +117,7 @@ const getTrackIndex = (state, trackNumber) => {
     return newCurrent;
 };
 
-export const reducer = function(state = INITIAL_STATE, action) {
+export default function reducer(state = INITIAL_STATE, action) {
     switch (action.type) {
         case INIT: {
             // yield sideEffect(playerInit);
@@ -203,4 +203,4 @@ export const reducer = function(state = INITIAL_STATE, action) {
         default:
             return state;
     }
-};
+}

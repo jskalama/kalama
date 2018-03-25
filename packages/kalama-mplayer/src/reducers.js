@@ -1,4 +1,5 @@
 import { combineReducers } from 'redux';
-import { reducer as tracks } from './ducks/tracks';
+import tracks from './ducks/tracks';
+import router from './ducks/router';
 
-export default combineReducers({ tracks });
+export default combineReducers({ tracks, router });
