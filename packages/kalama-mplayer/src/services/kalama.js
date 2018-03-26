@@ -4,3 +4,7 @@ export const search = async query => {
     const { artists, albums, songs } = await kalama.search(query);
     return [...artists, ...albums, ...songs];
 };
+
+export const getAlbums = async artist => {
+    return await kalama.getArtistAlbumsList(artist);
+};

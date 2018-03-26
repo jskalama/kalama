@@ -1,48 +1,58 @@
 import React, { Component } from 'react';
-import Autocomplete from '../components/Autocomplete';
+import SearchForm from '../components/SearchForm';
+import AlbumsForm from '../components/AlbumsForm';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { OnQueryChange, getQueryResult } from '../ducks/search';
+import {
+    OnSuggestionSelect,
+    OnQueryChange,
+    getQueryResult,
+    isAlbumsStep,
+    isSearchStep,
+    getAlbums
+} from '../ducks/search';
 
 const mapStateToProps = state => {
     return {
-        suggestions: getQueryResult(state)
+        suggestions: getQueryResult(state),
+        albums: getAlbums(state),
+        isSearchStep: isSearchStep(state),
+        isAlbumsStep: isAlbumsStep(state)
     };
 };
 const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
-            OnQueryChange
+            OnQueryChange,
+            OnSuggestionSelect
         },
         dispatch
     );
 };
 
 class SearchScreen extends Component {
-    componentDidMount() {
-        this.refs.autocomplete && this.refs.autocomplete.focus();
-    }
-
     render() {
-        const { props: { OnQueryChange, suggestions } } = this;
+        const {
+            props: {
+                OnQueryChange,
+                OnSuggestionSelect,
+                suggestions,
+                albums,
+                isSearchStep,
+                isAlbumsStep
+            }
+        } = this;
         return (
             <element>
                 <box height="100%">
-                    <form
-                        keys
-                        border={{ type: 'line' }}
-                        style={{ border: { fg: 'blue' } }}
-                    >
-                        <Autocomplete
+                    {isSearchStep && (
+                        <SearchForm
                             onInput={OnQueryChange}
-                            items={suggestions.map(s => ({
-                                value: s,
-                                title: s.label
-                            }))}
-                            ref="autocomplete"
+                            onChange={OnSuggestionSelect}
+                            items={suggestions}
                         />
-                    </form>
-                    search
+                    )}
+                    {isAlbumsStep && <AlbumsForm items={albums} />}
                 </box>
             </element>
         );

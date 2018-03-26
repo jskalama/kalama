@@ -1,14 +1,23 @@
-import { ON_QUERY_CHANGE, OnQueryResult } from '../ducks/search';
 import {
+    ON_QUERY_CHANGE,
+    OnQueryResult,
+    OnAlbumsResult,
+    ON_SUGGECTION_SELECT,
+    GoToAlbums
+} from '../ducks/search';
+import {
+    actionChannel,
+    all,
     call,
+    cancel,
+    fork,
     put,
     take,
-    fork,
-    cancel,
-    actionChannel
+    takeEvery
 } from 'redux-saga/effects';
 import { delay } from 'redux-saga';
-import { search } from '../services/kalama';
+import { search, getAlbums } from '../services/kalama';
+import { ItemType } from 'kalama-api';
 
 function* doSearch(payload) {
     yield delay(500);
@@ -16,7 +25,7 @@ function* doSearch(payload) {
     yield put(OnQueryResult(suggestions));
 }
 
-export default function* searchSaga() {
+function* autocompleteSaga() {
     let searchTask;
     const chan = yield actionChannel(ON_QUERY_CHANGE);
     while (true) {
@@ -26,4 +35,19 @@ export default function* searchSaga() {
         }
         searchTask = yield fork(doSearch, payload);
     }
+}
+
+function* stepsSaga() {
+    yield takeEvery(ON_SUGGECTION_SELECT, function*({ payload: suggestion }) {
+        if (suggestion.itemType === ItemType.Artist) {
+            const artist = suggestion;
+            const albums = yield call(getAlbums, artist);
+            yield put(OnAlbumsResult(albums));
+            yield put(GoToAlbums());
+        }
+    });
+}
+
+export default function* searchSaga() {
+    yield all([autocompleteSaga(), stepsSaga()]);
 }

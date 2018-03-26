@@ -5,6 +5,7 @@ import Input from './Input';
 export default class Autocomplete extends Component {
     static propTypes = {
         value: any,
+        label: string,
         onChange: func,
         onInput: func,
         items: arrayOf(
@@ -48,7 +49,6 @@ export default class Autocomplete extends Component {
             }));
         }
         if (key.name === 'enter') {
-            debugger;
             handleSelect();
         }
     };
@@ -56,19 +56,23 @@ export default class Autocomplete extends Component {
     render() {
         const {
             state: { selectedIndex },
-            props: { items, onInput },
+            props: { label, items, onInput },
             handleKey,
             style
         } = this;
+
+        const strLabel = label ? label : '';
+        const labelSpace = strLabel.length + 1;
+
         return (
             <element>
                 <box height={1}>
-                    <box width={8} height={1}>
-                        Search:
+                    <box width={labelSpace} height={1}>
+                        {strLabel}
                     </box>
                     <Input
                         ref="input"
-                        left={8}
+                        left={labelSpace}
                         height={1}
                         onKey={handleKey}
                         onChange={onInput}
