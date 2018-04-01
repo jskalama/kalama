@@ -6,7 +6,7 @@ const isBusyError = error =>
 export const retryIfBusy = promiseCreator =>
     promiseRetry((retry, number) =>
         promiseCreator().catch(error => {
-            console.log(`retry #${number}`, error);
+            // console.log(`retry #${number}`, error);
             if (isBusyError(error)) {
                 return retry();
             } else {

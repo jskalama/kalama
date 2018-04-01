@@ -1,5 +1,3 @@
-import mockTracks from './mock/tracks';
-
 // Actions
 export const INIT = 'kalama-player/tracks/INIT';
 export const SHUTDOWN = 'kalama-player/tracks/SHUTDOWN';
@@ -90,7 +88,7 @@ export const setPlayerInteractive = isInteractive => {
 // Reducer
 
 const INITIAL_STATE = {
-    tracks: mockTracks,
+    tracks: [],
     current: null,
     isPlaying: false,
     isPaused: false,

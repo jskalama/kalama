@@ -5,8 +5,8 @@ import { render } from 'react-blessed';
 import { Provider } from 'react-redux';
 import store from './store';
 import Router from './containers/Router';
-import PlayerScreen from './containers/PlayerScreen';
 import { initKeyboard } from './services/keyboard';
+
 
 class App extends Component {
     render() {

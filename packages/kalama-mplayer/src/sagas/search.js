@@ -24,6 +24,10 @@ import { ItemType } from 'kalama-api';
 function* doSearch(payload) {
     yield delay(500);
     const query = payload.trim();
+    if (!query.length) {
+        yield put(OnQueryResult([]));
+        return;
+    }
     try {
         const suggestions = yield call(search, query);
         yield put(OnQueryResult(suggestions));
