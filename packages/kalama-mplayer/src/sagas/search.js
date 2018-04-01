@@ -45,7 +45,6 @@ function* stepsSaga() {
         payload: suggestion
     }) {
         if (type === ON_ALBUM_SELECT) {
-            debugger
             yield put(LoadTracksList(suggestion));
             return;
         }

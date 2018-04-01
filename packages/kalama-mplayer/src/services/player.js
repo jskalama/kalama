@@ -40,4 +40,17 @@ const seekBy = async seconds => {
     return ignoreWhatever(() => currentItem.seekBy(seconds));
 };
 
-export { openFile, stop, play, pause, getPercent, waitForTrackEnd, seekBy };
+const shutdown = async () => {
+    await retryIfBusy(() => player.shutdown());
+};
+
+export {
+    shutdown,
+    openFile,
+    stop,
+    play,
+    pause,
+    getPercent,
+    waitForTrackEnd,
+    seekBy
+};

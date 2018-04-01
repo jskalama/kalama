@@ -11,7 +11,9 @@ import {
     STEP_BACK,
     STEP_FORWARD,
     onPlayerCurrentTimeChanged,
-    goToNextTrack
+    goToNextTrack,
+    SHUTDOWN,
+    onPlayerShutdown
 } from '../ducks/tracks';
 import sleep from 'sleep-promise';
 import * as P from '../services/player';
@@ -57,6 +59,11 @@ function* playerSaga() {
 
     yield takeEvery(STEP_FORWARD, function*() {
         yield call(P.seekBy, 10);
+    });
+
+    yield takeEvery(SHUTDOWN, function*() {
+        yield call(P.shutdown);
+        yield put(onPlayerShutdown());
     });
 }
 
