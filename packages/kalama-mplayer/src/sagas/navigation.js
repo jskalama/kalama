@@ -2,7 +2,11 @@ import { takeEvery, select, call, put, fork, cancel } from 'redux-saga/effects';
 import { Navigate } from '../ducks/router';
 import { LOAD_TRACKS_LIST } from '../ducks/search';
 import { getTracks } from '../services/kalama';
-import { setTracks, ON_PLAYER_SHUTDOWN } from '../ducks/tracks';
+import {
+    setTracks,
+    ON_PLAYER_SHUTDOWN,
+    setCurrentTrackIndex
+} from '../ducks/tracks';
 
 function* doShutdown() {
     yield call(::process.exit, 0);
@@ -12,6 +16,7 @@ function* doLoadTrackList({ payload: resource }) {
     const tracks = yield call(getTracks, resource);
     yield put(setTracks(tracks));
     yield put(Navigate('Player'));
+    yield put(setCurrentTrackIndex(0));
 }
 
 function* navigationSaga() {

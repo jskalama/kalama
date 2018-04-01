@@ -1,4 +1,13 @@
-import { takeEvery, select, call, put, fork, cancel } from 'redux-saga/effects';
+import {
+    takeEvery,
+    takeLatest,
+    select,
+    call,
+    put,
+    fork,
+    cancel,
+    cancelled
+} from 'redux-saga/effects';
 import {
     TOGGLE_PAUSE,
     onPlayerPaused,
@@ -30,25 +39,39 @@ function* playerSaga() {
         }
     });
 
-    yield takeEvery(
+    let isOpeningFile = false;
+
+    yield takeLatest(
         [SET_CURRENT_TRACK_INDEX, GO_TO_NEXT_TRACK, GO_TO_PREV_TRACK],
-        function*() {
+        function*({ type, payload }) {
             const state = yield select();
             const tracks = state.tracks.tracks;
             const track = tracks[state.tracks.current];
 
-            yield call(P.openFile, track.url);
-
-            yield put(onPlayerPlaying());
-            const positionPollerTask = yield fork(positionPoller);
+            if (isOpeningFile) {
+                console.log('OPENING');
+                return;
+            }
             try {
-                yield call(P.waitForTrackEnd);
-                yield put(onPlayerEnd());
-                yield put(goToNextTrack());
-            } catch (e) {
-                yield put(onPlayerPrematureEnd());
+                isOpeningFile = true;
+                yield call(P.openFile, track.url);
+                isOpeningFile = false;
+
+                yield put(onPlayerPlaying());
+                const positionPollerTask = yield fork(positionPoller);
+                try {
+                    yield call(P.waitForTrackEnd);
+                    yield put(onPlayerEnd());
+                    yield put(goToNextTrack());
+                } catch (e) {
+                    yield put(onPlayerPrematureEnd());
+                } finally {
+                    yield cancel(positionPollerTask);
+                }
             } finally {
-                yield cancel(positionPollerTask);
+                if (yield cancelled()) {
+                    isOpeningFile = false;
+                }
             }
         }
     );

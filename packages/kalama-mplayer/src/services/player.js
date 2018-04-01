@@ -12,7 +12,9 @@ const openFile = async url => {
 };
 
 const stop = async () => {
-    await retryIfBusy(() => currentItem.stop());
+    if (currentItem) {
+        await retryIfBusy(() => currentItem && currentItem.stop());
+    }
     currentItem = null;
 };
 

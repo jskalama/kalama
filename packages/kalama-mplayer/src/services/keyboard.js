@@ -4,7 +4,8 @@ import {
     KEY_PREV_TRACK,
     KEY_REWIND,
     KEY_FAST_FORWARD,
-    KEY_PLAY_PAUSE
+    KEY_PLAY_PAUSE,
+    KEY_SEARCH
 } from '../ducks/keyboard';
 
 const keymap = [
@@ -13,7 +14,8 @@ const keymap = [
     ['C-right', KEY_NEXT_TRACK],
     ['left', KEY_REWIND],
     ['right', KEY_FAST_FORWARD],
-    ['space', KEY_PLAY_PAUSE]
+    ['space', KEY_PLAY_PAUSE],
+    ['C-s', KEY_SEARCH]
 ];
 
 export const initKeyboard = (screen, store) => {
