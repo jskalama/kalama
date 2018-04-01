@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { func, array } from 'prop-types';
 import Autocomplete from './Autocomplete';
+import { formatSearchItem } from './formatters';
 
 export default class SearchForm extends Component {
     propTypes: {
@@ -21,9 +22,9 @@ export default class SearchForm extends Component {
                 label="Search:"
                 onInput={onInput}
                 onChange={onChange}
-                items={items.map(s => ({
-                    value: s,
-                    title: s.label
+                items={items.map(item => ({
+                    value: item,
+                    title: formatSearchItem(item)
                 }))}
                 ref="autocomplete"
             />

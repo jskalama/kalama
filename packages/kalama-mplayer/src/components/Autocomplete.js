@@ -44,9 +44,14 @@ export default class Autocomplete extends Component {
             }));
         }
         if (key.name === 'up') {
-            this.setState(({ selectedIndex }, { items }) => ({
-                selectedIndex: (selectedIndex - 1) % items.length
-            }));
+            this.setState(({ selectedIndex }, { items }) => {
+                const len = items.length;
+                const newIndex = selectedIndex - 1;
+                const newSelectedIndex = newIndex < 0 ? len - 1 : newIndex;
+                return {
+                    selectedIndex: newSelectedIndex
+                };
+            });
         }
         if (key.name === 'enter') {
             handleSelect();

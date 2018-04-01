@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { func, array } from 'prop-types';
 import Autocomplete from './Autocomplete';
-import formatAlbum from './formatAlbum';
+import { formatAlbum } from './formatters';
 
 export default class AlbumsForm extends Component {
     propTypes: {
