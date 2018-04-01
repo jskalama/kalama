@@ -1,19 +1,4 @@
 import mockTracks from './mock/tracks';
-// import { sideEffect } from 'redux-side-effects';
-
-import {
-    playerSetTrack,
-    playerInit,
-    playerSetPaused,
-    playerShutdown,
-    playerGetTime,
-    playerStepBack,
-    playerStepForward
-} from '../side-effects/player';
-
-import { appKeyboardInit, appExit } from '../side-effects/app';
-import { pollerStart, pollerEnd } from '../side-effects/poller';
-import { redispatch } from '../side-effects/redispatch';
 
 // Actions
 export const INIT = 'kalama-player/tracks/INIT';
@@ -38,6 +23,9 @@ export const ON_PLAYER_CURRENT_TIME_CHANGED =
     'kalama-player/tracks/ON_PLAYER_CURRENT_TIME_CHANGED';
 
 export const ON_POLLER_TICK = 'kalama-player/tracks/ON_POLLER_TICK';
+export const SET_PLAYER_INTERACTIVE =
+    'kalama-player/tracks/SET_PLAYER_INTERACTIVE';
+export const DIRECT_TRACK_SELECT = 'kalama-player/tracks/DIRECT_TRACK_SELECT';
 
 // Action creators
 
@@ -49,6 +37,9 @@ export const setTracks = tracks => {
 };
 export const setCurrentTrackIndex = idx => {
     return { type: SET_CURRENT_TRACK_INDEX, payload: idx };
+};
+export const directTrackSelect = idx => {
+    return { type: DIRECT_TRACK_SELECT, payload: idx };
 };
 export const togglePause = () => {
     return { type: TOGGLE_PAUSE };
@@ -92,6 +83,9 @@ export const onPollerTick = () => {
 export const onPlayerCurrentTimeChanged = time => {
     return { type: ON_PLAYER_CURRENT_TIME_CHANGED, payload: time };
 };
+export const setPlayerInteractive = isInteractive => {
+    return { type: SET_PLAYER_INTERACTIVE, payload: !!isInteractive };
+};
 
 // Reducer
 
@@ -100,7 +94,8 @@ const INITIAL_STATE = {
     current: null,
     isPlaying: false,
     isPaused: false,
-    currentTime: null
+    currentTime: null,
+    isInteractive: false
 };
 
 const getTrackIndex = (state, trackNumber) => {
@@ -119,63 +114,34 @@ const getTrackIndex = (state, trackNumber) => {
 
 export default function reducer(state = INITIAL_STATE, action) {
     switch (action.type) {
-        case INIT: {
-            // yield sideEffect(playerInit);
-            // yield sideEffect(appKeyboardInit);
-            return state;
-        }
-
-        // case SHUTDOWN: {
-        //     yield sideEffect(playerShutdown);
-        //     return state;
-        // }
-
         case SET_TRACKS: {
             return { ...state, tracks: action.payload, current: null };
         }
 
         case TOGGLE_PAUSE: {
-            // yield sideEffect(playerSetPaused, !state.isPaused);
-
             return { ...state, isPaused: !state.isPaused };
         }
 
-        // case STEP_BACK: {
-        //     yield sideEffect(playerStepBack);
-        //     return state;
-        // }
-
-        // case STEP_FORWARD: {
-        //     yield sideEffect(playerStepForward);
-        //     return state;
-        // }
-
         case SET_CURRENT_TRACK_INDEX: {
             const current = action.payload;
-            // yield sideEffect(playerSetTrack, state.tracks[current]);
             return { ...state, current: current };
         }
 
         case GO_TO_NEXT_TRACK: {
             const current = getTrackIndex(state, 'next');
-            // yield sideEffect(playerSetTrack, state.tracks[current]);
             return { ...state, current };
         }
 
         case GO_TO_PREV_TRACK: {
             const current = getTrackIndex(state, 'prev');
-            // yield sideEffect(playerSetTrack, state.tracks[current]);
             return { ...state, current };
         }
 
         case ON_PLAYER_PLAYING: {
-            // yield sideEffect(pollerStart);
             return { ...state, isPlaying: true, isPaused: false };
         }
 
         case ON_PLAYER_END: {
-            // yield sideEffect(pollerEnd);
-            // yield sideEffect(redispatch, goToNextTrack);
             return { ...state, isPlaying: false, isPaused: false };
         }
 
@@ -187,20 +153,17 @@ export default function reducer(state = INITIAL_STATE, action) {
             return { ...state, isPlaying: false, isPaused: true };
         }
 
-        // case ON_PLAYER_SHUTDOWN: {
-        //     yield sideEffect(appExit);
-        //     return state;
-        // }
-
-        // case ON_POLLER_TICK: {
-        //     yield sideEffect(playerGetTime);
-        //     return state;
-        // }
         case ON_PLAYER_CURRENT_TIME_CHANGED: {
             return { ...state, currentTime: action.payload };
+        }
+
+        case SET_PLAYER_INTERACTIVE: {
+            return { ...state, isInteractive: !!action.payload };
         }
 
         default:
             return state;
     }
 }
+
+export const isPlayerInteractive = state => state.tracks.isInteractive;

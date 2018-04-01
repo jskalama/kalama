@@ -14,7 +14,8 @@ import {
     goToPrevTrack,
     goToNextTrack,
     stepBack,
-    stepForward
+    stepForward,
+    isPlayerInteractive
 } from '../ducks/tracks';
 import { put, call, select } from 'redux-saga/effects';
 import { getRoute, Navigate } from '../ducks/router';
@@ -26,7 +27,12 @@ function* quit() {
 
 function* playerKeys({ type }) {
     const route = yield select(getRoute);
+    const isInteractive = yield select(isPlayerInteractive);
+
     if (route.screen !== 'Player') {
+        return;
+    }
+    if (!isInteractive) {
         return;
     }
 

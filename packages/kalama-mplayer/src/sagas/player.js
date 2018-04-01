@@ -22,7 +22,11 @@ import {
     onPlayerCurrentTimeChanged,
     goToNextTrack,
     SHUTDOWN,
-    onPlayerShutdown
+    onPlayerShutdown,
+    setPlayerInteractive,
+    DIRECT_TRACK_SELECT,
+    isPlayerInteractive,
+    setCurrentTrackIndex
 } from '../ducks/tracks';
 import sleep from 'sleep-promise';
 import * as P from '../services/player';
@@ -39,8 +43,6 @@ function* playerSaga() {
         }
     });
 
-    let isOpeningFile = false;
-
     yield takeLatest(
         [SET_CURRENT_TRACK_INDEX, GO_TO_NEXT_TRACK, GO_TO_PREV_TRACK],
         function*({ type, payload }) {
@@ -48,33 +50,34 @@ function* playerSaga() {
             const tracks = state.tracks.tracks;
             const track = tracks[state.tracks.current];
 
-            if (isOpeningFile) {
-                console.log('OPENING');
-                return;
-            }
             try {
-                isOpeningFile = true;
                 yield call(P.openFile, track.url);
-                isOpeningFile = false;
 
                 yield put(onPlayerPlaying());
                 const positionPollerTask = yield fork(positionPoller);
                 try {
+                    yield put(setPlayerInteractive(true));
                     yield call(P.waitForTrackEnd);
                     yield put(onPlayerEnd());
                     yield put(goToNextTrack());
                 } catch (e) {
                     yield put(onPlayerPrematureEnd());
                 } finally {
+                    yield put(setPlayerInteractive(false));
                     yield cancel(positionPollerTask);
                 }
             } finally {
-                if (yield cancelled()) {
-                    isOpeningFile = false;
-                }
+                // yield put(setPlayerInteractive(false));
             }
         }
     );
+
+    yield takeEvery(DIRECT_TRACK_SELECT, function*({ payload: trackIndex }) {
+        const isInteractive = yield select(isPlayerInteractive);
+        if (isInteractive) {
+            yield put(setCurrentTrackIndex(trackIndex));
+        }
+    });
 
     yield takeEvery(STEP_BACK, function*() {
         yield call(P.seekBy, -10);

@@ -5,7 +5,7 @@ import TracksList from '../components/TracksList';
 import TrackInfo from '../components/TrackInfo';
 import Toolbar from '../components/Toolbar';
 import {
-    setCurrentTrackIndex,
+    directTrackSelect,
     init,
     togglePause,
     stepBack,
@@ -26,7 +26,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
-            setCurrentTrackIndex,
+            directTrackSelect,
             togglePause,
             stepBack,
             stepForward,
@@ -45,8 +45,8 @@ class PlayerScreen extends Component {
     }
 
     handleTrackSelect = index => {
-        const { props: { setCurrentTrackIndex } } = this;
-        setCurrentTrackIndex(index);
+        const { props: { directTrackSelect } } = this;
+        directTrackSelect(index);
     };
 
     render() {
