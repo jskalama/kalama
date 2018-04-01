@@ -65,9 +65,7 @@ function* playerKeys({ type }) {
 function* searchKeys({ type }) {
     switch (type) {
         case KEY_SEARCH: {
-            debugger;
             if (yield select(hasTracks)) {
-                debugger;
                 yield put(Navigate('Player'));
             }
             return;

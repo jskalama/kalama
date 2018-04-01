@@ -21,7 +21,8 @@ class App extends Component {
 const screen = blessed.screen({
     autoPadding: true,
     smartCSR: true,
-    title: 'kalama player'
+    title: 'kalama player',
+    ignoreLocked: ['C-c', 'C-s'] //TODO: move all global keybindings to one place
 });
 
 initKeyboard(screen, store);
