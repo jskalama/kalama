@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { func, array } from 'prop-types';
 import Autocomplete from './Autocomplete';
+import formatAlbum from './formatAlbum';
 
 export default class AlbumsForm extends Component {
     propTypes: {
@@ -21,9 +22,9 @@ export default class AlbumsForm extends Component {
                 label="Select Album:"
                 onInput={onInput}
                 onChange={onChange}
-                items={items.map(s => ({
-                    value: s,
-                    title: s.label
+                items={items.map(album => ({
+                    value: album,
+                    title: formatAlbum(album)
                 }))}
                 ref="autocomplete"
             />

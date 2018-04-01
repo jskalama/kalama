@@ -6,16 +6,19 @@ import { bindActionCreators } from 'redux';
 import {
     OnSuggestionSelect,
     OnQueryChange,
+    OnAlbumQueryChange,
     getQueryResult,
     isAlbumsStep,
     isSearchStep,
-    getAlbums
+    getAlbums,
+    getFilteredAlbums
 } from '../ducks/search';
 
 const mapStateToProps = state => {
     return {
         suggestions: getQueryResult(state),
         albums: getAlbums(state),
+        filteredAlbums: getFilteredAlbums(state),
         isSearchStep: isSearchStep(state),
         isAlbumsStep: isAlbumsStep(state)
     };
@@ -24,7 +27,8 @@ const mapDispatchToProps = dispatch => {
     return bindActionCreators(
         {
             OnQueryChange,
-            OnSuggestionSelect
+            OnSuggestionSelect,
+            OnAlbumQueryChange
         },
         dispatch
     );
@@ -36,8 +40,9 @@ class SearchScreen extends Component {
             props: {
                 OnQueryChange,
                 OnSuggestionSelect,
+                OnAlbumQueryChange,
                 suggestions,
-                albums,
+                filteredAlbums,
                 isSearchStep,
                 isAlbumsStep
             }
@@ -52,7 +57,12 @@ class SearchScreen extends Component {
                             items={suggestions}
                         />
                     )}
-                    {isAlbumsStep && <AlbumsForm items={albums} />}
+                    {isAlbumsStep && (
+                        <AlbumsForm
+                            onInput={OnAlbumQueryChange}
+                            items={filteredAlbums}
+                        />
+                    )}
                 </box>
             </element>
         );

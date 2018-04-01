@@ -1,5 +1,10 @@
+import { createSelector } from 'reselect';
+import FuzzySearch from 'fuzzy-search';
+import orderAlbums from './search/orderAlbums';
+
 // Actions
 export const ON_QUERY_CHANGE = 'Search/ON_QUERY_CHANGE';
+export const ON_ALBUM_QUERY_CHANGE = 'Search/ON_ALBUM_QUERY_CHANGE';
 export const ON_QUERY_RESULT = 'Search/ON_QUERY_RESULT';
 export const ON_ALBUMS_RESULT = 'Search/ON_ALBUMS_RESULT';
 export const ON_SUGGECTION_SELECT = 'Search/ON_SUGGECTION_SELECT';
@@ -10,7 +15,8 @@ const defaultState = {
     step: 'search',
     suggestions: [],
     albums: [],
-    selectedSuggestion: null
+    selectedSuggestion: null,
+    albumQuery: ''
 };
 
 // Reducer
@@ -24,6 +30,9 @@ export default function reducer(state = defaultState, action) {
         }
         case ON_QUERY_RESULT: {
             return { ...state, suggestions: action.payload };
+        }
+        case ON_ALBUM_QUERY_CHANGE: {
+            return { ...state, albumQuery: action.payload };
         }
         case ON_ALBUMS_RESULT: {
             return { ...state, albums: action.payload };
@@ -39,6 +48,11 @@ export default function reducer(state = defaultState, action) {
 // Action Creators
 export const OnQueryChange = value => ({
     type: ON_QUERY_CHANGE,
+    payload: value
+});
+
+export const OnAlbumQueryChange = value => ({
+    type: ON_ALBUM_QUERY_CHANGE,
     payload: value
 });
 
@@ -68,5 +82,19 @@ export const GoToSearch = () => ({
 //Selectors
 export const getQueryResult = state => state.search.suggestions;
 export const getAlbums = state => state.search.albums;
+export const getAlbumQuery = state => state.search.albumQuery;
 export const isSearchStep = state => state.search.step === 'search';
 export const isAlbumsStep = state => state.search.step === 'albums';
+export const getFilteredAlbums = createSelector(
+    getAlbums,
+    getAlbumQuery,
+    (albums, albumQuery) => {
+        if (!albums.length) {
+            return [];
+        }
+        const searcher = new FuzzySearch(albums, ['label'], {
+            caseSensitive: false
+        });
+        return orderAlbums(searcher.search(albumQuery));
+    }
+);
