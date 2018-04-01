@@ -8,3 +8,7 @@ export const search = async query => {
 export const getAlbums = async artist => {
     return await kalama.getArtistAlbumsList(artist);
 };
+
+export const getTracks = async resource => {
+    return await kalama.getTracksList(resource);
+};

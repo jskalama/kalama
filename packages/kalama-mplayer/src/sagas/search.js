@@ -3,7 +3,9 @@ import {
     OnQueryResult,
     OnAlbumsResult,
     ON_SUGGECTION_SELECT,
-    GoToAlbums
+    GoToAlbums,
+    LoadTracksList,
+    ON_ALBUM_SELECT
 } from '../ducks/search';
 import {
     actionChannel,
@@ -38,13 +40,25 @@ function* autocompleteSaga() {
 }
 
 function* stepsSaga() {
-    yield takeEvery(ON_SUGGECTION_SELECT, function*({ payload: suggestion }) {
+    yield takeEvery([ON_SUGGECTION_SELECT, ON_ALBUM_SELECT], function*({
+        type,
+        payload: suggestion
+    }) {
+        if (type === ON_ALBUM_SELECT) {
+            debugger
+            yield put(LoadTracksList(suggestion));
+            return;
+        }
+
         if (suggestion.itemType === ItemType.Artist) {
             const artist = suggestion;
             const albums = yield call(getAlbums, artist);
             yield put(OnAlbumsResult(albums));
             yield put(GoToAlbums());
+            return;
         }
+
+        yield put(LoadTracksList(suggestion));
     });
 }
 

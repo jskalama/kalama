@@ -8,8 +8,10 @@ export const ON_ALBUM_QUERY_CHANGE = 'Search/ON_ALBUM_QUERY_CHANGE';
 export const ON_QUERY_RESULT = 'Search/ON_QUERY_RESULT';
 export const ON_ALBUMS_RESULT = 'Search/ON_ALBUMS_RESULT';
 export const ON_SUGGECTION_SELECT = 'Search/ON_SUGGECTION_SELECT';
+export const ON_ALBUM_SELECT = 'Search/ON_ALBUM_SELECT';
 export const GO_TO_ALBUMS = 'Search/GO_TO_ALBUMS';
 export const GO_TO_SEARCH = 'Search/GO_TO_SEARCH';
+export const LOAD_TRACKS_LIST = 'Search/LOAD_TRACKS_LIST';
 
 const defaultState = {
     step: 'search',
@@ -71,12 +73,22 @@ export const OnSuggestionSelect = suggestion => ({
     payload: suggestion
 });
 
+export const OnAlbumSelect = album => ({
+    type: ON_ALBUM_SELECT,
+    payload: album
+});
+
 export const GoToAlbums = () => ({
     type: GO_TO_ALBUMS
 });
 
 export const GoToSearch = () => ({
     type: GO_TO_SEARCH
+});
+
+export const LoadTracksList = resource => ({
+    type: LOAD_TRACKS_LIST,
+    payload: resource
 });
 
 //Selectors

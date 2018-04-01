@@ -11,7 +11,8 @@ import {
     isAlbumsStep,
     isSearchStep,
     getAlbums,
-    getFilteredAlbums
+    getFilteredAlbums,
+    OnAlbumSelect
 } from '../ducks/search';
 
 const mapStateToProps = state => {
@@ -28,6 +29,7 @@ const mapDispatchToProps = dispatch => {
         {
             OnQueryChange,
             OnSuggestionSelect,
+            OnAlbumSelect,
             OnAlbumQueryChange
         },
         dispatch
@@ -40,6 +42,7 @@ class SearchScreen extends Component {
             props: {
                 OnQueryChange,
                 OnSuggestionSelect,
+                OnAlbumSelect,
                 OnAlbumQueryChange,
                 suggestions,
                 filteredAlbums,
@@ -60,6 +63,7 @@ class SearchScreen extends Component {
                     {isAlbumsStep && (
                         <AlbumsForm
                             onInput={OnAlbumQueryChange}
+                            onChange={OnAlbumSelect}
                             items={filteredAlbums}
                         />
                     )}
