@@ -34,7 +34,7 @@ export default class TracksList extends Component {
         });
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps) {
         const { props } = this;
         if (nextProps.tracks !== props.tracks) {
             return true;

@@ -3,6 +3,9 @@ import React, { Component } from 'react';
 const makeListener = (input, onChange, onKey) => {
     const originalListener = input._listener;
     return function enchancedListener(ch, key) {
+        if (key.name === 'escape') {
+            return;
+        }
         const prevValue = input.value;
         originalListener.call(input, ch, key);
         const value = input.value;
