@@ -167,3 +167,9 @@ export default function reducer(state = INITIAL_STATE, action) {
 }
 
 export const isPlayerInteractive = state => state.tracks.isInteractive;
+export const isPlayerPaused = state => state.tracks.isPaused;
+export const getTracks = state => state.tracks.tracks;
+export const hasTracks = state => getTracks(state).length > 0;
+export const getCurrentTrackIndex = state => state.tracks.current;
+export const getCurrentTrack = state =>
+    getTracks(state)[getCurrentTrackIndex(state)];

@@ -5,8 +5,7 @@ import {
     call,
     put,
     fork,
-    cancel,
-    cancelled
+    cancel
 } from 'redux-saga/effects';
 import {
     TOGGLE_PAUSE,
@@ -26,14 +25,16 @@ import {
     setPlayerInteractive,
     DIRECT_TRACK_SELECT,
     isPlayerInteractive,
-    setCurrentTrackIndex
+    setCurrentTrackIndex,
+    isPlayerPaused,
+    getCurrentTrack
 } from '../ducks/tracks';
 import sleep from 'sleep-promise';
 import * as P from '../services/player';
 
 function* playerSaga() {
     yield takeEvery(TOGGLE_PAUSE, function*() {
-        const isPaused = (yield select()).tracks.isPaused;
+        const isPaused = yield select(isPlayerPaused);
         if (isPaused) {
             yield call(P.pause);
             yield put(onPlayerPaused());
@@ -45,10 +46,8 @@ function* playerSaga() {
 
     yield takeLatest(
         [SET_CURRENT_TRACK_INDEX, GO_TO_NEXT_TRACK, GO_TO_PREV_TRACK],
-        function*({ type, payload }) {
-            const state = yield select();
-            const tracks = state.tracks.tracks;
-            const track = tracks[state.tracks.current];
+        function*() {
+            const track = yield select(getCurrentTrack);
 
             try {
                 yield call(P.openFile, track.url);

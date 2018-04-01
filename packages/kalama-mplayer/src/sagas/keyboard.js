@@ -15,7 +15,8 @@ import {
     goToNextTrack,
     stepBack,
     stepForward,
-    isPlayerInteractive
+    isPlayerInteractive,
+    hasTracks
 } from '../ducks/tracks';
 import { put, call, select } from 'redux-saga/effects';
 import { getRoute, Navigate } from '../ducks/router';
@@ -26,12 +27,8 @@ function* quit() {
 }
 
 function* playerKeys({ type }) {
-    const route = yield select(getRoute);
     const isInteractive = yield select(isPlayerInteractive);
 
-    if (route.screen !== 'Player') {
-        return;
-    }
     if (!isInteractive) {
         return;
     }
@@ -65,6 +62,31 @@ function* playerKeys({ type }) {
     }
 }
 
+function* searchKeys({ type }) {
+    switch (type) {
+        case KEY_SEARCH: {
+            debugger;
+            if (yield select(hasTracks)) {
+                debugger;
+                yield put(Navigate('Player'));
+            }
+            return;
+        }
+    }
+}
+
+function* handleKey(action) {
+    const route = yield select(getRoute);
+    switch (route.screen) {
+        case 'Player':
+            yield* playerKeys(action);
+            return;
+        case 'Search':
+            yield* searchKeys(action);
+            return;
+    }
+}
+
 export default function* keyboardSaga() {
     yield takeEvery(KEY_QUIT, quit);
 
@@ -77,6 +99,6 @@ export default function* keyboardSaga() {
             KEY_PLAY_PAUSE,
             KEY_SEARCH
         ],
-        playerKeys
+        handleKey
     );
 }
