@@ -23,8 +23,13 @@ import { ItemType } from 'kalama-api';
 
 function* doSearch(payload) {
     yield delay(500);
-    const suggestions = yield call(search, payload);
-    yield put(OnQueryResult(suggestions));
+    const query = payload.trim();
+    try {
+        const suggestions = yield call(search, query);
+        yield put(OnQueryResult(suggestions));
+    } catch (e) {
+        yield put(OnQueryResult([]));
+    }
 }
 
 function* autocompleteSaga() {
