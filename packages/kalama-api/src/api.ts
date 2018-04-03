@@ -2,7 +2,7 @@ import fetch from 'node-fetch';
 import cheerio = require('cheerio');
 import { equal } from 'assert';
 
-const SERVER_ROOT = 'https://myzuka.me';
+const SERVER_ROOT = 'https://myzuka.club';
 
 export enum ItemType {
     Artist,
@@ -173,6 +173,7 @@ const parseTracksListHtml = (htmlText: string): Array<Track> => {
             };
         })
         .get()
+        .filter(({ url }) => !!url)
         .map(({ url, title, duration }) => ({
             url: normalizeUrl(url),
             title,
