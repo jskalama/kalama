@@ -27,7 +27,7 @@ export default class TracksList extends Component {
     }
 
     tracksListToListItems(tracks, current) {
-        const playIcon = figures('▶');
+        const playIcon = '>';
         return tracks.map((it, i) => {
             const { title } = it;
             return i === current ? `${playIcon}${title}` : ` ${title}`;
