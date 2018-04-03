@@ -188,6 +188,7 @@ const parseTracksListHtml = (htmlText: string): Array<Track> => {
             };
         })
         .get()
+        .filter(({ url }) => !!url)
         .map(({ url, title, duration }) => ({
             url: normalizeUrl(url),
             title,
