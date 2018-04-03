@@ -211,6 +211,6 @@ export const resolveRedirectedTrack = async (
         redirect: 'manual'
     });
     const location = response.headers.get('Location');
-    equal(response.status, 301, 'Resource should be redirected');
+    equal(response.status, 302, 'Resource should be redirected');
     return { ...resource, url: location };
 };
