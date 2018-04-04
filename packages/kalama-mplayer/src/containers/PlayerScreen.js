@@ -11,12 +11,13 @@ import {
     stepBack,
     stepForward,
     goToPrevTrack,
-    goToNextTrack
+    goToNextTrack,
+    getPrefixizedTracks
 } from '../ducks/tracks';
 
 const mapStateToProps = state => {
     return {
-        tracks: state.tracks.tracks,
+        tracks: getPrefixizedTracks(state),
         current: state.tracks.current,
         isPlaying: state.tracks.isPlaying,
         isPaused: state.tracks.isPaused,

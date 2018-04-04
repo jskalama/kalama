@@ -1,5 +1,5 @@
 import React, { Component, PropTypes } from 'react';
-import figures from 'figures';
+import chalk from 'chalk';
 
 const TrackShape = PropTypes.shape({
     title: PropTypes.string
@@ -27,10 +27,10 @@ export default class TracksList extends Component {
     }
 
     tracksListToListItems(tracks, current) {
-        const playIcon = '>';
         return tracks.map((it, i) => {
-            const { title } = it;
-            return i === current ? `${playIcon}${title}` : ` ${title}`;
+            const { prefix, suffix } = it;
+            const fullTitle = `${chalk.gray(prefix)}${chalk.bold(suffix)}`;
+            return i === current ? `>${fullTitle}` : ` ${fullTitle}`;
         });
     }
 
