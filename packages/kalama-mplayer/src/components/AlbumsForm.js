@@ -15,11 +15,12 @@ export default class AlbumsForm extends Component {
     }
 
     render() {
-        const { props: { onInput, onChange, items } } = this;
+        const { props: { onInput, onChange, items, value } } = this;
 
         return (
             <Autocomplete
                 label="Select Album:"
+                value={value}
                 onInput={onInput}
                 onChange={onChange}
                 items={items.map(album => ({

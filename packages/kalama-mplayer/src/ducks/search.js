@@ -18,6 +18,7 @@ const defaultState = {
     suggestions: [],
     albums: [],
     selectedSuggestion: null,
+    query: '',
     albumQuery: ''
 };
 
@@ -32,6 +33,9 @@ export default function reducer(state = defaultState, action) {
         }
         case ON_QUERY_RESULT: {
             return { ...state, suggestions: action.payload };
+        }
+        case ON_QUERY_CHANGE: {
+            return { ...state, query: action.payload };
         }
         case ON_ALBUM_QUERY_CHANGE: {
             return { ...state, albumQuery: action.payload };
@@ -92,6 +96,7 @@ export const LoadTracksList = resource => ({
 });
 
 //Selectors
+export const getQuery = state => state.search.query;
 export const getQueryResult = state => state.search.suggestions;
 export const getAlbums = state => state.search.albums;
 export const getAlbumQuery = state => state.search.albumQuery;

@@ -15,13 +15,14 @@ export default class SearchForm extends Component {
     }
 
     render() {
-        const { props: { onInput, onChange, items } } = this;
+        const { props: { onInput, onChange, items, value } } = this;
 
         return (
             <Autocomplete
                 label="Search:"
                 onInput={onInput}
                 onChange={onChange}
+                value={value}
                 items={items.map(item => ({
                     value: item,
                     title: formatSearchItem(item)

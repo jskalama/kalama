@@ -7,6 +7,8 @@ import {
     OnSuggestionSelect,
     OnQueryChange,
     OnAlbumQueryChange,
+    getQuery,
+    getAlbumQuery,
     getQueryResult,
     isAlbumsStep,
     isSearchStep,
@@ -17,6 +19,8 @@ import {
 
 const mapStateToProps = state => {
     return {
+        query: getQuery(state),
+        albumQuery: getAlbumQuery(state),
         suggestions: getQueryResult(state),
         albums: getAlbums(state),
         filteredAlbums: getFilteredAlbums(state),
@@ -47,7 +51,9 @@ class SearchScreen extends Component {
                 suggestions,
                 filteredAlbums,
                 isSearchStep,
-                isAlbumsStep
+                isAlbumsStep,
+                query,
+                albumQuery
             }
         } = this;
         return (
@@ -57,6 +63,7 @@ class SearchScreen extends Component {
                         <SearchForm
                             onInput={OnQueryChange}
                             onChange={OnSuggestionSelect}
+                            value={query}
                             items={suggestions}
                         />
                     )}
@@ -64,6 +71,7 @@ class SearchScreen extends Component {
                         <AlbumsForm
                             onInput={OnAlbumQueryChange}
                             onChange={OnAlbumSelect}
+                            value={albumQuery}
                             items={filteredAlbums}
                         />
                     )}

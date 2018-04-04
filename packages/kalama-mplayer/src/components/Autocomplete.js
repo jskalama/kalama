@@ -61,7 +61,7 @@ export default class Autocomplete extends Component {
     render() {
         const {
             state: { selectedIndex },
-            props: { label, items, onInput },
+            props: { label, items, onInput, value },
             handleKey,
             style
         } = this;
@@ -79,6 +79,7 @@ export default class Autocomplete extends Component {
                         ref="input"
                         left={labelSpace}
                         height={1}
+                        value={value}
                         onKey={handleKey}
                         onChange={onInput}
                     />
