@@ -7,7 +7,7 @@
         "start": "babel-node src/app.js",
         "build-dev": "babel src -d .tmp --source-maps",
         "compile": "babel src -d dist",
-        "prepublish": "npm run build"
+        "prepublish": "npm run compile"
     },
     "bin": {
         "kalama-mplayer": "dist/cli.js"
