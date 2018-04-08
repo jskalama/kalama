@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import PlayerScreen from './PlayerScreen';
 import SearchScreen from './SearchScreen';
+import HelpScreen from './HelpScreen';
 import { getRoute } from '../ducks/router';
 
 const mapStateToProps = (state, props) => {
@@ -22,6 +23,8 @@ class Router extends Component {
                 return <PlayerScreen route={route} />;
             case 'Search':
                 return <SearchScreen route={route} />;
+            case 'Help':
+                return <HelpScreen route={route} />;
             default:
                 return <element>404</element>;
         }

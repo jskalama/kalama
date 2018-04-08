@@ -7,7 +7,6 @@ import store from './store';
 import Router from './containers/Router';
 import { initKeyboard } from './services/keyboard';
 
-
 class App extends Component {
     render() {
         return (
@@ -22,7 +21,7 @@ const screen = blessed.screen({
     autoPadding: true,
     smartCSR: true,
     title: 'kalama player',
-    ignoreLocked: ['C-c', 'C-s'] //TODO: move all global keybindings to one place
+    ignoreLocked: ['C-c', 'C-s', 'C-l', 'escape'] //TODO: move all global keybindings to one place
 });
 
 initKeyboard(screen, store);

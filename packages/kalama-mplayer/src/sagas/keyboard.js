@@ -6,7 +6,9 @@ import {
     KEY_NEXT_TRACK,
     KEY_REWIND,
     KEY_FAST_FORWARD,
-    KEY_SEARCH
+    KEY_SEARCH,
+    KEY_HELP,
+    KEY_TABULATE
 } from '../ducks/keyboard';
 import {
     togglePause,
@@ -18,9 +20,9 @@ import {
     isPlayerInteractive,
     hasTracks
 } from '../ducks/tracks';
-import { put, call, select } from 'redux-saga/effects';
+import { put, select } from 'redux-saga/effects';
 import { getRoute, Navigate } from '../ducks/router';
-import { GoToSearch } from '../ducks/search';
+import { GoToSearch, isAlbumsStep } from '../ducks/search';
 
 function* quit() {
     yield put(shutdown());
@@ -54,33 +56,52 @@ function* playerKeys({ type }) {
             yield put(stepForward());
             return;
         }
-        case KEY_SEARCH: {
-            yield put(Navigate('Search'));
-            yield put(GoToSearch());
-            return;
-        }
-    }
-}
-
-function* searchKeys({ type }) {
-    switch (type) {
-        case KEY_SEARCH: {
-            if (yield select(hasTracks)) {
-                yield put(Navigate('Player'));
-            }
-            return;
-        }
     }
 }
 
 function* handleKey(action) {
     const route = yield select(getRoute);
+    const isAlbums = yield select(isAlbumsStep);
+    const playerHasTracks = yield select(hasTracks);
+    switch (action.type) {
+        case KEY_TABULATE: {
+            if (route.screen === 'Search') {
+                if (isAlbums) {
+                    yield put(Navigate('Search'));
+                    yield put(GoToSearch());
+                    return;
+                }
+                if (playerHasTracks) {
+                    yield put(Navigate('Player'));
+                    return;
+                }
+            }
+            if (route.screen === 'Player') {
+                yield put(Navigate('Search'));
+                yield put(GoToSearch());
+                return;
+            }
+            if (route.screen === 'Help') {
+                if (playerHasTracks) {
+                    yield put(Navigate('Player'));
+                    return;
+                } else {
+                    yield put(Navigate('Search'));
+                    yield put(GoToSearch());
+                    return;
+                }
+            }
+            return;
+        }
+        case KEY_HELP: {
+            yield put(Navigate('Help'));
+            return;
+        }
+    }
+
     switch (route.screen) {
         case 'Player':
             yield* playerKeys(action);
-            return;
-        case 'Search':
-            yield* searchKeys(action);
             return;
     }
 }
@@ -95,7 +116,9 @@ export default function* keyboardSaga() {
             KEY_REWIND,
             KEY_FAST_FORWARD,
             KEY_PLAY_PAUSE,
-            KEY_SEARCH
+            KEY_SEARCH,
+            KEY_HELP,
+            KEY_TABULATE
         ],
         handleKey
     );

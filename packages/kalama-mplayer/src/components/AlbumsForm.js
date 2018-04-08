@@ -19,7 +19,7 @@ export default class AlbumsForm extends Component {
 
         return (
             <Autocomplete
-                label="Select Album:"
+                label="Select Album (or Escape to go back):"
                 value={value}
                 onInput={onInput}
                 onChange={onChange}

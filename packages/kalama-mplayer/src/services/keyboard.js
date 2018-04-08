@@ -5,7 +5,9 @@ import {
     KEY_REWIND,
     KEY_FAST_FORWARD,
     KEY_PLAY_PAUSE,
-    KEY_SEARCH
+    KEY_SEARCH,
+    KEY_HELP,
+    KEY_TABULATE
 } from '../ducks/keyboard';
 
 const keymap = [
@@ -15,11 +17,15 @@ const keymap = [
     ['left', KEY_REWIND],
     ['right', KEY_FAST_FORWARD],
     ['space', KEY_PLAY_PAUSE],
-    ['C-s', KEY_SEARCH]
+    ['C-s', KEY_SEARCH],
+    ['C-l', KEY_HELP],
+    ['escape', KEY_TABULATE],
 ];
 
 export const initKeyboard = (screen, store) => {
     keymap.forEach(([key, action]) => {
-        screen.key(key, () => store.dispatch({ type: action }));
+        screen.key(key, () => {
+            store.dispatch({ type: action });
+        });
     });
 };
