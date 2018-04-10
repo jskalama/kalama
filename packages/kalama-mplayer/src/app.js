@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import store from './store';
 import Router from './containers/Router';
 import { initKeyboard } from './services/keyboard';
+import { initSOD } from './services/sod';
 
 class App extends Component {
     render() {
@@ -25,5 +26,6 @@ const screen = blessed.screen({
 });
 
 initKeyboard(screen, store);
+initSOD(screen);
 
 render(<App />, screen);
