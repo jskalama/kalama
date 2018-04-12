@@ -29,7 +29,7 @@ export default class TracksList extends Component {
     tracksListToListItems(tracks, current) {
         return tracks.map((it, i) => {
             const { prefix, suffix } = it;
-            const fullTitle = `${chalk.gray(prefix)}${chalk.bold(suffix)}`;
+            const fullTitle = `${chalk.yellow(prefix)}${chalk.bold(suffix)}`;
             return i === current ? `>${fullTitle}` : ` ${fullTitle}`;
         });
     }
