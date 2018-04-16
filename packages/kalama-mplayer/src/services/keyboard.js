@@ -7,7 +7,8 @@ import {
     KEY_PLAY_PAUSE,
     KEY_SEARCH,
     KEY_HELP,
-    KEY_TABULATE
+    KEY_TABULATE,
+    KEY_DOWNLOAD
 } from '../ducks/keyboard';
 
 const keymap = [
@@ -19,6 +20,7 @@ const keymap = [
     ['space', KEY_PLAY_PAUSE],
     ['C-s', KEY_SEARCH],
     ['C-l', KEY_HELP],
+    ['C-s', KEY_DOWNLOAD],
     ['escape', KEY_TABULATE],
 ];
 

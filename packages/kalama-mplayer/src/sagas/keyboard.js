@@ -8,7 +8,8 @@ import {
     KEY_FAST_FORWARD,
     KEY_SEARCH,
     KEY_HELP,
-    KEY_TABULATE
+    KEY_TABULATE,
+    KEY_DOWNLOAD
 } from '../ducks/keyboard';
 import {
     togglePause,
@@ -30,6 +31,16 @@ function* quit() {
 
 function* playerKeys({ type }) {
     const isInteractive = yield select(isPlayerInteractive);
+    const playerHasTracks = yield select(hasTracks);
+
+    switch (type) {
+        case KEY_DOWNLOAD: {
+            if (playerHasTracks) {
+                yield put(Navigate('Download'));
+                return;
+            }
+        }
+    }
 
     if (!isInteractive) {
         return;
@@ -81,7 +92,7 @@ function* handleKey(action) {
                 yield put(GoToSearch());
                 return;
             }
-            if (route.screen === 'Help') {
+            if (route.screen === 'Download' || route.screen === 'Help') {
                 if (playerHasTracks) {
                     yield put(Navigate('Player'));
                     return;
@@ -118,7 +129,8 @@ export default function* keyboardSaga() {
             KEY_PLAY_PAUSE,
             KEY_SEARCH,
             KEY_HELP,
-            KEY_TABULATE
+            KEY_TABULATE,
+            KEY_DOWNLOAD
         ],
         handleKey
     );

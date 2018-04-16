@@ -8,3 +8,4 @@ export const KEY_PLAY_PAUSE = 'Keyboard/KEY_PLAY_PAUSE';
 export const KEY_SEARCH = 'Keyboard/KEY_SEARCH';
 export const KEY_HELP = 'Keyboard/KEY_HELP';
 export const KEY_TABULATE = 'Keyboard/KEY_TABULATE';
+export const KEY_DOWNLOAD = 'Keyboard/KEY_DOWNLOAD';

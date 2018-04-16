@@ -22,7 +22,7 @@ const screen = blessed.screen({
     autoPadding: true,
     smartCSR: true,
     title: 'kalama player',
-    ignoreLocked: ['C-c', 'C-s', 'C-l', 'escape'] //TODO: move all global keybindings to one place
+    ignoreLocked: ['C-c', 'C-s', 'C-s', 'C-l', 'escape'] //TODO: move all global keybindings to one place
 });
 
 initKeyboard(screen, store);
