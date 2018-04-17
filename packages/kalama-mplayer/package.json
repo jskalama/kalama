@@ -27,6 +27,7 @@
     "dependencies": {
         "blessed": "^0.1.81",
         "chalk": "^2.3.2",
+        "download": "^6.2.5",
         "figures": "^2.0.0",
         "fuzzy-search": "^2.0.1",
         "kalama-api": "^0.7.1",
