@@ -33,6 +33,7 @@
         "lcp": "^1.1.0",
         "lodash": "^4.17.5",
         "mplayer-as-promised": "0.0.5",
+        "platform-folders": "^0.1.5",
         "promise-retry": "^1.1.1",
         "prop-types": "^15.6.1",
         "react": "^0.14.9",
