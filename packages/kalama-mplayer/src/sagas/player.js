@@ -96,9 +96,12 @@ function* positionPoller() {
     try {
         yield put(onPlayerCurrentTimeChanged(0));
         while (true) {
-            const percent = yield call(P.getPercent);
-            if (percent !== null) {
-                yield put(onPlayerCurrentTimeChanged(percent));
+            const isPaused = yield select(isPlayerPaused);
+            if(!isPaused) {
+                const percent = yield call(P.getPercent);
+                if (percent !== null) {
+                    yield put(onPlayerCurrentTimeChanged(percent));
+                }
             }
             yield call(sleep, 1000);
         }

@@ -1,8 +1,9 @@
 import { join } from 'path';
 import { getDownloadsFolder } from 'platform-folders';
+import download from 'download';
 
-const FOLDER = 'Kalama-Downloads';
+export const APP_DOWNLOAD_FOLDER = join(getDownloadsFolder(), 'Kalama-Downloads');
 
-const getFolder = () => {
-    join(getDownloadsFolder(), FOLDER);
+export const performDownloadTask = async task => {
+    await download(task.url, join(APP_DOWNLOAD_FOLDER, task.folderName));
 };

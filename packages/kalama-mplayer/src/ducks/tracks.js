@@ -33,8 +33,8 @@ export const DIRECT_TRACK_SELECT = 'kalama-player/tracks/DIRECT_TRACK_SELECT';
 export const init = () => {
     return { type: INIT };
 };
-export const setTracks = tracks => {
-    return { type: SET_TRACKS, payload: tracks };
+export const setTracks = (tracks, parentResource) => {
+    return { type: SET_TRACKS, payload: tracks, meta: { parentResource } };
 };
 export const setCurrentTrackIndex = idx => {
     return { type: SET_CURRENT_TRACK_INDEX, payload: idx };
@@ -92,6 +92,7 @@ export const setPlayerInteractive = isInteractive => {
 
 const INITIAL_STATE = {
     tracks: [],
+    parentResource: null,
     current: null,
     isPlaying: false,
     isPaused: false,
@@ -116,7 +117,12 @@ const getTrackIndex = (state, trackNumber) => {
 export default function reducer(state = INITIAL_STATE, action) {
     switch (action.type) {
         case SET_TRACKS: {
-            return { ...state, tracks: action.payload, current: null };
+            return {
+                ...state,
+                tracks: action.payload,
+                parentResource: action.meta.parentResource,
+                current: null
+            };
         }
 
         case TOGGLE_PAUSE: {
@@ -175,6 +181,8 @@ export const hasTracks = state => getTracks(state).length > 0;
 export const getCurrentTrackIndex = state => state.tracks.current;
 export const getCurrentTrack = state =>
     getTracks(state)[getCurrentTrackIndex(state)];
+export const getParentResourceLabel = ({ tracks: { parentResource } }) =>
+    parentResource ? parentResource.label || 'Unknown' : 'Unknown';
 
 // Memoized Selectors
 export const getPrefixizedTracks = createSelector(getTracks, tracks =>

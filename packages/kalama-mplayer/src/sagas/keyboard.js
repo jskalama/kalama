@@ -1,4 +1,4 @@
-import { takeEvery } from 'redux-saga';
+import { takeEvery } from 'redux-saga/effects';
 import {
     KEY_QUIT,
     KEY_PLAY_PAUSE,
@@ -24,6 +24,7 @@ import {
 import { put, select } from 'redux-saga/effects';
 import { getRoute, Navigate } from '../ducks/router';
 import { GoToSearch, isAlbumsStep } from '../ducks/search';
+import { DownloadCurrentPlst } from '../ducks/download';
 
 function* quit() {
     yield put(shutdown());
@@ -37,6 +38,7 @@ function* playerKeys({ type }) {
         case KEY_DOWNLOAD: {
             if (playerHasTracks) {
                 yield put(Navigate('Download'));
+                yield put(DownloadCurrentPlst());
                 return;
             }
         }

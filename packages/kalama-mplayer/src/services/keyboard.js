@@ -18,7 +18,6 @@ const keymap = [
     ['left', KEY_REWIND],
     ['right', KEY_FAST_FORWARD],
     ['space', KEY_PLAY_PAUSE],
-    ['C-s', KEY_SEARCH],
     ['C-l', KEY_HELP],
     ['C-s', KEY_DOWNLOAD],
     ['escape', KEY_TABULATE],

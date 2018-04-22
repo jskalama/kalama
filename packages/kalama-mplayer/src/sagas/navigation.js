@@ -14,7 +14,7 @@ function* doShutdown() {
 
 function* doLoadTrackList({ payload: resource }) {
     const tracks = yield call(getTracks, resource);
-    yield put(setTracks(tracks));
+    yield put(setTracks(tracks, resource));
     yield put(Navigate('Player'));
     yield put(setCurrentTrackIndex(0));
 }
