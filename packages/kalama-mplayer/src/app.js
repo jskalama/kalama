@@ -5,7 +5,7 @@ import { render } from 'react-blessed';
 import { Provider } from 'react-redux';
 import store from './store';
 import Router from './containers/Router';
-import { initKeyboard } from './services/keyboard';
+import { initKeyboard, getGlobalKeys } from './services/keyboard';
 import { initSOD } from './services/sod';
 
 class App extends Component {
@@ -22,7 +22,7 @@ const screen = blessed.screen({
     autoPadding: true,
     smartCSR: true,
     title: 'kalama player',
-    ignoreLocked: ['C-c', 'C-s', 'C-s', 'C-l', 'escape'] //TODO: move all global keybindings to one place
+    ignoreLocked: getGlobalKeys()
 });
 
 initKeyboard(screen, store);

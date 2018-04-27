@@ -30,6 +30,8 @@ export const ON_TASK_COMPLETED = 'Download/ON_TASK_COMPLETED';
 export const ON_TASK_RUNNING = 'Download/ON_TASK_RUNNING';
 export const ON_TASK_FAILED = 'Download/ON_TASK_FAILED';
 export const DOWNLOAD_CURRENT_PLST = 'Download/DOWNLOAD_CURRENT_PLST';
+export const DOWNLOAD_AND_SHARE_CURRENT_PLST =
+    'Download/DOWNLOAD_AND_SHARE_CURRENT_PLST';
 
 // Reducer
 const defaultState = {
@@ -107,6 +109,9 @@ export const OnTaskFailed = id => ({
 });
 export const DownloadCurrentPlst = () => ({
     type: DOWNLOAD_CURRENT_PLST
+});
+export const DownloadAndShareCurrentPlst = () => ({
+    type: DOWNLOAD_AND_SHARE_CURRENT_PLST
 });
 
 //Selectors

@@ -9,7 +9,8 @@ import {
     KEY_SEARCH,
     KEY_HELP,
     KEY_TABULATE,
-    KEY_DOWNLOAD
+    KEY_DOWNLOAD,
+    KEY_QRCODE
 } from '../ducks/keyboard';
 import {
     togglePause,
@@ -24,7 +25,10 @@ import {
 import { put, select } from 'redux-saga/effects';
 import { getRoute, Navigate } from '../ducks/router';
 import { GoToSearch, isAlbumsStep } from '../ducks/search';
-import { DownloadCurrentPlst } from '../ducks/download';
+import {
+    DownloadCurrentPlst,
+    DownloadAndShareCurrentPlst
+} from '../ducks/download';
 
 function* quit() {
     yield put(shutdown());
@@ -41,6 +45,15 @@ function* playerKeys({ type }) {
                 yield put(DownloadCurrentPlst());
                 return;
             }
+            break;
+        }
+        case KEY_QRCODE: {
+            if (playerHasTracks) {
+                yield put(Navigate('Download'));
+                yield put(DownloadAndShareCurrentPlst());
+                return;
+            }
+            break;
         }
     }
 
@@ -132,7 +145,8 @@ export default function* keyboardSaga() {
             KEY_SEARCH,
             KEY_HELP,
             KEY_TABULATE,
-            KEY_DOWNLOAD
+            KEY_DOWNLOAD,
+            KEY_QRCODE
         ],
         handleKey
     );
