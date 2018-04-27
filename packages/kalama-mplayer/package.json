@@ -13,6 +13,10 @@
     "bin": {
         "kalama-mplayer": "dist/cli.js"
     },
+    "files": [
+        "dist",
+        "src"
+    ],
     "keywords": [],
     "author": "kalama team",
     "license": "WTFPL",
