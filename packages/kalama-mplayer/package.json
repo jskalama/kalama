@@ -1,6 +1,6 @@
 {
     "name": "kalama-mplayer",
-    "version": "0.7.1",
+    "version": "0.7.2",
     "description": "MPlayer frontend for kalama",
     "main": "index.js",
     "scripts": {
@@ -13,10 +13,7 @@
     "bin": {
         "kalama-mplayer": "dist/cli.js"
     },
-    "files": [
-        "dist",
-        "src"
-    ],
+    "files": ["dist", "src"],
     "keywords": [],
     "author": "kalama team",
     "license": "WTFPL",
@@ -28,10 +25,11 @@
         "babel-preset-stage-0": "^6.24.1",
         "eslint": "^4.8.0",
         "eslint-plugin-react": "^7.4.0",
-        "remote-redux-devtools": "^0.5.12",
         "remotedev-server": "^0.2.4"
     },
     "dependencies": {
+        "remote-redux-devtools": "^0.5.12",
+        "babel-polyfill": "^6.26.0",
         "blessed": "^0.1.81",
         "chalk": "^2.3.2",
         "download": "^6.2.5",
