@@ -16,7 +16,7 @@ const keymap = [
     ['C-l', KEY_HELP, { global: true }],
     ['C-s', KEY_DOWNLOAD, { global: true }],
     ['escape', KEY_TABULATE, { global: true }],
-    ['C-q', KEY_QRCODE, { global: true }],
+    ['C-w', KEY_QRCODE, { global: true }],
     ['C-left', KEY_PREV_TRACK],
     ['C-right', KEY_NEXT_TRACK],
     ['left', KEY_REWIND],

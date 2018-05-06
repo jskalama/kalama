@@ -13,7 +13,10 @@
     "bin": {
         "kalama-mplayer": "dist/cli.js"
     },
-    "files": ["dist", "src"],
+    "files": [
+        "dist",
+        "src"
+    ],
     "keywords": [],
     "author": "kalama team",
     "license": "WTFPL",
@@ -28,7 +31,7 @@
         "remotedev-server": "^0.2.4"
     },
     "dependencies": {
-        "remote-redux-devtools": "^0.5.12",
+        "archiver-promise": "^1.0.0",
         "babel-polyfill": "^6.26.0",
         "blessed": "^0.1.81",
         "chalk": "^2.3.2",
@@ -47,6 +50,7 @@
         "react-redux": "^5.0.6",
         "redux": "^3.7.2",
         "redux-saga": "^0.16.0",
+        "remote-redux-devtools": "^0.5.12",
         "reselect": "^3.0.1",
         "sanitize-filename": "^1.6.1",
         "sleep-promise": "^2.0.0",

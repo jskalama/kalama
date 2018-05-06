@@ -8,6 +8,10 @@ export const STATUS_SCHEDULED = 'STATUS_SCHEDULED';
 export const STATUS_RUNNING = 'STATUS_RUNNING';
 export const STATUS_COMPLETED = 'STATUS_COMPLETED';
 export const STATUS_FAILED = 'STATUS_FAILED';
+export const TYPE_DOWNLOAD = 'TYPE_DOWNLOAD';
+export const TYPE_ARCHIVE = 'TYPE_ARCHIVE';
+
+// Helpers
 
 const playlistLabelToFolderName = label => {
     const sanitized = sanitize(label, { replacement: '-' });
@@ -16,12 +20,36 @@ const playlistLabelToFolderName = label => {
     }
     return sanitized;
 };
+
 const trackToTask = track => ({
+    type: TYPE_DOWNLOAD,
     id: uid(),
     url: track.url,
     title: track.title,
     status: STATUS_SCHEDULED
 });
+
+const tasksToArchiveTask = (folderName, tasks) => ({
+    id: uid(),
+    type: TYPE_ARCHIVE,
+    waitForIds: tasks.map(_ => _.id),
+    folderName,
+    status: STATUS_SCHEDULED
+});
+
+const isArchiveTaskAndReady = (t, all) => {
+    if (t.status !== STATUS_SCHEDULED) {
+        return false;
+    }
+    if (t.type !== TYPE_ARCHIVE) {
+        return false;
+    }
+    debugger;
+    const waitForIdsSet = new Set(t.waitForIds);
+    return all
+        .filter(_ => waitForIdsSet.has(_.id))
+        .every(_ => _.status === STATUS_COMPLETED);
+};
 
 // Actions
 export const ADD_TASKS = 'Download/ADD_TASKS';
@@ -95,6 +123,16 @@ export const AddTracksTasks = ({ tracks, playlistLabel }) => {
     };
 };
 
+export const AddTracksAndShareTasks = ({ tracks, playlistLabel }) => {
+    const folderName = playlistLabelToFolderName(playlistLabel);
+    const tasks = tracks.map(trackToTask).map(t => ({ ...t, folderName }));
+    const archiveTask = tasksToArchiveTask(folderName, tasks);
+    return {
+        type: ADD_TASKS,
+        payload: [...tasks, archiveTask]
+    };
+};
+
 export const OnTaskCompleted = id => ({
     type: ON_TASK_COMPLETED,
     payload: { id }
@@ -115,9 +153,14 @@ export const DownloadAndShareCurrentPlst = () => ({
 });
 
 //Selectors
+
 export const getTasks = state => state.download.tasks;
+
 export const getTasksSummary = state => countBy(getTasks(state), 'status');
-export const getFirstScheduledTask = state =>
-    Object.values(getTasks(state)).filter(
-        t => t.status === STATUS_SCHEDULED
-    )[0];
+
+export const getNextScheduledTask = state =>
+    Object.values(getTasks(state)).find(
+        (t, i, allTasks) =>
+            (t.type === TYPE_DOWNLOAD && t.status === STATUS_SCHEDULED) ||
+            isArchiveTaskAndReady(t, allTasks)
+    );
