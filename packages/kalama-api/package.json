@@ -6,6 +6,7 @@
     "scripts": {
         "compile": "tsc -p tsconfig.json",
         "prepare": "npm run compile",
+        "example": "npm run compile && node dist/example.js",
         "test": "mocha -r ts-node/register src/tests/**/*.spec.ts --timeout 10000"
     },
     "files": [
