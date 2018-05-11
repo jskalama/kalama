@@ -2,12 +2,13 @@ import fetch from 'node-fetch';
 import cheerio = require('cheerio');
 import { equal } from 'assert';
 
-const SERVER_ROOT = 'https://myzuka.club';
+const SERVER_ROOT = 'https://myzcloud.me';
 
 export enum ItemType {
     Artist,
     Album,
-    Song
+    Song,
+    Unknown
 }
 
 export enum AlbumCategory {
@@ -74,13 +75,27 @@ const normalizeUrl = (url: string): string => {
     return `${SERVER_ROOT}${url}`;
 };
 
+const itemTypeMap = {
+    artist: ItemType.Artist,
+    album: ItemType.Album,
+    song: ItemType.Song
+};
+
+const decodeItemTypeFromUrl = (url: string): ItemType => {
+    const parts = url.split('/');
+    const itemTypeIdentStr = parts[1];
+    if (itemTypeMap.hasOwnProperty(itemTypeIdentStr)) {
+        return itemTypeMap[itemTypeIdentStr];
+    } else {
+        return ItemType.Unknown;
+    }
+};
+
 const decodeItem = (item: Item): SearchResultItem => {
-    const parts = item.url.split('/');
-    const itemTypeStr = parts[1];
     return {
         ...item,
         url: normalizeUrl(item.url),
-        itemType: ItemType[itemTypeStr]
+        itemType: decodeItemTypeFromUrl(item.url)
     };
 };
 
@@ -111,7 +126,7 @@ export const getArtistAlbumsList = async (
     artist: Resource
 ): Promise<Array<Album>> => {
     const url = artist.url;
-    const albumsUrl = `${url}/Albums`;
+    const albumsUrl = `${url}/albums`;
     const queryResult = await fetch(albumsUrl, {
         headers: { referer: SERVER_ROOT }
     });
@@ -149,7 +164,7 @@ const parseDurationDOM = (durationBitrateDiv: any): number => {
 
 const parseYearDOM = (albumDiv: any): number => {
     const yearStr = albumDiv
-        .find('.info > .tags > a[href^="/Albums/"]')
+        .find('.card-footer > .card-text > a[href^="/albums/"]')
         .text()
         .trim();
 
@@ -164,8 +179,8 @@ const parseTracksListHtml = (htmlText: string): Array<Track> => {
     const nodes = $('[itemtype="http://schema.org/MusicRecording"]');
     return nodes
         .map((i, node) => {
-            const playButton = $(node).find('.play [data-url]');
-            const durationBitrateDiv = $(node).find('.options .data');
+            const playButton = $(node).find('.playlist__control.play[data-url]');
+            const durationBitrateDiv = $(node).find('.track__details .text-muted');
             return {
                 url: playButton.attr('data-url'),
                 title: playButton.attr('data-title'),
@@ -183,16 +198,17 @@ const parseTracksListHtml = (htmlText: string): Array<Track> => {
 
 const parseAlbumsListHtml = (htmlText: string): Array<Album> => {
     const $ = cheerio.load(htmlText);
-    const albumNodes = $('.album-list > .item');
+    const albumNodes = $('#divAlbumsList .card');
     return albumNodes
         .map((i, node) => {
             const $node = $(node);
+            const labelNode = $node.find('.card-body > .card-subtitle > a');
             return {
-                url: $node.find('.info > .title > a').attr('href'),
-                label: $node.find('.info > .title > a').text(),
+                url: labelNode.attr('href'),
+                label: labelNode.text(),
                 year: parseYearDOM($node),
                 albumCategory: parseInt($node.attr('data-type'), 10),
-                image: $node.find('.vis > a > img').attr('src')
+                image: $node.find('a > img.card-img-top').attr('src')
             };
         })
         .get()
