@@ -1,6 +1,6 @@
 {
     "name": "kalama",
-    "version": "0.7.2",
+    "version": "0.7.3",
     "main": "index.js",
     "license": "MIT",
     "scripts": {
@@ -39,7 +39,7 @@
         "inquirer": "^3.0.2",
         "inquirer-autocomplete-prompt": "^0.11.0",
         "ip": "^1.1.5",
-        "kalama-api": "^0.7.2",
+        "kalama-api": "^0.7.3",
         "lodash": "^4.17.4",
         "node-fetch": "^1.6.3",
         "q-io": "^1.13.2",
