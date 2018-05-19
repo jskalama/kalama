@@ -7,6 +7,11 @@ import store from './store';
 import Router from './containers/Router';
 import { initKeyboard, getGlobalKeys } from './services/keyboard';
 import { initSOD } from './services/sod';
+import { platform } from 'os';
+
+if (platform() === 'win32') {
+    require('kalama-mplayer-binary-win32').setup();
+}
 
 class App extends Component {
     render() {

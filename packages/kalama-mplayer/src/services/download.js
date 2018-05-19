@@ -1,8 +1,13 @@
 import { join } from 'path';
-import { getDownloadsFolder } from 'platform-folders';
 import download from 'download';
 import Аrchiver from 'archiver-promise';
 
+import { platform, homedir } from 'os';
+
+const getDownloadsFolder =
+    platform() === 'win32'
+        ? homedir
+        : require('platform-folders').getDownloadsFolder;
 
 export const APP_DOWNLOAD_FOLDER = join(
     getDownloadsFolder(),
@@ -15,5 +20,4 @@ export const performDownloadTask = async task => {
 
 export const performArchiveTask = async task => {
     //TODO: implement
-    debugger
 };
