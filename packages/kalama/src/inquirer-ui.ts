@@ -81,7 +81,7 @@ const sortAlbumsByCategoryAndYear = (albums: Array<Album>): Array<Album> => {
 const albumsToChoices = (albums: Array<Album>) => {
     const albumsChoices = sortAlbumsByCategoryAndYear(albums).map(item => ({
         name: `[${AlbumCategory[item.albumCategory]}] ${chalk.yellow(
-            item.year || '....'
+            item.year ? item.year.toString() : '....'
         )} ${item.label}`,
         value: item
     }));

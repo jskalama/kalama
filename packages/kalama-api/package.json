@@ -1,7 +1,8 @@
 {
     "name": "kalama-api",
-    "version": "0.7.1",
-    "main": "dist/api.js",
+    "version": "0.7.3",
+    "main": "./dist/api.js",
+    "typings": "./dist/api.d.ts",
     "license": "MIT",
     "scripts": {
         "compile": "tsc -p tsconfig.json",
