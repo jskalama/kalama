@@ -49,7 +49,7 @@ export default function* downloadSaga() {
                 return;
             }
 
-            task.type === TYPE_DOWNLOAD
+            const runner = task.type === TYPE_DOWNLOAD
                 ? performDownloadTask
                 : task.type === TYPE_ARCHIVE
                     ? performArchiveTask
