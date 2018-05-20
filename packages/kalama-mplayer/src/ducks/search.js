@@ -18,6 +18,7 @@ const defaultState = {
     suggestions: [],
     albums: [],
     selectedSuggestion: null,
+    playlistResource:null,
     query: '',
     albumQuery: ''
 };
@@ -45,6 +46,9 @@ export default function reducer(state = defaultState, action) {
         }
         case ON_SUGGECTION_SELECT: {
             return { ...state, selectedSuggestion: action.payload };
+        }
+        case LOAD_TRACKS_LIST: {
+            return { ...state, playlistResource: action.payload };
         }
         default:
             return state;
@@ -115,3 +119,5 @@ export const getFilteredAlbums = createSelector(
         return orderAlbums(searcher.search(albumQuery));
     }
 );
+export const getSelectedSuggestion = state => state.search.selectedSuggestion;
+export const getPlaylistResource = state => state.search.playlistResource;

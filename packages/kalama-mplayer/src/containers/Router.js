@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import MainWindow from './MainWindow';
 import PlayerScreen from './PlayerScreen';
 import SearchScreen from './SearchScreen';
 import HelpScreen from './HelpScreen';
@@ -26,13 +27,29 @@ class Router extends Component {
         } = this;
         switch (screen) {
             case 'Player':
-                return <PlayerScreen route={route} />;
+                return (
+                    <MainWindow>
+                        <PlayerScreen route={route} />
+                    </MainWindow>
+                );
             case 'Search':
-                return <SearchScreen route={route} />;
+                return (
+                    <MainWindow>
+                        <SearchScreen route={route} />
+                    </MainWindow>
+                );
             case 'Help':
-                return <HelpScreen route={route} />;
+                return (
+                    <MainWindow>
+                        <HelpScreen route={route} />
+                    </MainWindow>
+                );
             case 'Download':
-                return <DownloadScreen route={route} />;
+                return (
+                    <MainWindow>
+                        <DownloadScreen route={route} />
+                    </MainWindow>
+                );
             default:
                 return <element>404</element>;
         }
