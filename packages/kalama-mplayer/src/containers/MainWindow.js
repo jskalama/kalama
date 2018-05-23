@@ -3,14 +3,13 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getRoute } from '../ducks/router';
 import Label from '../components/Label';
-import { getPlaylistResource } from '../ducks/search';
 import { getTasksSummary, STATUS_SCHEDULED } from '../ducks/download';
-import { getCurrentTrack } from '../ducks/tracks';
+import { getCurrentTrack, getParentResource } from '../ducks/tracks';
 
 const mapStateToProps = state => {
     return {
         route: getRoute(state),
-        playlist: getPlaylistResource(state),
+        parentResource: getParentResource(state),
         tasksSummary: getTasksSummary(state),
         currentTrack: getCurrentTrack(state)
     };
@@ -35,7 +34,7 @@ const getTitle = (route, playlist, tasksSummary, currentTrack) => {
         part1 = playlistName;
     }
     if (currentTrack) {
-        part2 = currentTrack.title;
+        part2 = currentTrack.suffix;
     }
 
     return [part0, part1, part2].filter(_ => _).join(' / ');
@@ -50,7 +49,7 @@ class MainWindow extends Component {
             boxStyle,
             borderOptions,
             titleStyle,
-            props: { children, route, playlist, tasksSummary, currentTrack }
+            props: { children, route, parentResource, tasksSummary, currentTrack }
         } = this;
         return (
             <element>
@@ -65,7 +64,7 @@ class MainWindow extends Component {
                 <Label
                     style={titleStyle}
                     top={0}
-                    text={getTitle(route, playlist, tasksSummary, currentTrack)}
+                    text={getTitle(route, parentResource, tasksSummary, currentTrack)}
                 />
             </element>
         );

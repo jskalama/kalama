@@ -180,7 +180,9 @@ export const getTracks = state => state.tracks.tracks;
 export const hasTracks = state => getTracks(state).length > 0;
 export const getCurrentTrackIndex = state => state.tracks.current;
 export const getCurrentTrack = state =>
-    getTracks(state)[getCurrentTrackIndex(state)];
+    getPrefixizedTracks(state)[getCurrentTrackIndex(state)];
+export const getParentResource = ({ tracks: { parentResource } }) =>
+    parentResource;
 export const getParentResourceLabel = ({ tracks: { parentResource } }) =>
     parentResource ? parentResource.label || 'Unknown' : 'Unknown';
 
