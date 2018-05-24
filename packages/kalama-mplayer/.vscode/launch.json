@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "Debug & Remote DevTools",
-            "program": "${workspaceFolder}/.tmp/app.js",
+            "program": "${workspaceFolder}/.tmp/cli.js",
             "preLaunchTask": "build-dev",
             "sourceMaps": true,
             "console": "integratedTerminal",
@@ -20,7 +20,7 @@
             "type": "node",
             "request": "launch",
             "name": "Debug",
-            "program": "${workspaceFolder}/.tmp/app.js",
+            "program": "${workspaceFolder}/.tmp/cli.js",
             "preLaunchTask": "build-dev",
             "sourceMaps": true,
             "console": "integratedTerminal"

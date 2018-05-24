@@ -23,14 +23,16 @@ class App extends Component {
     }
 }
 
-const screen = blessed.screen({
-    autoPadding: true,
-    smartCSR: true,
-    title: 'kalama player',
-    ignoreLocked: getGlobalKeys()
-});
+export default () => {
+    const screen = blessed.screen({
+        autoPadding: true,
+        smartCSR: true,
+        title: 'kalama player',
+        ignoreLocked: getGlobalKeys()
+    });
 
-initKeyboard(screen, store);
-initSOD(screen);
+    initKeyboard(screen, store);
+    initSOD(screen);
 
-render(<App />, screen);
+    render(<App />, screen);
+};
