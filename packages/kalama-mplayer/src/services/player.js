@@ -46,6 +46,10 @@ export const setVolume = async vol => {
     return ignoreWhatever(() => currentItem.setVolume(vol));
 };
 
+export const getVolume = async () => {
+    return retryIfBusy(() => currentItem.getVolume());
+};
+
 export const shutdown = async () => {
     await retryIfBusy(() => player.shutdown());
 };

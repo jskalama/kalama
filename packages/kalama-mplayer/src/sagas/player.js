@@ -35,6 +35,14 @@ import sleep from 'sleep-promise';
 import * as P from '../services/player';
 import * as C from '../services/conf';
 import { showMessage } from '../ducks/flashMessages';
+import {
+    DEFAULT_VOLUME,
+    VOLUME_STEP,
+    MAX_VOLUME,
+    MIN_VOLUME,
+    normalize,
+    limit
+} from '../lib/volume';
 
 function* playerSaga() {
     yield takeEvery(TOGGLE_PAUSE, function*() {
@@ -102,8 +110,10 @@ function* volumeControl() {
     const config = yield call(C.getResolved);
     let volume = parseInt(config.volume, 10);
     if (isNaN(volume)) {
-        volume = 50;
+        volume = DEFAULT_VOLUME;
     }
+    volume = limit(volume);
+    yield put(showMessage(`Volume: ${normalize(volume)}%`));
 
     yield takeEvery(
         [VOLUME_DOWN, VOLUME_UP],
@@ -111,23 +121,18 @@ function* volumeControl() {
         function* onVolumeUpOrDown({ type }) {
             switch (type) {
                 case VOLUME_UP:
-                    volume = volume + 10;
+                    volume = volume + VOLUME_STEP;
                     break;
                 case VOLUME_DOWN:
-                    volume = volume - 10;
+                    volume = volume - VOLUME_STEP;
                     break;
                 default:
                     break;
             }
-            if (volume > 100) {
-                volume = 100;
-            }
-            if (volume < 0) {
-                volume = 0;
-            }
+            volume = limit(volume);
             yield call(P.setVolume, volume);
             yield call(C.set, 'volume', volume);
-            yield put(showMessage(`Volume: ${volume}%`));
+            yield put(showMessage(`Volume: ${normalize(volume)}%`));
         }
     );
 }

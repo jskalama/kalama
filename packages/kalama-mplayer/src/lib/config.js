@@ -1,6 +1,7 @@
 import { platform, homedir, tmpdir } from 'os';
 import { delimiter, sep } from 'path';
 import Configstore from 'configstore';
+import { DEFAULT_VOLUME } from './volume';
 
 const downloadsFolder =
     platform() === 'win32'
@@ -18,7 +19,7 @@ const macros = {
 const conf = new Configstore('kalama', {
     'downloads-dir': '{OS_DOWNLOADS}{/}Kalama',
     'temp-dir': '{OS_TMP}',
-    volume: '50',
+    volume: DEFAULT_VOLUME,
     player: 'vlc %'
 });
 
