@@ -27,10 +27,14 @@ import {
     isPlayerInteractive,
     setCurrentTrackIndex,
     isPlayerPaused,
-    getCurrentTrack
+    getCurrentTrack,
+    VOLUME_DOWN,
+    VOLUME_UP
 } from '../ducks/tracks';
 import sleep from 'sleep-promise';
 import * as P from '../services/player';
+import * as C from '../services/conf';
+import { showMessage } from '../ducks/flashMessages';
 
 function* playerSaga() {
     yield takeEvery(TOGGLE_PAUSE, function*() {
@@ -54,6 +58,7 @@ function* playerSaga() {
 
                 yield put(onPlayerPlaying());
                 const positionPollerTask = yield fork(positionPoller);
+                const volumeControlTask = yield fork(volumeControl);
                 try {
                     yield put(setPlayerInteractive(true));
                     yield call(P.waitForTrackEnd);
@@ -64,6 +69,7 @@ function* playerSaga() {
                 } finally {
                     yield put(setPlayerInteractive(false));
                     yield cancel(positionPollerTask);
+                    yield cancel(volumeControlTask);
                 }
             } finally {
                 // yield put(setPlayerInteractive(false));
@@ -92,12 +98,46 @@ function* playerSaga() {
     });
 }
 
+function* volumeControl() {
+    const config = yield call(C.getResolved);
+    let volume = parseInt(config.volume, 10);
+    if (isNaN(volume)) {
+        volume = 50;
+    }
+
+    yield takeEvery(
+        [VOLUME_DOWN, VOLUME_UP],
+
+        function* onVolumeUpOrDown({ type }) {
+            switch (type) {
+                case VOLUME_UP:
+                    volume = volume + 10;
+                    break;
+                case VOLUME_DOWN:
+                    volume = volume - 10;
+                    break;
+                default:
+                    break;
+            }
+            if (volume > 100) {
+                volume = 100;
+            }
+            if (volume < 0) {
+                volume = 0;
+            }
+            yield call(P.setVolume, volume);
+            yield call(C.set, 'volume', volume);
+            yield put(showMessage(`Volume: ${volume}%`));
+        }
+    );
+}
+
 function* positionPoller() {
     try {
         yield put(onPlayerCurrentTimeChanged(0));
         while (true) {
             const isPaused = yield select(isPlayerPaused);
-            if(!isPaused) {
+            if (!isPaused) {
                 const percent = yield call(P.getPercent);
                 if (percent !== null) {
                     yield put(onPlayerCurrentTimeChanged(percent));

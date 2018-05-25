@@ -5,20 +5,25 @@ import { getRoute } from '../ducks/router';
 import Label from '../components/Label';
 import { getTasksSummary, STATUS_SCHEDULED } from '../ducks/download';
 import { getCurrentTrack, getParentResource } from '../ducks/tracks';
+import { getMessage } from '../ducks/flashMessages';
 
 const mapStateToProps = state => {
     return {
         route: getRoute(state),
         parentResource: getParentResource(state),
         tasksSummary: getTasksSummary(state),
-        currentTrack: getCurrentTrack(state)
+        currentTrack: getCurrentTrack(state),
+        message: getMessage(state)
     };
 };
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({}, dispatch);
 };
 
-const getTitle = (route, playlist, tasksSummary, currentTrack) => {
+const getTitle = (route, playlist, tasksSummary, currentTrack, message) => {
+    if (message) {
+        return message;
+    }
     const screenName = route ? route.screen : null;
     const playlistName = playlist ? playlist.label : null;
     let part0, part1, part2;
@@ -49,7 +54,14 @@ class MainWindow extends Component {
             boxStyle,
             borderOptions,
             titleStyle,
-            props: { children, route, parentResource, tasksSummary, currentTrack }
+            props: {
+                children,
+                route,
+                parentResource,
+                tasksSummary,
+                currentTrack,
+                message
+            }
         } = this;
         return (
             <element>
@@ -64,7 +76,13 @@ class MainWindow extends Component {
                 <Label
                     style={titleStyle}
                     top={0}
-                    text={getTitle(route, parentResource, tasksSummary, currentTrack)}
+                    text={getTitle(
+                        route,
+                        parentResource,
+                        tasksSummary,
+                        currentTrack,
+                        message
+                    )}
                 />
             </element>
         );

@@ -8,7 +8,9 @@ import {
     KEY_HELP,
     KEY_TABULATE,
     KEY_DOWNLOAD,
-    KEY_QRCODE
+    KEY_QRCODE,
+    KEY_VOLUME_DOWN,
+    KEY_VOLUME_UP
 } from '../ducks/keyboard';
 
 const keymap = [
@@ -21,7 +23,9 @@ const keymap = [
     ['C-right', KEY_NEXT_TRACK],
     ['left', KEY_REWIND],
     ['right', KEY_FAST_FORWARD],
-    ['space', KEY_PLAY_PAUSE]
+    ['space', KEY_PLAY_PAUSE],
+    ['-', KEY_VOLUME_DOWN],
+    ['+', KEY_VOLUME_UP],
 ];
 
 export const getGlobalKeys = () =>

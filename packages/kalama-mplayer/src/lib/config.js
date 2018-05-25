@@ -18,12 +18,14 @@ const macros = {
 const conf = new Configstore('kalama', {
     'downloads-dir': '{OS_DOWNLOADS}{/}Kalama',
     'temp-dir': '{OS_TMP}',
+    volume: '50',
     player: 'vlc %'
 });
 
 const resolveOne = v =>
     Object.entries(macros).reduce(
-        (v, [macro, replacement]) => v.replace(macro, replacement),
+        (v, [macro, replacement]) =>
+            v && v.replace ? v.replace(macro, replacement) : v,
         v
     );
 

@@ -10,7 +10,9 @@ import {
     KEY_HELP,
     KEY_TABULATE,
     KEY_DOWNLOAD,
-    KEY_QRCODE
+    KEY_QRCODE,
+    KEY_VOLUME_DOWN,
+    KEY_VOLUME_UP
 } from '../ducks/keyboard';
 import {
     togglePause,
@@ -20,7 +22,9 @@ import {
     stepBack,
     stepForward,
     isPlayerInteractive,
-    hasTracks
+    hasTracks,
+    volumeDown,
+    volumeUp
 } from '../ducks/tracks';
 import { put, select } from 'redux-saga/effects';
 import { getRoute, Navigate } from '../ducks/router';
@@ -80,6 +84,14 @@ function* playerKeys({ type }) {
         }
         case KEY_FAST_FORWARD: {
             yield put(stepForward());
+            return;
+        }
+        case KEY_VOLUME_DOWN: {
+            yield put(volumeDown());
+            return;
+        }
+        case KEY_VOLUME_UP: {
+            yield put(volumeUp());
             return;
         }
     }
@@ -146,7 +158,9 @@ export default function* keyboardSaga() {
             KEY_HELP,
             KEY_TABULATE,
             KEY_DOWNLOAD,
-            KEY_QRCODE
+            KEY_QRCODE,
+            KEY_VOLUME_DOWN,
+            KEY_VOLUME_UP
         ],
         handleKey
     );

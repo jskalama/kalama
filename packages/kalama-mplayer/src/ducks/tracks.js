@@ -12,6 +12,8 @@ export const STEP_BACK = 'kalama-player/tracks/STEP_BACK';
 export const STEP_FORWARD = 'kalama-player/tracks/STEP_FORWARD';
 export const GO_TO_NEXT_TRACK = 'kalama-player/tracks/GO_TO_NEXT_TRACK';
 export const GO_TO_PREV_TRACK = 'kalama-player/tracks/GO_TO_PREV_TRACK';
+export const VOLUME_DOWN = 'kalama-player/tracks/VOLUME_DOWN';
+export const VOLUME_UP = 'kalama-player/tracks/VOLUME_UP';
 
 export const ON_PLAYER_END = 'kalama-player/tracks/ON_PLAYER_END';
 export const ON_PLAYER_ERROR = 'kalama-player/tracks/ON_PLAYER_ERROR';
@@ -56,6 +58,12 @@ export const goToNextTrack = () => {
 };
 export const goToPrevTrack = () => {
     return { type: GO_TO_PREV_TRACK };
+};
+export const volumeUp = () => {
+    return { type: VOLUME_UP };
+};
+export const volumeDown = () => {
+    return { type: VOLUME_DOWN };
 };
 export const shutdown = () => {
     return { type: SHUTDOWN };

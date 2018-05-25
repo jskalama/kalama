@@ -9,3 +9,5 @@ export const KEY_HELP = 'Keyboard/KEY_HELP';
 export const KEY_TABULATE = 'Keyboard/KEY_TABULATE';
 export const KEY_DOWNLOAD = 'Keyboard/KEY_DOWNLOAD';
 export const KEY_QRCODE = 'Keyboard/KEY_QRCODE';
+export const KEY_VOLUME_DOWN = 'Keyboard/KEY_VOLUME_DOWN';
+export const KEY_VOLUME_UP = 'Keyboard/KEY_VOLUME_UP';

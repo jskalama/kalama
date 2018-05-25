@@ -4,29 +4,29 @@ import { retryIfBusy, ignoreWhatever } from '../lib/asyncHelpers';
 const player = new MPlayer();
 let currentItem = null;
 
-const openFile = async url => {
+export const openFile = async url => {
     if (currentItem) {
         await stop();
     }
     currentItem = await retryIfBusy(() => player.openFile(url));
 };
 
-const stop = async () => {
+export const stop = async () => {
     if (currentItem) {
         await retryIfBusy(() => currentItem && currentItem.stop());
     }
     currentItem = null;
 };
 
-const play = async () => {
+export const play = async () => {
     await retryIfBusy(() => currentItem.play());
 };
 
-const pause = async () => {
+export const pause = async () => {
     await retryIfBusy(() => currentItem.pause());
 };
 
-const waitForTrackEnd = async () => {
+export const waitForTrackEnd = async () => {
     try {
         await currentItem.listen();
     } finally {
@@ -34,25 +34,18 @@ const waitForTrackEnd = async () => {
     }
 };
 
-const getPercent = async () => {
+export const getPercent = async () => {
     return ignoreWhatever(() => currentItem.getCurrentPercent());
 };
 
-const seekBy = async seconds => {
+export const seekBy = async seconds => {
     return ignoreWhatever(() => currentItem.seekBy(seconds));
 };
 
-const shutdown = async () => {
-    await retryIfBusy(() => player.shutdown());
+export const setVolume = async vol => {
+    return ignoreWhatever(() => currentItem.setVolume(vol));
 };
 
-export {
-    shutdown,
-    openFile,
-    stop,
-    play,
-    pause,
-    getPercent,
-    waitForTrackEnd,
-    seekBy
+export const shutdown = async () => {
+    await retryIfBusy(() => player.shutdown());
 };
