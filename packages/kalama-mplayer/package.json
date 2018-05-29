@@ -1,6 +1,6 @@
 {
     "name": "kalama-mplayer",
-    "version": "0.8.0-1",
+    "version": "0.8.0-2",
     "description": "MPlayer frontend for kalama",
     "main": "index.js",
     "scripts": {
@@ -14,7 +14,10 @@
     "bin": {
         "kalama-mplayer": "dist/cli.js"
     },
-    "files": ["dist", "src"],
+    "files": [
+        "dist",
+        "src"
+    ],
     "keywords": [],
     "author": "kalama team",
     "license": "WTFPL",
