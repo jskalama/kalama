@@ -1,20 +1,24 @@
-import { platform, homedir, tmpdir } from 'os';
+import { homedir, tmpdir } from 'os';
 import { delimiter, sep } from 'path';
 import Configstore from 'configstore';
 import { DEFAULT_VOLUME } from './volume';
+import getUserFolders from 'user-folders';
 
-const downloadsFolder =
-    platform() === 'win32'
-        ? homedir()
-        : require('platform-folders').getDownloadsFolder();
-
-const macros = {
-    '{OS_DOWNLOADS}': downloadsFolder,
-    '{OS_HOME}': homedir(),
-    '{OS_TMP}': tmpdir(),
-    '{/}': sep,
-    '{COLON}': delimiter
+const loadDependencies = async () => {
+    try {
+        const folders = await getUserFolders();
+        const downloads = folders.download;
+        return {
+            downloads
+        };
+    } catch (e) {
+        return {
+            downloads: homedir()
+        };
+    }
 };
+
+let cache = false;
 
 const conf = new Configstore('kalama', {
     'downloads-dir': '{OS_DOWNLOADS}{/}Kalama',
@@ -23,20 +27,34 @@ const conf = new Configstore('kalama', {
     player: 'vlc %'
 });
 
-const resolveOne = v =>
+const resolveOne = (macros, v) =>
     Object.entries(macros).reduce(
         (v, [macro, replacement]) =>
             v && v.replace ? v.replace(macro, replacement) : v,
         v
     );
 
-const resolve = () =>
-    Object.entries(conf.all)
-        .map(([k, v]) => [k, resolveOne(v)])
+const resolve = async () => {
+    if (cache) {
+        return cache;
+    }
+    const { downloads } = await loadDependencies();
+    const macros = {
+        '{OS_DOWNLOADS}': downloads,
+        '{OS_HOME}': homedir(),
+        '{OS_TMP}': tmpdir(),
+        '{/}': sep,
+        '{COLON}': delimiter
+    };
+
+    const cache = Object.entries(conf.all)
+        .map(([k, v]) => [k, resolveOne(macros, v)])
         .reduce((obj, [k, v]) => {
             obj[k] = v;
             return obj;
         }, {});
+    return cache;
+};
 
 export { resolve };
 export default conf;

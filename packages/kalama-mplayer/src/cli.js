@@ -38,8 +38,8 @@ yargs
         'conf-list',
         'List config values',
         () => {},
-        () => {
-            const resolvedConf = resolve();
+        async () => {
+            const resolvedConf = await resolve();
             Object.entries(conf.all).forEach(([k, v]) =>
                 console.log(
                     `${underline(k)} = ${bold(v)}\n${repeat(

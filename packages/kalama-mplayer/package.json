@@ -14,19 +14,10 @@
     "bin": {
         "kalama-mplayer": "dist/cli.js"
     },
-    "files": [
-        "dist",
-        "src"
-    ],
+    "files": ["dist", "src"],
     "keywords": [],
     "author": "kalama team",
     "license": "WTFPL",
-    "darwinDependencies": {
-        "platform-folders": "^0.1.5"
-    },
-    "linuxDependencies": {
-        "platform-folders": "^0.1.5"
-    },
     "win32Dependencies": {
         "kalama-mplayer-binary-win32": "0.0.3"
     },
@@ -54,7 +45,6 @@
         "lodash": "^4.17.5",
         "mplayer-as-promised": "0.0.5",
         "npm-platform-dependencies": "^0.1.0",
-        "platform-folders": "^0.1.5",
         "promise-retry": "^1.1.1",
         "prop-types": "^15.6.1",
         "react": "^0.14.9",
@@ -68,6 +58,7 @@
         "sanitize-filename": "^1.6.1",
         "sleep-promise": "^2.0.0",
         "uid": "0.0.2",
+        "user-folders": "0.0.2",
         "yargs": "^11.0.0"
     }
 }
