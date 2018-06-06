@@ -60,9 +60,11 @@ function* playerSaga() {
         [SET_CURRENT_TRACK_INDEX, GO_TO_NEXT_TRACK, GO_TO_PREV_TRACK],
         function*() {
             const track = yield select(getCurrentTrack);
-
+            const config = yield call(C.getResolved);
+            const volume = parseInt(config.volume, 10);
+        
             try {
-                yield call(P.openFile, track.url);
+                yield call(P.openFile, track.url, volume);
 
                 yield put(onPlayerPlaying());
                 const positionPollerTask = yield fork(positionPoller);

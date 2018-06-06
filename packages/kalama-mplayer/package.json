@@ -46,7 +46,7 @@
         "kalama-api": "^0.7.1",
         "lcp": "^1.1.0",
         "lodash": "^4.17.5",
-        "mplayer-as-promised": "0.0.5",
+        "kalama-mplayer-as-promised": "0.1.0",
         "npm-platform-dependencies": "^0.1.0",
         "promise-retry": "^1.1.1",
         "prop-types": "^15.6.1",

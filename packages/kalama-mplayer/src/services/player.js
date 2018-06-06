@@ -1,13 +1,14 @@
-import { MPlayer } from 'mplayer-as-promised';
+import { MPlayer } from 'kalama-mplayer-as-promised';
 import { retryIfBusy, ignoreWhatever } from '../lib/asyncHelpers';
 
 const player = new MPlayer();
 let currentItem = null;
 
-export const openFile = async url => {
+export const openFile = async (url, startupVolume = 20) => {
     if (currentItem) {
-        await stop();
+        await shutdown();
     }
+    player.setStartupVolume(startupVolume);
     currentItem = await retryIfBusy(() => player.openFile(url));
 };
 
