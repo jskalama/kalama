@@ -3,14 +3,18 @@ import download from 'download';
 import Аrchiver from 'archiver-promise';
 import { resolve } from '../lib/config';
 
-// export const APP_DOWNLOAD_FOLDER = resolve()['downloads-dir'];
-// export const APP_TMP_FOLDER = resolve()['temp-dir'];
-
 export const performDownloadTask = async task => {
+    const downloadDir = await getDownloadDir();
+    const targetDir = join(downloadDir, task.folderName);
+    await download(task.url, targetDir, {
+        filename: task.fileName
+    });
+};
+
+export const getDownloadDir = async () => {
     const conf = await resolve();
     const downloadDir = conf['downloads-dir'];
-    const targetDir = join(downloadDir, task.folderName);
-    await download(task.url, targetDir);
+    return downloadDir;
 };
 
 export const performArchiveTask = async task => {

@@ -1,20 +1,20 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { getTasksSummary } from '../ducks/download';
+import { getTasksSummary, getDownloadDir } from '../ducks/download';
 import DownloadTasksSummary from '../components/DownloadTasksSummary';
-import { APP_DOWNLOAD_FOLDER } from '../services/download';
+import chalk from 'chalk';
 
 class DownloadScreen extends Component {
     render() {
         const {
-            props: { tasksSummary }
+            props: { tasksSummary, downloadDir }
         } = this;
         return (
             <box keys mouse scrollable allwaysScroll>
                 Downloading to:{'\n'}
-                {APP_DOWNLOAD_FOLDER}
-                {'\n'}
-                <box top={2}>
+                {chalk.bold(downloadDir)}
+
+                <box top={3}>
                     <DownloadTasksSummary data={tasksSummary} />
                 </box>
             </box>
@@ -24,7 +24,8 @@ class DownloadScreen extends Component {
 
 const mapStateToProps = state => {
     return {
-        tasksSummary: getTasksSummary(state)
+        tasksSummary: getTasksSummary(state),
+        downloadDir: getDownloadDir(state)
     };
 };
 

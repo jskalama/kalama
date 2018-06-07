@@ -12,14 +12,23 @@ import {
     DOWNLOAD_AND_SHARE_CURRENT_PLST,
     TYPE_DOWNLOAD,
     TYPE_ARCHIVE,
-    AddTracksAndShareTasks
+    AddTracksAndShareTasks,
+    getDownloadableTracks,
+    SetDownloadDir
 } from '../ducks/download';
-import { performDownloadTask, performArchiveTask } from '../services/download';
+import {
+    performDownloadTask,
+    performArchiveTask,
+    getDownloadDir
+} from '../services/download';
 import { getTracks, getParentResourceLabel } from '../ducks/tracks';
 
 export default function* downloadSaga() {
+    const downloadDir = yield call(getDownloadDir);
+    yield put(SetDownloadDir(downloadDir)); //just for display purposes
+
     yield takeEvery(DOWNLOAD_CURRENT_PLST, function* downloadCurrentPlst() {
-        const tracks = yield select(getTracks);
+        const tracks = yield select(getDownloadableTracks);
         const playlistLabel = yield select(getParentResourceLabel);
         yield put(AddTracksTasks({ tracks, playlistLabel }));
     });

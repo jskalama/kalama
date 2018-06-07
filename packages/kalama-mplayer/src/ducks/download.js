@@ -1,6 +1,9 @@
 import uid from 'uid';
 import { keyBy, countBy } from 'lodash';
 import sanitize from 'sanitize-filename';
+import { getFileNames } from './tracks/getFileNames';
+import { createSelector } from 'reselect';
+import { getTracks } from './tracks';
 
 // Constants
 
@@ -26,7 +29,8 @@ const trackToTask = track => ({
     id: uid(),
     url: track.url,
     title: track.title,
-    status: STATUS_SCHEDULED
+    status: STATUS_SCHEDULED,
+    fileName: track.fileName
 });
 
 const tasksToArchiveTask = (folderName, tasks) => ({
@@ -44,7 +48,6 @@ const isArchiveTaskAndReady = (t, all) => {
     if (t.type !== TYPE_ARCHIVE) {
         return false;
     }
-    debugger;
     const waitForIdsSet = new Set(t.waitForIds);
     return all
         .filter(_ => waitForIdsSet.has(_.id))
@@ -60,10 +63,12 @@ export const ON_TASK_FAILED = 'Download/ON_TASK_FAILED';
 export const DOWNLOAD_CURRENT_PLST = 'Download/DOWNLOAD_CURRENT_PLST';
 export const DOWNLOAD_AND_SHARE_CURRENT_PLST =
     'Download/DOWNLOAD_AND_SHARE_CURRENT_PLST';
+export const SET_DOWNLOAD_DIR = 'SET_DOWNLOAD_DIR';
 
 // Reducer
 const defaultState = {
-    tasks: {}
+    tasks: {},
+    downloadDir: null //just for display purposes
 };
 
 const updateTasksStatus = (tasks, id, status) => {
@@ -78,6 +83,12 @@ export default function reducer(state = defaultState, action = {}) {
             return {
                 ...state,
                 tasks: { ...state.tasks, ...keyBy(payload, 'id') }
+            };
+        }
+        case SET_DOWNLOAD_DIR: {
+            return {
+                ...state,
+                downloadDir: action.payload
             };
         }
         case SET_TASK_STATUS: {
@@ -151,6 +162,10 @@ export const DownloadCurrentPlst = () => ({
 export const DownloadAndShareCurrentPlst = () => ({
     type: DOWNLOAD_AND_SHARE_CURRENT_PLST
 });
+export const SetDownloadDir = dir => ({
+    type: SET_DOWNLOAD_DIR,
+    payload: dir
+});
 
 //Selectors
 
@@ -164,3 +179,12 @@ export const getNextScheduledTask = state =>
             (t.type === TYPE_DOWNLOAD && t.status === STATUS_SCHEDULED) ||
             isArchiveTaskAndReady(t, allTasks)
     );
+
+export const getDownloadDir = state => state.download.downloadDir;
+
+// Memoized Selectors
+
+export const getDownloadableTracks = createSelector(getTracks, tracks => {
+    const fileNames = getFileNames(tracks);
+    return tracks.map((track, i) => ({ ...track, fileName: fileNames[i] }));
+});
