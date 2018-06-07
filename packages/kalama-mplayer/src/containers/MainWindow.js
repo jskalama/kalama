@@ -3,9 +3,15 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getRoute } from '../ducks/router';
 import Label from '../components/Label';
-import { getTasksSummary, STATUS_SCHEDULED } from '../ducks/download';
+import {
+    getTasksSummary,
+    STATUS_SCHEDULED,
+    STATUS_FAILED,
+    STATUS_COMPLETED
+} from '../ducks/download';
 import { getCurrentTrack, getParentResource } from '../ducks/tracks';
 import { getMessage } from '../ducks/flashMessages';
+import chalk from 'chalk';
 
 const mapStateToProps = state => {
     return {
@@ -33,8 +39,12 @@ const getTitle = (route, playlist, tasksSummary, currentTrack, message) => {
         part0 = screenName;
     }
     const tasksLeft = tasksSummary[STATUS_SCHEDULED];
+    const tasksFailed = tasksSummary[STATUS_FAILED];
+    const tasksCompleted = tasksSummary[STATUS_COMPLETED];
     if (tasksLeft > 0) {
-        part1 = `Tasks: ${tasksLeft}`;
+        part1 = `Download: ${tasksLeft} (${chalk.green(
+            tasksCompleted || 0
+        )}|${chalk.red(tasksFailed || 0)})`;
     } else {
         part1 = playlistName;
     }
@@ -89,4 +99,7 @@ class MainWindow extends Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(MainWindow);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(MainWindow);
