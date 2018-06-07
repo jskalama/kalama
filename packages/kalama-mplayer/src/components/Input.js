@@ -18,8 +18,14 @@ const makeListener = (input, onChange, onKey) => {
 
 export default class Input extends Component {
     componentDidMount() {
-        const { refs: { input }, props: { onChange, onKey } } = this;
+        const {
+            refs: { input },
+            props: { onChange, onKey }
+        } = this;
         input._listener = makeListener(input, onChange, onKey);
+        input.on('submit', () => {
+            input.focus();
+        });
     }
 
     focus() {

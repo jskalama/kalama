@@ -38,8 +38,6 @@ import { showMessage } from '../ducks/flashMessages';
 import {
     DEFAULT_VOLUME,
     VOLUME_STEP,
-    MAX_VOLUME,
-    MIN_VOLUME,
     normalize,
     limit
 } from '../lib/volume';

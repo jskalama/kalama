@@ -1,4 +1,4 @@
-import { takeEvery, select, call, put, fork, cancel } from 'redux-saga/effects';
+import { takeEvery, call, put } from 'redux-saga/effects';
 import { Navigate } from '../ducks/router';
 import { LOAD_TRACKS_LIST } from '../ducks/search';
 import { getTracks } from '../services/kalama';
@@ -7,6 +7,7 @@ import {
     ON_PLAYER_SHUTDOWN,
     setCurrentTrackIndex
 } from '../ducks/tracks';
+import { showMessage } from '../ducks/flashMessages';
 
 function* doShutdown() {
     yield call(::process.exit, 0);
@@ -14,6 +15,12 @@ function* doShutdown() {
 
 function* doLoadTrackList({ payload: resource }) {
     const tracks = yield call(getTracks, resource);
+    if (!tracks.length) {
+        yield put(
+            showMessage('No tracks! All tracks are removed by copyright')
+        );
+        return;
+    }
     yield put(setTracks(tracks, resource));
     yield put(Navigate('Player'));
     yield put(setCurrentTrackIndex(0));
