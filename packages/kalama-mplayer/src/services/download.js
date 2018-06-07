@@ -7,10 +7,10 @@ import { resolve } from '../lib/config';
 // export const APP_TMP_FOLDER = resolve()['temp-dir'];
 
 export const performDownloadTask = async task => {
-    await download(
-        task.url,
-        join((await resolve())['downloads-dir'], task.folderName)
-    );
+    const conf = await resolve();
+    const downloadDir = conf['downloads-dir'];
+    const targetDir = join(downloadDir, task.folderName);
+    await download(task.url, targetDir);
 };
 
 export const performArchiveTask = async task => {

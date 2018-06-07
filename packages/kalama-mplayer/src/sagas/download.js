@@ -1,12 +1,4 @@
-import {
-    takeEvery,
-    takeLatest,
-    select,
-    call,
-    put,
-    fork,
-    cancel
-} from 'redux-saga/effects';
+import { takeEvery, select, call, put } from 'redux-saga/effects';
 import {
     ADD_TASKS,
     ON_TASK_COMPLETED,
@@ -49,17 +41,19 @@ export default function* downloadSaga() {
                 return;
             }
 
-            const runner = task.type === TYPE_DOWNLOAD
-                ? performDownloadTask
-                : task.type === TYPE_ARCHIVE
-                    ? performArchiveTask
-                    : null;
+            const runner =
+                task.type === TYPE_DOWNLOAD
+                    ? performDownloadTask
+                    : task.type === TYPE_ARCHIVE
+                        ? performArchiveTask
+                        : null;
 
             yield put(OnTaskRunning(task.id));
             try {
                 yield call(runner, task);
                 yield put(OnTaskCompleted(task.id));
             } catch (e) {
+                //TODO: output the reason
                 yield put(OnTaskFailed(task.id));
             }
         }
