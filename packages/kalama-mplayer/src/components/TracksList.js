@@ -1,5 +1,6 @@
 import React, { Component, PropTypes } from 'react';
 import chalk from 'chalk';
+import formatDuration from 'format-duration';
 
 const TrackShape = PropTypes.shape({
     title: PropTypes.string
@@ -19,19 +20,27 @@ export default class TracksList extends Component {
     };
 
     componentDidMount() {
-        const { props: { onTrackSelect }, refs: { list } } = this;
+        const {
+            props: { onTrackSelect },
+            refs: { list }
+        } = this;
         list.on('select', (_, index) => {
-            onTrackSelect(index);
+            onTrackSelect(index - 1); //minus one is because this is a TableList which has headers
         });
         list.focus();
     }
 
     tracksListToListItems(tracks, current) {
-        return tracks.map((it, i) => {
-            const { prefix, suffix } = it;
+        const headers = ['Track'];
+        const body = tracks.map((it, i) => {
+            const { prefix, suffix, duration } = it;
             const fullTitle = `${chalk.yellow(prefix)}${chalk.bold(suffix)}`;
-            return i === current ? `>${fullTitle}` : ` ${fullTitle}`;
+            return [
+                i === current ? `>${fullTitle}` : ` ${fullTitle}`,
+                chalk.yellow(formatDuration(duration * 1000))
+            ];
         });
+        return [headers, ...body];
     }
 
     shouldComponentUpdate(nextProps) {
@@ -53,16 +62,16 @@ export default class TracksList extends Component {
         } = this;
         return (
             <element>
-                <list
+                <listtable
+                    align="left"
                     ref="list"
                     interactive
                     keys
                     mouse
-                    selected={current}
+                    selected={current + 1}
                     style={style}
-                    items={tracksListToListItems(tracks, current)}
+                    rows={tracksListToListItems(tracks, current)}
                 />
-                ads
             </element>
         );
     }
