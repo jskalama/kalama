@@ -63,6 +63,8 @@ export default class TracksList extends Component {
         return (
             <element>
                 <listtable
+                    width="100%"
+                    height="100%"
                     align="left"
                     ref="list"
                     interactive
