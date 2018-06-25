@@ -1,9 +1,9 @@
 {
-    "name": "kalama-api",
-    "version": "0.7.3",
-    "main": "./dist/api.js",
-    "typings": "./dist/api.d.ts",
-    "license": "MIT",
+    "name": "kalama-cache",
+    "version": "0.0.1",
+    "description": "Media file cache for kalama",
+    "main": "index.js",
+    "typings": "./dist/kalama-cache.d.ts",
     "scripts": {
         "compile": "tsc -p tsconfig.json",
         "prepare": "npm run compile",
@@ -21,17 +21,16 @@
         "@types/node-fetch": "^1.6.7",
         "chai": "^4.1.2",
         "mocha": "^4.0.0",
-        "snap-shot-it": "^4.0.1",
         "ts-node": "^3.3.0",
         "typescript": "^2.4.2"
     },
-    "dependencies": {
-        "@types/configstore": "^2.1.1",
-        "cheerio": "^0.22.0",
-        "node-fetch": "^1.6.3"
-    },
+    "author": "",
+    "license": "ISC",
     "repository": {
         "type": "git",
         "url": "https://github.com/jskalama/kalama"
+    },
+    "dependencies": {
+        "kalama-api": "^0.7.3"
     }
 }
