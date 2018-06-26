@@ -3,7 +3,8 @@ import { ItemType, search, getArtistAlbumsList, getTracksList } from '../api';
 import snapshot = require('snap-shot-it');
 import {
     expectToBeAValidItem,
-    expectToBeAValidPlayableTrack
+    expectToBeAValidPlayableTrack,
+    expectToHaveUniqueIds
 } from './expectations';
 
 describe('search', () => {
@@ -33,6 +34,7 @@ describe('getTracksList', () => {
                 'https://myzuka.me/Album/802734/Asd-Blockbasta-Deluxe-Edition-2015'
         });
         tracks.forEach(expectToBeAValidPlayableTrack);
+        expectToHaveUniqueIds(tracks);
     });
 });
 
@@ -45,5 +47,6 @@ describe('getTracksList with removed-by-copyright-holder tracks', () => {
                 'https://myzuka.club/Album/297617/Joao-Gilberto-Joao-Gilberto-In-Tokyo-2004'
         });
         tracks.forEach(expectToBeAValidPlayableTrack);
+        expectToHaveUniqueIds(tracks);
     });
 });

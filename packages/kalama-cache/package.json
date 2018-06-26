@@ -31,6 +31,14 @@
         "url": "https://github.com/jskalama/kalama"
     },
     "dependencies": {
-        "kalama-api": "^0.7.3"
+        "@types/lodash": "^4.14.110",
+        "@types/md5": "^2.1.32",
+        "@types/q-io": "0.0.30",
+        "download": "^7.0.0",
+        "kalama-api": "^0.7.3",
+        "lodash": "^4.17.10",
+        "md5": "^2.2.1",
+        "q-io": "^1.13.5",
+        "snap-shot-it": "^5.0.1"
     }
 }

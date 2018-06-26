@@ -1,6 +1,7 @@
 import fetch from 'node-fetch';
 import cheerio = require('cheerio');
 import { equal } from 'assert';
+import assert = require('assert');
 
 const SERVER_ROOT = 'https://myzcloud.me';
 
@@ -32,6 +33,7 @@ export interface Resource {
 }
 
 export interface Track extends Resource {
+    id: string;
     url: string;
     title: string;
     duration?: number;
@@ -174,22 +176,39 @@ const parseYearDOM = (albumDiv: any): number => {
     return parseInt(yearStr, 10);
 };
 
+const parseTrackId = (idAttr: string): string => {
+    const matches = idAttr.match(/^play_(.+)$/);
+    assert(matches && matches[1], 'wrong track id format');
+    const [, id] = matches;
+    return id;
+};
+
 const parseTracksListHtml = (htmlText: string): Array<Track> => {
     const $ = cheerio.load(htmlText);
     const nodes = $('[itemtype="http://schema.org/MusicRecording"]');
     return nodes
         .map((i, node) => {
-            const playButton = $(node).find('.playlist__control.play[data-url]');
-            const durationBitrateDiv = $(node).find('.track__details .text-muted');
+            const playButton = $(node).find(
+                '.playlist__control.play[data-url]'
+            );
+            const durationBitrateDiv = $(node).find(
+                '.track__details .text-muted'
+            );
+            const url = playButton.attr('data-url');
+            if (!url) {
+                return null;
+            }
             return {
-                url: playButton.attr('data-url'),
+                id: parseTrackId(playButton.attr('id')),
+                url,
                 title: playButton.attr('data-title'),
                 duration: parseDurationDOM(durationBitrateDiv)
             };
         })
         .get()
-        .filter(({ url }) => !!url)
-        .map(({ url, title, duration }) => ({
+        .filter(_ => _)
+        .map(({id, url, title, duration }) => ({
+            id,
             url: normalizeUrl(url),
             title,
             duration
