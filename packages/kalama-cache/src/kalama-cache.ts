@@ -56,18 +56,25 @@ export class PlaylistCache extends EventEmitter {
         );
     }
 
+    private reportCachedItems(items: { [id: string]: CacheItem }) {
+        this.emit('change', items);
+    }
+
     private async fetchTrack(track: Track) {
+        const { id, url } = track;
         const cached = await this.getCachedItem(track);
         if (cached.file) {
+            this.reportCachedItems({ [id]: cached });
             return;
         }
 
-        const { tempFile } = this.descriptors[track.id];
+        const { tempFile, file } = this.descriptors[id];
 
-        await download(track.url, dirname(tempFile), {
+        await download(url, dirname(tempFile), {
             filename: basename(tempFile)
         });
         await this.commit(track);
+        this.reportCachedItems({ [id]: { file, id } });
     }
 
     private async commit(track: Track) {
@@ -109,13 +116,18 @@ export class PlaylistCache extends EventEmitter {
         } = this;
         // TODO: emit events across the process
 
-        await this.fetchTrack(tracks[0]);
+        const cachedItems = await this.getCachedItems();
+        this.reportCachedItems(cachedItems);
+
+        if (!cachedItems[tracks[0].id].file) {
+            await this.fetchTrack(tracks[0]);
+        }
 
         const notCachedItems = Object.values(
             await this.getCachedItems()
         ).filter(_ => !_.file);
 
-        for (let i = 1; i < notCachedItems.length; i += concurrency) {
+        for (let i = 0; i < notCachedItems.length; i += concurrency) {
             await Promise.all(
                 notCachedItems
                     .slice(i, i + concurrency)
