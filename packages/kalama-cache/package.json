@@ -2,7 +2,7 @@
     "name": "kalama-cache",
     "version": "0.0.1",
     "description": "Media file cache for kalama",
-    "main": "index.js",
+    "main": "./dist/kalama-cache.js",
     "typings": "./dist/kalama-cache.d.ts",
     "scripts": {
         "compile": "tsc -p tsconfig.json",

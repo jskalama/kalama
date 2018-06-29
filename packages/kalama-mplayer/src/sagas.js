@@ -6,6 +6,7 @@ import keyboard from './sagas/keyboard';
 import search from './sagas/search';
 import download from './sagas/download';
 import flashMessages from './sagas/flashMessages';
+import cache from './sagas/cache';
 
 function* sagas() {
     yield all([
@@ -14,7 +15,8 @@ function* sagas() {
         navigation(),
         search(),
         download(),
-        flashMessages()
+        flashMessages(),
+        cache()
     ]);
 }
 

@@ -34,13 +34,10 @@ import {
 import sleep from 'sleep-promise';
 import * as P from '../services/player';
 import * as C from '../services/conf';
+
 import { showMessage } from '../ducks/flashMessages';
-import {
-    DEFAULT_VOLUME,
-    VOLUME_STEP,
-    normalize,
-    limit
-} from '../lib/volume';
+import { DEFAULT_VOLUME, VOLUME_STEP, normalize, limit } from '../lib/volume';
+import { eventChannel } from 'redux-saga';
 
 function* playerSaga() {
     yield takeEvery(TOGGLE_PAUSE, function*() {
@@ -60,9 +57,13 @@ function* playerSaga() {
             const track = yield select(getCurrentTrack);
             const config = yield call(C.getResolved);
             const volume = parseInt(config.volume, 10);
-        
+
             try {
-                yield call(P.openFile, track.url, volume);
+                if (track.cache && track.cache.file) {
+                    yield call(P.openFile, track.cache.file, volume);
+                } else {
+                    yield call(P.openFile, track.url, volume);
+                }
 
                 yield put(onPlayerPlaying());
                 const positionPollerTask = yield fork(positionPoller);

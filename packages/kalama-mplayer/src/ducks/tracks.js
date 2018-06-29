@@ -29,6 +29,7 @@ export const ON_POLLER_TICK = 'kalama-player/tracks/ON_POLLER_TICK';
 export const SET_PLAYER_INTERACTIVE =
     'kalama-player/tracks/SET_PLAYER_INTERACTIVE';
 export const DIRECT_TRACK_SELECT = 'kalama-player/tracks/DIRECT_TRACK_SELECT';
+export const ON_CACHE_STATE_CHANGE = 'kalama-player/tracks/ON_CACHE_STATE_CHANGE';
 
 // Action creators
 
@@ -37,6 +38,9 @@ export const init = () => {
 };
 export const setTracks = (tracks, parentResource) => {
     return { type: SET_TRACKS, payload: tracks, meta: { parentResource } };
+};
+export const onCacheStateChange = cacheItems => {
+    return { type: ON_CACHE_STATE_CHANGE, payload: cacheItems };
 };
 export const setCurrentTrackIndex = idx => {
     return { type: SET_CURRENT_TRACK_INDEX, payload: idx };
@@ -100,6 +104,7 @@ export const setPlayerInteractive = isInteractive => {
 
 const INITIAL_STATE = {
     tracks: [],
+    cache: {},
     parentResource: null,
     current: null,
     isPlaying: false,
@@ -130,6 +135,16 @@ export default function reducer(state = INITIAL_STATE, action) {
                 tracks: action.payload,
                 parentResource: action.meta.parentResource,
                 current: null
+            };
+        }
+
+        case ON_CACHE_STATE_CHANGE: {
+            return {
+                ...state,
+                cache: {
+                    ...state.cache,
+                    ...action.payload
+                }
             };
         }
 
@@ -184,7 +199,8 @@ export default function reducer(state = INITIAL_STATE, action) {
 // Selectors
 export const isPlayerInteractive = state => state.tracks.isInteractive;
 export const isPlayerPaused = state => state.tracks.isPaused;
-export const getTracks = state => state.tracks.tracks;
+export const getCache = state => state.tracks.cache;
+export const getRawTracks = state => state.tracks.tracks;
 export const hasTracks = state => getTracks(state).length > 0;
 export const getCurrentTrackIndex = state => state.tracks.current;
 export const getCurrentTrack = state =>
@@ -195,6 +211,12 @@ export const getParentResourceLabel = ({ tracks: { parentResource } }) =>
     parentResource ? parentResource.label || 'Unknown' : 'Unknown';
 
 // Memoized Selectors
+export const getTracks = createSelector(
+    getRawTracks,
+    getCache,
+    (tracks, cache) =>
+        tracks.map(track => ({ ...track, cache: cache[track.id] }))
+);
 export const getPrefixizedTracks = createSelector(getTracks, tracks =>
     prefixizeTrackNames(tracks)
 );
