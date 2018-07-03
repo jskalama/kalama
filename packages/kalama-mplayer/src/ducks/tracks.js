@@ -29,7 +29,9 @@ export const ON_POLLER_TICK = 'kalama-player/tracks/ON_POLLER_TICK';
 export const SET_PLAYER_INTERACTIVE =
     'kalama-player/tracks/SET_PLAYER_INTERACTIVE';
 export const DIRECT_TRACK_SELECT = 'kalama-player/tracks/DIRECT_TRACK_SELECT';
-export const ON_CACHE_STATE_CHANGE = 'kalama-player/tracks/ON_CACHE_STATE_CHANGE';
+export const ON_CACHE_STATE_CHANGE =
+    'kalama-player/tracks/ON_CACHE_STATE_CHANGE';
+export const ON_CACHE_READY = 'kalama-player/tracks/ON_CACHE_READY';
 
 // Action creators
 
@@ -41,6 +43,9 @@ export const setTracks = (tracks, parentResource) => {
 };
 export const onCacheStateChange = cacheItems => {
     return { type: ON_CACHE_STATE_CHANGE, payload: cacheItems };
+};
+export const onCacheReady = () => {
+    return { type: ON_CACHE_READY };
 };
 export const setCurrentTrackIndex = idx => {
     return { type: SET_CURRENT_TRACK_INDEX, payload: idx };
@@ -215,8 +220,20 @@ export const getTracks = createSelector(
     getRawTracks,
     getCache,
     (tracks, cache) =>
-        tracks.map(track => ({ ...track, cache: cache[track.id] }))
+        tracks.map(track => ({
+            ...track,
+            cacheFile: cache[track.id] ? cache[track.id].file : null
+        }))
 );
 export const getPrefixizedTracks = createSelector(getTracks, tracks =>
     prefixizeTrackNames(tracks)
+);
+
+export const isFirstTrackCached = createSelector(
+    getTracks,
+    tracks => !!tracks[0].cacheFile
+);
+
+export const areAllTracksCached = createSelector(getTracks, tracks =>
+    tracks.every(track => !!track.cacheFile)
 );

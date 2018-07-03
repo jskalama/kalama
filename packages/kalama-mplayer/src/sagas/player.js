@@ -59,8 +59,8 @@ function* playerSaga() {
             const volume = parseInt(config.volume, 10);
 
             try {
-                if (track.cache && track.cache.file) {
-                    yield call(P.openFile, track.cache.file, volume);
+                if (track.cacheFile) {
+                    yield call(P.openFile, track.cacheFile, volume);
                 } else {
                     yield call(P.openFile, track.url, volume);
                 }

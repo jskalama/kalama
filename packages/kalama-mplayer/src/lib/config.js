@@ -24,7 +24,8 @@ const conf = new Configstore('kalama', {
     'downloads-dir': '{OS_DOWNLOADS}{/}Kalama',
     'temp-dir': '{OS_TMP}',
     volume: DEFAULT_VOLUME,
-    player: 'vlc %'
+    player: 'vlc %',
+    cacheMaxSize: 200e6
 });
 
 const resolveOne = (macros, v) =>

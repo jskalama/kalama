@@ -1,5 +1,10 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
-import { SET_TRACKS, onCacheStateChange } from '../ducks/tracks';
+import { takeEvery, select, call, put } from 'redux-saga/effects';
+import {
+    SET_TRACKS,
+    onCacheStateChange,
+    isFirstTrackCached,
+    onCacheReady
+} from '../ducks/tracks';
 import { eventChannel } from 'redux-saga';
 import { createPlaylistCache } from '../services/cache';
 
@@ -10,13 +15,18 @@ function* cacheSaga() {
         const cacheChannel = yield call(playlistCacheChannel, tracks);
         yield takeEvery(cacheChannel, function* onCacheChange(cacheState) {
             yield put(onCacheStateChange(cacheState));
+            const isCacheReady = yield select(isFirstTrackCached);
+            if (isCacheReady) {
+                yield put(onCacheReady());
+            }
         });
     });
 }
 
-function playlistCacheChannel(tracks) {
+async function playlistCacheChannel(tracks) {
+    const cache = await createPlaylistCache(tracks);
+    await cache.cleanup(); //TODO: cleanup as often as once in 30 minutes
     return eventChannel(emitter => {
-        const cache = createPlaylistCache(tracks);
         cache.on('change', emitter);
         cache.fetch();
         return () => {

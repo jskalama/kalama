@@ -1,11 +1,12 @@
-import { takeEvery, call, put } from 'redux-saga/effects';
+import { take, takeEvery, call, put } from 'redux-saga/effects';
 import { Navigate } from '../ducks/router';
 import { LOAD_TRACKS_LIST } from '../ducks/search';
 import { getTracks } from '../services/kalama';
 import {
     setTracks,
     ON_PLAYER_SHUTDOWN,
-    setCurrentTrackIndex
+    setCurrentTrackIndex,
+    ON_CACHE_READY
 } from '../ducks/tracks';
 import { showMessage } from '../ducks/flashMessages';
 

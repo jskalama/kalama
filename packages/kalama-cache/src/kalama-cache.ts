@@ -4,12 +4,13 @@ import { EventEmitter } from 'events';
 import md5 = require('md5');
 import assert = require('assert');
 import { join, dirname, basename } from 'path';
-import { move, exists } from 'q-io/fs';
-import { keyBy } from 'lodash';
+import { move, exists, stat, remove } from 'q-io/fs';
+import { keyBy, fromPairs } from 'lodash';
+import { IndexStorage } from './IndexStorage';
 
 export type TracksList = Array<Track>;
 export type FileName = string;
-type Hash = string;
+export type Hash = string;
 interface CacheDescriptor {
     tempFile: FileName;
     file: FileName;
@@ -22,24 +23,35 @@ export interface CacheItem {
 export interface PlaylistCacheOptions {
     storageDirectory: string;
     concurrency: number;
+    maxSize: number;
 }
 
 export class PlaylistCache extends EventEmitter {
     private retryQueue = [];
     private descriptors: { [id: string]: CacheDescriptor };
     private tracksById: { [id: string]: Track };
+    private storage: IndexStorage;
+    private hashesById: { [id: string]: Hash };
 
     constructor(
         private readonly tracks: TracksList,
         private readonly options: PlaylistCacheOptions
     ) {
         super();
+        this.hashesById = this.createHashList();
         this.descriptors = this.createCacheDescriptorsList();
         this.tracksById = this.indexTracksById();
+        this.storage = new IndexStorage(this.options.storageDirectory);
     }
 
     private indexTracksById(): { [id: string]: Track } {
         return keyBy(this.tracks, 'id');
+    }
+
+    private createHashList(): { [id: string]: Hash } {
+        return fromPairs(
+            this.tracks.map(track => [track.id, this.getTrackHash(track)])
+        );
     }
 
     private createCacheDescriptorsList(): { [id: string]: CacheDescriptor } {
@@ -62,9 +74,15 @@ export class PlaylistCache extends EventEmitter {
 
     private async fetchTrack(track: Track) {
         const { id, url } = track;
+        const {
+            storage,
+            hashesById: { [id]: hash }
+        } = this;
+
         const cached = await this.getCachedItem(track);
         if (cached.file) {
             this.reportCachedItems({ [id]: cached });
+            await this.saveToIndex(track);
             return;
         }
 
@@ -73,8 +91,19 @@ export class PlaylistCache extends EventEmitter {
         await download(url, dirname(tempFile), {
             filename: basename(tempFile)
         });
+
         await this.commit(track);
+        await this.saveToIndex(track);
+
         this.reportCachedItems({ [id]: { file, id } });
+    }
+
+    private async saveToIndex(track) {
+        const { id } = track;
+        const { [id]: hash } = this.hashesById;
+        const { tempFile, file } = this.descriptors[id];
+        const { size } = await stat(file);
+        await this.storage.put(hash, size);
     }
 
     private async commit(track: Track) {
@@ -88,8 +117,14 @@ export class PlaylistCache extends EventEmitter {
         return md5(track.id);
     }
 
+    private hashToFile(h: Hash): FileName {
+        const part0 = h.substr(0, 2);
+        const part1 = h.substr(2, 2);
+        return join(this.options.storageDirectory, part0, part1, h);
+    }
+
     private getTrackPath(track: Track): FileName {
-        const h = this.getTrackHash(track);
+        const h = this.hashesById[track.id];
         const part0 = h.substr(0, 2);
         const part1 = h.substr(2, 2);
         return join(this.options.storageDirectory, part0, part1, h);
@@ -114,27 +149,35 @@ export class PlaylistCache extends EventEmitter {
             tracks,
             options: { concurrency }
         } = this;
-        // TODO: emit events across the process
 
         const cachedItems = await this.getCachedItems();
         this.reportCachedItems(cachedItems);
 
-        if (!cachedItems[tracks[0].id].file) {
-            await this.fetchTrack(tracks[0]);
-        }
-
-        const notCachedItems = Object.values(
-            await this.getCachedItems()
-        ).filter(_ => !_.file);
-
-        for (let i = 0; i < notCachedItems.length; i += concurrency) {
+        //todo: make concurrency better
+        for (let i = 0; i < tracks.length; i += concurrency) {
             await Promise.all(
-                notCachedItems
+                tracks
                     .slice(i, i + concurrency)
-                    .map(cacheItem =>
-                        this.fetchTrack(this.tracksById[cacheItem.id])
-                    )
+                    .map(track => this.fetchTrack(track))
             );
         }
+    }
+
+    public async cleanup() {
+        const {
+            options: { maxSize }
+        } = this;
+        const garbageItems = await this.storage.getGarbageItems(maxSize);
+        const deletedItems = [];
+        for (let i = 0; i < garbageItems.length; i++) {
+            try {
+                const hash: Hash = garbageItems[i];
+                await remove(`${this.hashToFile(hash)}.mp3`);
+                deletedItems.push(hash);
+            } catch (e) {
+                console.error(e);
+            }
+        }
+        this.storage.remove(deletedItems);
     }
 }

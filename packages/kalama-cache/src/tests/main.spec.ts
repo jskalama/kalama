@@ -6,6 +6,7 @@ import {
     getTracksList
 } from 'kalama-api';
 import snapshot = require('snap-shot-it');
+import { join } from 'path';
 import { PlaylistCache } from '../kalama-cache';
 
 describe('getTracksList', () => {
@@ -17,15 +18,25 @@ describe('getTracksList', () => {
             itemType: ItemType.Album,
             label: '',
             url:
-                'https://myzcloud.me/album/3037656/asd-blockbasta-deluxe-edition-2015'
+                'https://myzcloud.me/album/3037660/asd-wer-hatte-das-gedacht-2003'
+            // 'https://myzcloud.me/album/3037656/asd-blockbasta-deluxe-edition-2015'
         });
         cache = new PlaylistCache(tracks, {
-            storageDirectory: '/tmp/kalama-cache',
-            concurrency: 2
+            storageDirectory: join(
+                process.env.HOME,
+                '.cache',
+                'kalama-cache-test'
+            ),
+            concurrency: 1,
+            maxSize: 500e6
+        });
+        cache.on('change', () => {
+            console.log('.');
         });
         console.time('fetch');
         await cache.fetch();
         console.timeEnd('fetch');
+        await cache.cleanup();
     });
 
     it('should get a list of album tracks', async () => {

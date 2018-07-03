@@ -33,12 +33,7 @@ export default class TracksList extends Component {
     tracksListToListItems(tracks, current) {
         const headers = ['Track'];
         const body = tracks.map((it, i) => {
-            const {
-                prefix,
-                suffix,
-                duration,
-                cache: { file: cacheFile } = {}
-            } = it;
+            const { prefix, suffix, duration, cacheFile } = it;
             const cacheSign = cacheFile ? '*' : ' ';
             const currentSign = i === current ? '>' : ' ';
             const fullTitle = `${chalk.yellow(prefix)}${chalk.bold(suffix)}`;
