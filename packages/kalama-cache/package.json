@@ -1,6 +1,6 @@
 {
     "name": "kalama-cache",
-    "version": "0.0.1",
+    "version": "0.0.3",
     "description": "Media file cache for kalama",
     "main": "./dist/kalama-cache.js",
     "typings": "./dist/kalama-cache.d.ts",
@@ -12,6 +12,7 @@
     },
     "files": [
         "dist",
+        "migrations",
         "src"
     ],
     "devDependencies": {
@@ -35,10 +36,10 @@
         "@types/md5": "^2.1.32",
         "@types/q-io": "0.0.30",
         "download": "^7.0.0",
-        "kalama-api": "^0.7.3",
+        "kalama-api": "0.7.5",
         "lodash": "^4.17.10",
         "md5": "^2.2.1",
-        "q-io": "^1.13.5",
+        "q-io": "^1.13.6",
         "snap-shot-it": "^5.0.1",
         "sqlite": "^2.9.2"
     }

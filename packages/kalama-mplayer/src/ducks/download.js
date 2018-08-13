@@ -173,12 +173,13 @@ export const getTasks = state => state.download.tasks;
 
 export const getTasksSummary = state => countBy(getTasks(state), 'status');
 
-export const getNextScheduledTask = state =>
-    Object.values(getTasks(state)).find(
+export const getNextScheduledTask = state => {
+    return Object.values(getTasks(state)).find(
         (t, i, allTasks) =>
             (t.type === TYPE_DOWNLOAD && t.status === STATUS_SCHEDULED) ||
             isArchiveTaskAndReady(t, allTasks)
     );
+};
 
 export const getDownloadDir = state => state.download.downloadDir;
 
