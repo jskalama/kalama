@@ -1,6 +1,6 @@
 {
     "name": "kalama-cache",
-    "version": "0.0.3",
+    "version": "0.0.4",
     "description": "Media file cache for kalama",
     "main": "./dist/kalama-cache.js",
     "typings": "./dist/kalama-cache.d.ts",
