@@ -45,9 +45,9 @@ export class IndexStorage {
             (reserveFactor * garbageSize) / avgSize
         );
 
-        console.log('sumSize', sumSize);
-        console.log('avgSize', avgSize);
-        console.log('approxGarbageItemsCount', approxGarbageItemsCount);
+        // console.log('sumSize', sumSize);
+        // console.log('avgSize', avgSize);
+        // console.log('approxGarbageItemsCount', approxGarbageItemsCount);
         const garbageItems = await db.all(
             'SELECT hash, size FROM items ORDER BY accessTime ASC LIMIT ?',
             approxGarbageItemsCount
