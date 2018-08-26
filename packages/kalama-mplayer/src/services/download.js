@@ -2,13 +2,38 @@ import { join } from 'path';
 import download from 'download';
 import Аrchiver from 'archiver-promise';
 import { resolve } from '../lib/config';
+import fs from 'q-io/fs';
+import mkdirp from 'mkdirp-promise';
+
+const copyCachedTask = async (task, targetDir) => {
+    await mkdirp(targetDir);
+    await fs.copy(task.cacheFile, join(targetDir, task.fileName));
+};
+
+const downloadTask = async (task, targetDir) => {
+    await download(task.url, targetDir, {
+        filename: task.fileName
+    });
+};
 
 export const performDownloadTask = async task => {
     const downloadDir = await getDownloadDir();
     const targetDir = join(downloadDir, task.folderName);
-    await download(task.url, targetDir, {
-        filename: task.fileName
-    });
+
+    if (task.cacheFile) {
+        try {
+            await copyCachedTask(task, targetDir);
+            return;
+        } catch (e) {
+            //if could not copy cache file, fail back to download
+            debugger;
+            await downloadTask(task, targetDir);
+            return;
+        }
+    } else {
+        debugger;
+        await downloadTask(task, targetDir);
+    }
 };
 
 export const getDownloadDir = async () => {

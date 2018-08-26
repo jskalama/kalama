@@ -28,6 +28,7 @@ const trackToTask = track => ({
     type: TYPE_DOWNLOAD,
     id: uid(),
     url: track.url,
+    cacheFile: track.cacheFile,
     title: track.title,
     status: STATUS_SCHEDULED,
     fileName: track.fileName

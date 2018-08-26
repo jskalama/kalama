@@ -37,7 +37,6 @@ import * as C from '../services/conf';
 
 import { showMessage } from '../ducks/flashMessages';
 import { DEFAULT_VOLUME, VOLUME_STEP, normalize, limit } from '../lib/volume';
-import { eventChannel } from 'redux-saga';
 
 function* playerSaga() {
     yield takeEvery(TOGGLE_PAUSE, function*() {

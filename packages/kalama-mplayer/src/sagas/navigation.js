@@ -1,4 +1,4 @@
-import { take, takeEvery, call, put } from 'redux-saga/effects';
+import { take, race, takeEvery, call, put } from 'redux-saga/effects';
 import { Navigate } from '../ducks/router';
 import { LOAD_TRACKS_LIST } from '../ducks/search';
 import { getTracks } from '../services/kalama';
@@ -9,6 +9,7 @@ import {
     ON_CACHE_READY
 } from '../ducks/tracks';
 import { showMessage } from '../ducks/flashMessages';
+import { delay } from 'redux-saga';
 
 function* doShutdown() {
     yield call(::process.exit, 0);
@@ -24,6 +25,7 @@ function* doLoadTrackList({ payload: resource }) {
     }
     yield put(setTracks(tracks, resource));
     yield put(Navigate('Player'));
+    yield race([take(ON_CACHE_READY), delay(200)]);
     yield put(setCurrentTrackIndex(0));
 }
 
