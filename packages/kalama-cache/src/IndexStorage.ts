@@ -49,7 +49,7 @@ export class IndexStorage {
         console.log('avgSize', avgSize);
         console.log('approxGarbageItemsCount', approxGarbageItemsCount);
         const garbageItems = await db.all(
-            'SELECT hash, size FROM items ORDER BY accessTime DESC LIMIT ?',
+            'SELECT hash, size FROM items ORDER BY accessTime ASC LIMIT ?',
             approxGarbageItemsCount
         );
 
