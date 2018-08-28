@@ -1,4 +1,4 @@
-import { homedir, tmpdir } from 'os';
+import { homedir, tmpdir, platform } from 'os';
 import { delimiter, sep } from 'path';
 import Configstore from 'configstore';
 import { DEFAULT_VOLUME } from './volume';
@@ -25,7 +25,8 @@ const conf = new Configstore('kalama', {
     'temp-dir': '{OS_TMP}',
     volume: DEFAULT_VOLUME,
     player: 'vlc %',
-    cacheMaxSize: 200e6
+    cacheMaxSize: 200e6,
+    forceHttp: platform() === 'darwin' ? 'yes' : 'no'
 });
 
 const resolveOne = (macros, v) =>

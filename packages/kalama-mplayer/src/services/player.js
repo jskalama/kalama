@@ -1,6 +1,7 @@
 import { MPlayer } from 'kalama-mplayer-as-promised';
 import { retryIfBusy, ignoreWhatever } from '../lib/asyncHelpers';
 import upath from 'upath';
+import { getResolved } from './conf';
 
 const player = new MPlayer();
 let currentItem = null;
@@ -9,19 +10,27 @@ const isRemote = url => {
     return url.startsWith('https://') || url.startsWith('http://');
 };
 
-const normalizeUrl = url => {
+const normalizeUrl = (url, { forceHttp }) => {
+    let normalizedUrl = url;
+
     if (!isRemote(url)) {
-        return upath.normalize(url);
+        normalizedUrl = upath.normalize(url);
+    } else if (forceHttp) {
+        // This is weird, but OSX brew version of MPlayer does not support https URLs. We have no choice.
+        normalizedUrl = normalizedUrl.replace(/^https:/, 'http:');
     }
-    return url;
+    return normalizedUrl;
 };
 
 export const openFile = async (url, startupVolume = 20) => {
     if (currentItem) {
         await shutdown();
     }
+    const { forceHttp } = await getResolved();
     player.setStartupVolume(startupVolume);
-    currentItem = await retryIfBusy(() => player.openFile(normalizeUrl(url)));
+    currentItem = await retryIfBusy(() =>
+        player.openFile(normalizeUrl(url, { forceHttp: forceHttp === 'yes' }))
+    );
 };
 
 export const stop = async () => {
