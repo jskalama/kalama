@@ -1,15 +1,27 @@
 import { MPlayer } from 'kalama-mplayer-as-promised';
 import { retryIfBusy, ignoreWhatever } from '../lib/asyncHelpers';
+import upath from 'upath';
 
 const player = new MPlayer();
 let currentItem = null;
+
+const isRemote = url => {
+    return url.startsWith('https://') || url.startsWith('http://');
+};
+
+const normalizeUrl = url => {
+    if (!isRemote) {
+        return upath.normalize(url);
+    }
+    return url;
+};
 
 export const openFile = async (url, startupVolume = 20) => {
     if (currentItem) {
         await shutdown();
     }
     player.setStartupVolume(startupVolume);
-    currentItem = await retryIfBusy(() => player.openFile(url));
+    currentItem = await retryIfBusy(() => player.openFile(normalizeUrl(url)));
 };
 
 export const stop = async () => {
