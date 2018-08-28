@@ -1,6 +1,6 @@
 {
     "name": "kalama-mplayer",
-    "version": "0.8.0-10",
+    "version": "0.8.0-11",
     "description": "MPlayer frontend for kalama",
     "main": "index.js",
     "scripts": {
