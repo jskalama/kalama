@@ -10,7 +10,7 @@ const isRemote = url => {
 };
 
 const normalizeUrl = url => {
-    if (!isRemote) {
+    if (!isRemote(url)) {
         return upath.normalize(url);
     }
     return url;
