@@ -1,3 +1,5 @@
+import sanitize from 'sanitize-filename';
+
 const EXTENSION = '.mp3';
 
 export const getFileNames = tracks => {
@@ -6,9 +8,9 @@ export const getFileNames = tracks => {
         const initialLabel = track.title.length ? track.title : 'Untitled';
         let label = initialLabel;
         while (usedLabels.has(label)) {
-            label = `${initialLabel}${(i++).toString()}.${EXTENSION}`;
+            label = `${initialLabel}${(i++).toString()}`;
         }
         usedLabels.add(label);
-        return label;
+        return sanitize(`${label}${EXTENSION}`);
     });
 };

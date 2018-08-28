@@ -25,13 +25,10 @@ export const performDownloadTask = async task => {
             await copyCachedTask(task, targetDir);
             return;
         } catch (e) {
-            //if could not copy cache file, fail back to download
-            debugger;
             await downloadTask(task, targetDir);
             return;
         }
     } else {
-        debugger;
         await downloadTask(task, targetDir);
     }
 };
