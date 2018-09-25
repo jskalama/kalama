@@ -31,4 +31,10 @@ initUser().catch(() => {
 });
 
 const mixpanel = MP.init(TOKEN);
-export const mpTrack = ::mixpanel.track;
+export const mpTrack = async (type, args = {}) => {
+    const id = await getId();
+    mixpanel.track(type, {
+        distinct_id: id,
+        ...args
+    });
+};
