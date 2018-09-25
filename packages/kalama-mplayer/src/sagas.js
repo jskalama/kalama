@@ -7,6 +7,7 @@ import search from './sagas/search';
 import download from './sagas/download';
 import flashMessages from './sagas/flashMessages';
 import cache from './sagas/cache';
+import mixpanel from './sagas/mixpanel';
 
 function* sagas() {
     yield all([
@@ -16,7 +17,8 @@ function* sagas() {
         search(),
         download(),
         flashMessages(),
-        cache()
+        cache(),
+        mixpanel()
     ]);
 }
 

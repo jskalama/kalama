@@ -1,5 +1,5 @@
 // Actions
-const NAVIGATE = 'Router/NAVIGATE';
+export const NAVIGATE = 'Router/NAVIGATE';
 
 const defaultState = {
     route: { screen: null, params: {} }
