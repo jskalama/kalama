@@ -1,6 +1,10 @@
 import MP from 'mixpanel';
 import macaddress from 'macaddress';
-import os from 'os';
+import md5 from 'md5';
+import Humanhash from 'humanhash';
+import { version } from '../../package.json';
+
+const humanhash = new Humanhash();
 
 const TOKEN = 'a81f1ef2b2e5d2fbbb2a6cc1a57d4d99';
 
@@ -10,7 +14,7 @@ const getMac = async () =>
             if (err) {
                 return fail(err);
             }
-            ok(mac);
+            ok(md5(mac));
         })
     );
 
@@ -18,9 +22,7 @@ const getId = async () => getMac();
 
 const initUser = async () => {
     const uid = await getId();
-    const user = os.userInfo().username;
-    const host = os.hostname();
-    const name = `${user}@${host}`;
+    const name = humanhash.humanize(uid);
     mixpanel.people.set(uid, {
         $first_name: name
     });
@@ -35,6 +37,7 @@ export const mpTrack = async (type, args = {}) => {
     const id = await getId();
     mixpanel.track(type, {
         distinct_id: id,
+        version,
         ...args
     });
 };

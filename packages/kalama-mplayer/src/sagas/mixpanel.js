@@ -6,6 +6,8 @@ import {
     ON_SUGGECTION_SELECT,
     ON_ALBUM_SELECT
 } from '../ducks/search';
+import { DOWNLOAD_CURRENT_PLST } from '../ducks/download';
+import { getParentResource } from '../ducks/tracks';
 
 export default function* mixpanelSaga() {
     yield takeEvery(ON_QUERY_RESULT, function*() {
@@ -28,6 +30,16 @@ export default function* mixpanelSaga() {
             q: query,
             label: payload.label,
             url: payload.url
+        });
+    });
+
+    yield takeEvery(DOWNLOAD_CURRENT_PLST, function*() {
+        const query = yield select(getQuery);
+        const plst = yield select(getParentResource);
+        yield call(mpTrack, DOWNLOAD_CURRENT_PLST, {
+            q: query,
+            label: plst.label,
+            url: plst.url
         });
     });
 }
