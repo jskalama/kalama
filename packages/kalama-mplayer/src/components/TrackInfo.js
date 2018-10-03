@@ -33,15 +33,17 @@ export default class TrackInfo extends Component {
         } = this;
         return (
             <box style={style}>
-                {track ? track.title : '-'} {isPaused ? '(paused)' : null}
-                {isPlaying && !isPaused ? '(playing)' : null}
-                <box style={style} top="100%-2">
+                <box style={style} top="100%-3" height={1}>
+                    {track ? track.title : '-'} {isPaused ? '(paused)' : null}
+                    {isPlaying && !isPaused ? '(playing)' : null}
+                </box>
+                <box style={style} top="100%-2" height={1}>
                     Tracks cached: {cached}/{total}
                 </box>
-                <box style={style} top="100%-2">
-                    <box top={1}>{currentTime}%</box>
+                <box style={style} top="100%-1">
+                    <box top={0}>{currentTime}%</box>
                     <progressbar
-                        top={1}
+                        top={0}
                         left={4}
                         height={1}
                         filled={currentTime}
