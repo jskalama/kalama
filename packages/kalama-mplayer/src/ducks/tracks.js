@@ -229,6 +229,10 @@ export const getPrefixizedTracks = createSelector(getTracks, tracks =>
     prefixizeTrackNames(tracks)
 );
 
+export const getPrefixizedRawTracks = createSelector(getRawTracks, tracks =>
+    prefixizeTrackNames(tracks)
+);
+
 export const isFirstTrackCached = createSelector(
     getTracks,
     tracks => !!tracks[0].cacheFile
@@ -237,3 +241,15 @@ export const isFirstTrackCached = createSelector(
 export const areAllTracksCached = createSelector(getTracks, tracks =>
     tracks.every(track => !!track.cacheFile)
 );
+
+export const getCacheProgress = createSelector(getTracks, tracks => {
+    return tracks.reduce(
+        (stat, { cacheFile }) => {
+            if (cacheFile) {
+                stat.cached++;
+            }
+            return stat;
+        },
+        { cached: 0, total: tracks.length }
+    );
+});

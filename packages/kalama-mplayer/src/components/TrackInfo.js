@@ -9,7 +9,11 @@ export default class TrackInfo extends Component {
         track: TrackShape,
         isPlaying: PropTypes.bool,
         isPaused: PropTypes.bool,
-        currentTime: PropTypes.number
+        currentTime: PropTypes.number,
+        cacheProgress: PropTypes.shape({
+            cached: PropTypes.number,
+            total: PropTypes.number
+        })
     };
 
     style = {
@@ -18,14 +22,23 @@ export default class TrackInfo extends Component {
 
     render() {
         const {
-            props: { track, isPlaying, isPaused, currentTime },
+            props: {
+                track,
+                isPlaying,
+                isPaused,
+                currentTime,
+                cacheProgress: { cached, total }
+            },
             style
         } = this;
         return (
             <box style={style}>
                 {track ? track.title : '-'} {isPaused ? '(paused)' : null}
-                {isPlaying ? '(playing)' : null}
-                <box style={style} top="100%-3">
+                {isPlaying && !isPaused ? '(playing)' : null}
+                <box style={style} top="100%-2">
+                    Tracks cached: {cached}/{total}
+                </box>
+                <box style={style} top="100%-2">
                     <box top={1}>{currentTime}%</box>
                     <progressbar
                         top={1}

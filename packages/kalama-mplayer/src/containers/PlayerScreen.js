@@ -12,16 +12,18 @@ import {
     stepForward,
     goToPrevTrack,
     goToNextTrack,
-    getPrefixizedTracks
+    getCacheProgress,
+    getPrefixizedRawTracks
 } from '../ducks/tracks';
 
 const mapStateToProps = state => {
     return {
-        tracks: getPrefixizedTracks(state),
+        tracks: getPrefixizedRawTracks(state),
         current: state.tracks.current,
         isPlaying: state.tracks.isPlaying,
         isPaused: state.tracks.isPaused,
-        currentTime: state.tracks.currentTime
+        currentTime: state.tracks.currentTime,
+        cacheProgress: getCacheProgress(state)
     };
 };
 const mapDispatchToProps = dispatch => {
@@ -41,12 +43,16 @@ const mapDispatchToProps = dispatch => {
 
 class PlayerScreen extends Component {
     componentDidMount() {
-        const { props: { init } } = this;
+        const {
+            props: { init }
+        } = this;
         init();
     }
 
     handleTrackSelect = index => {
-        const { props: { directTrackSelect } } = this;
+        const {
+            props: { directTrackSelect }
+        } = this;
         directTrackSelect(index);
     };
 
@@ -62,7 +68,8 @@ class PlayerScreen extends Component {
                 stepBack,
                 stepForward,
                 goToPrevTrack,
-                goToNextTrack
+                goToNextTrack,
+                cacheProgress
             },
             handleTrackSelect
         } = this;
@@ -86,12 +93,13 @@ class PlayerScreen extends Component {
                         onTrackSelect={handleTrackSelect}
                     />
                 </box>
-                <box top="100%-5">
+                <box top="100%-3">
                     <TrackInfo
                         track={tracks[current]}
                         isPlaying={isPlaying}
                         isPaused={isPaused}
                         currentTime={currentTime}
+                        cacheProgress={cacheProgress}
                     />
                 </box>
 
@@ -107,4 +115,7 @@ class PlayerScreen extends Component {
     }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PlayerScreen);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(PlayerScreen);
