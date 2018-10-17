@@ -1,0 +1,59 @@
+{
+    "name": "kalama1",
+    "version": "0.8.0",
+    "main": "index.js",
+    "license": "MIT",
+    "scripts": {
+        "start": "npm run live",
+        "live": "nodemon --exec ./node_modules/.bin/ts-node -- ./src/index.ts",
+        "once": "ts-node ./src/cli.ts $*",
+        "compile": "tsc -p tsconfig.json",
+        "prepare": "npm run compile"
+    },
+    "files": [
+        "dist",
+        "src",
+        "kalama.js"
+    ],
+    "devDependencies": {
+        "@types/chai": "^4.0.4",
+        "@types/lodash": "^4.14.72",
+        "@types/mocha": "^2.2.43",
+        "@types/node": "^8.0.20",
+        "@types/node-fetch": "^1.6.7",
+        "chai": "^4.1.2",
+        "mocha": "^4.0.0",
+        "nodemon": "^1.11.0",
+        "ts-node": "^3.3.0",
+        "typescript": "^2.4.2"
+    },
+    "dependencies": {
+        "@types/configstore": "^2.1.1",
+        "archiver-promise": "^1.0.0",
+        "chalk": "^2.3.0",
+        "cheerio": "^0.22.0",
+        "child-process-promise": "^2.2.0",
+        "configstore": "^3.1.1",
+        "download": "^6.2.5",
+        "get-port": "^3.1.0",
+        "inquirer": "^3.0.2",
+        "inquirer-autocomplete-prompt": "^0.11.0",
+        "ip": "^1.1.5",
+        "kalama-api": "^0.8.0",
+        "lodash": "^4.17.4",
+        "node-fetch": "^1.6.3",
+        "q-io": "^1.13.2",
+        "qrcode-terminal": "^0.11.0",
+        "sanitize-filename": "^1.6.1",
+        "serve": "^6.0.6",
+        "tmp-promise": "^1.0.3",
+        "yargs": "^8.0.2"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/corporateanon/kalama"
+    },
+    "bin": {
+        "kalama1": "./kalama.js"
+    }
+}

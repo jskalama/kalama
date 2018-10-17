@@ -1,7 +1,11 @@
 import { expect } from 'chai';
 import { ItemType, search, getArtistAlbumsList, getTracksList } from '../api';
 import snapshot = require('snap-shot-it');
-import { expectToBeAValidItem } from './expectations';
+import {
+    expectToBeAValidItem,
+    expectToBeAValidPlayableTrack,
+    expectToHaveUniqueIds
+} from './expectations';
 
 describe('search', () => {
     it('should return results', async () => {
@@ -29,7 +33,8 @@ describe('getTracksList', () => {
             url:
                 'https://myzuka.me/Album/802734/Asd-Blockbasta-Deluxe-Edition-2015'
         });
-        tracks.forEach(expectToBeAValidItem);
+        tracks.forEach(expectToBeAValidPlayableTrack);
+        expectToHaveUniqueIds(tracks);
     });
 });
 
@@ -41,6 +46,7 @@ describe('getTracksList with removed-by-copyright-holder tracks', () => {
             url:
                 'https://myzuka.club/Album/297617/Joao-Gilberto-Joao-Gilberto-In-Tokyo-2004'
         });
-        tracks.forEach(expectToBeAValidItem);
+        tracks.forEach(expectToBeAValidPlayableTrack);
+        expectToHaveUniqueIds(tracks);
     });
 });
