@@ -72,7 +72,7 @@ const sortAlbumsByCategoryAndYear = (albums: Array<Album>): Array<Album> => {
         .value();
     const sortedAlbums = <Array<Album>>_(categoryOrder)
         .map(cat => byCat[cat])
-        .flatten(false)
+        .flatten()
         .filter(_.identity)
         .value();
     return sortedAlbums;

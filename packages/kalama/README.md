@@ -1,65 +1,113 @@
-# kalama
+# kalama-mplayer
 
-Music search client written in Node.
+Поисковик музыки и плеер с текстовым интерфейсом.
 
+## Зачем
 
-### Installation:
+Эта программа предназначена для тех, кто много времени проводит в консоли и любит слушать музыку.
 
-```
-npm -g install kalama
-```
+Скорее всего, она подойдёт для гиков, которые не предсталяют своей жизни без таких программ, как `zsh`, `midnight-commander`, `nano` (а то и `vim`).
 
-### Usage:
+## Установка
 
-Search and play music:
-
-```
-kalama
-```
-
-_Note: it will run VLC player by default. How to use other player: see Configuration section_
-
-Search and save tracks as MP3 files:
+1. Установите Node.js
+2. Выполните в консоли:
 
 ```
-kalama get ~/Music/folder-to-download
+npm i -g kalama-mplayer
 ```
 
-Search and export tracks as M3U file (with URLs, so that most players can play it directly from the remote servers):
+Для Linux или OSX понадобится дополнительно установить MPlayer.
+
+Debian:
 
 ```
-kalama playlist ~/Music/my-music.m3u
+sudo apt install mplayer
 ```
 
-Search, download, create ZIP archive with tracks and share it in the local network with QR-code (which you can use to download the tracks from PC to mobile device):
+OSX:
 
 ```
-kalama share
+brew install mplayer
 ```
 
+Для Windows установка MPlayer не требуется, потому что `kalama-mplayer` делает это автоматически.
 
-### Configuration
+## Как пользоваться
 
-On Linux systems the configuration file is stored under `~/.config/configstore/kalama.json`.
-
-By default it is the following:
-
-```
-{
-	"player": "vlc %"
-}
-```
-
-You can change `vlc` to any player that supports `m3u` playlists. For example, for **Audacious** it will be the following:
+Выполните в консоли
 
 ```
-{
-	"player": "audacious %"
-}
+kalama-mplayer
 ```
 
-**Note:** Don't forget to place `%` sign after the player command. It is a placeholder for playlist file.
+Затем введите название исполнителя, трека или альбома. Для навигации по списку используйте стрелки. Для выбора — клавишу `Enter`.
 
-### Demo:
+Если был выбран исполнитель, то дальше понадобится выбрать альбом.
 
-https://youtu.be/GDD5nfu5QPs
+После этого запустится плеер.
+
+Для управления плеером используйте комбинации клавиш:
+
+- `пробел` — пауза/пуск
+- `Ctrl + стрелка вправо` — следующая песня
+- `Ctrl + стрелка влево` — предыдущая песня
+- `стрелки вверх/вниз, затем Enter` — перемещение по плейлисту
+- `стрелка вправо` — перемотать вперёд на 10 секунд
+- `стрелка влево` — перемотать назад на 10 секунд
+- `Ctrl + S` — скачать все песни данного плейлиста
+- `Ctrl + W` — скачать все песни данного плейлиста во временную папку и показать QR-код для скачивания zip-архива с песнями на мобильное устройство
+- `Ctrl + C` — выход
+- `Ctrl + L` — показать help
+- `+` — повысить громкость
+- `-` — понизить громкость
+- `Escape` — "умная клавиша" для переключения в другое окно. Используйте её, чтобы выйти из плеера в поиск, из поиска в плеер (если он был ранее запущен), из help-а или из окна загрузки альбома (при этом загрузка не остановится)
+
+## Настройка
+
+Чтобы посмотреть все настройки, выполните команду:
+
+```
+kalama-mplayer conf-list
+```
+
+Чтобы сбросить все настройки к заводским, выполните команду:
+
+```
+kalama-mplayer conf-clear
+```
+
+Чтобы задать ключ конфигурации, выполните команду:
+
+```
+kalama-mplayer conf-set <ключ> <значение>
+```
+
+Чтобы сбросить ключ конфигурации к значению по умолчанию, выполните команду:
+
+```
+kalama-mplayer conf-delete <ключ>
+```
+
+Доступные ключи конфигурации:
+
+- `downloads-dir` — папка для сохранения песен
+- `temp-dir` — временная папка
+- `volume` — громкость
+- `cacheMaxSize` — максимальный размер кэша (в байтах). По умолчанию `1000000000`. Поставьте `0`, если не хотите кэшировать треки
+
+В настройках можно использовать макросы:
+
+- `{OS_DOWNLOADS}` — папка "Загрузки" данного пользователя
+- `{OS_HOME}` — домашняя папка данного пользователя 
+- `{OS_TMP}` — временная папка
+- `{/}` — разделитель папок в имени файла (`/` для UNIX, `\` для Windows)
+- `{COLON}` — разделитель путей (`:` для UNIX, `;` для Windows)
+
+## Как это работает
+
+`kalama-mplayer` ищет музыку в открытом онлайн-каталоге, затем воспроизводит её с помощью проигрывателя MPlayer. [MPlayer](http://mplayerhq.hu/) — это открытый проигрыватель, доступный для многих платформ, включая Linux, OSX, Windows. Пользователям с OSX и Linux его необходимо установить вручную. Для Windows MPlayer включён в пакет `kalama-mplayer`.
+
+## Кэширование
+
+Для более стабильного воспроизведения и экономии трафика `kalama-mplayer` скачивает прослушиваемые треки в папку `~/.cache/kalama`. Треки, которые давно не воспроизводились, вытесняются из кэша более новыми. Её размер задан в конфигурации параметром `cacheMaxSize` и по умолчанию равен **1 Гб**. Вы можете задать любой размер кэша и проигрыватель будет удалять старые файлы, чтобы держать кэш в заданных пределах. Чтобы выключить кэш, установите размер равным нулю. `kalama-mplayer conf-set cacheMaxSize 0`.

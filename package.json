@@ -1,8 +1,9 @@
 {
 	"devDependencies": {
-		"lerna": "^2.9.0"
+		"lerna": "^3.4.3"
 	},
 	"dependencies": {
 		"download": "^7.0.0"
-	}
+	},
+	"name": "kalama"
 }
