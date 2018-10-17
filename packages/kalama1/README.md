@@ -1,4 +1,4 @@
-# kalama
+# kalama1
 
 Music search client written in Node.
 
@@ -6,7 +6,7 @@ Music search client written in Node.
 ### Installation:
 
 ```
-npm -g install kalama
+npm -g install kalama1
 ```
 
 ### Usage:
@@ -14,7 +14,7 @@ npm -g install kalama
 Search and play music:
 
 ```
-kalama
+kalama1
 ```
 
 _Note: it will run VLC player by default. How to use other player: see Configuration section_
@@ -22,19 +22,19 @@ _Note: it will run VLC player by default. How to use other player: see Configura
 Search and save tracks as MP3 files:
 
 ```
-kalama get ~/Music/folder-to-download
+kalama1 get ~/Music/folder-to-download
 ```
 
 Search and export tracks as M3U file (with URLs, so that most players can play it directly from the remote servers):
 
 ```
-kalama playlist ~/Music/my-music.m3u
+kalama1 playlist ~/Music/my-music.m3u
 ```
 
 Search, download, create ZIP archive with tracks and share it in the local network with QR-code (which you can use to download the tracks from PC to mobile device):
 
 ```
-kalama share
+kalama1 share
 ```
 
 
