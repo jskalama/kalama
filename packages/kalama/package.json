@@ -1,6 +1,6 @@
 {
     "name": "kalama",
-    "version": "0.8.0",
+    "version": "0.8.1",
     "description": "MPlayer frontend for kalama",
     "main": "index.js",
     "scripts": {
@@ -45,8 +45,8 @@
         "format-duration": "^1.1.0",
         "fuzzy-search": "^2.0.1",
         "humanhash": "^1.0.4",
-        "kalama-api": "^0.8.0",
-        "kalama-cache": "^0.8.0",
+        "kalama-api": "^0.8.1",
+        "kalama-cache": "^0.8.1",
         "kalama-mplayer-as-promised": "0.1.0",
         "lcp": "^1.1.0",
         "lodash": "^4.17.5",
