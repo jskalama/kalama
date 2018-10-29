@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { func, arrayOf, string, any, shape } from 'prop-types';
 import Input from './Input';
+import { autocomplete } from '../theme/colors';
 
 export default class Autocomplete extends Component {
     static propTypes = {
@@ -16,13 +17,7 @@ export default class Autocomplete extends Component {
         )
     };
 
-    style = {
-        list: {
-            selected: {
-                bg: 'blue'
-            }
-        }
-    };
+    style = autocomplete;
 
     state = {
         selectedIndex: 0
@@ -32,7 +27,10 @@ export default class Autocomplete extends Component {
         this.refs.input && this.refs.input.focus();
     }
     handleSelect = () => {
-        const { state: { selectedIndex }, props: { items, onChange } } = this;
+        const {
+            state: { selectedIndex },
+            props: { items, onChange }
+        } = this;
         const item = items[selectedIndex];
         item && onChange && onChange(item.value);
     };

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
+import { toolbar } from '../theme/colors';
 
-const btnStyle = { bg: 'blue', fg: 'white', hover: { bg: 'yellow' } };
+const btnStyle = toolbar.button;
 
 export default class Toolbar extends Component {
     static propTypes = {

@@ -1,4 +1,5 @@
 import React, { Component, PropTypes } from 'react';
+import { trackInfo } from '../theme/colors';
 
 const TrackShape = PropTypes.shape({
     title: PropTypes.string
@@ -16,10 +17,6 @@ export default class TrackInfo extends Component {
         })
     };
 
-    style = {
-        bg: 'gray'
-    };
-
     render() {
         const {
             props: {
@@ -28,26 +25,25 @@ export default class TrackInfo extends Component {
                 isPaused,
                 currentTime,
                 cacheProgress: { cached, total }
-            },
-            style
+            }
         } = this;
         return (
-            <box style={style}>
-                <box style={style} top="100%-3" height={1}>
+            <box style={trackInfo.box}>
+                <box style={trackInfo.box} top="100%-3" height={1}>
                     {track ? track.title : '-'} {isPaused ? '(paused)' : null}
                     {isPlaying && !isPaused ? '(playing)' : null}
                 </box>
-                <box style={style} top="100%-2" height={1}>
+                <box style={trackInfo.box} top="100%-2" height={1}>
                     Tracks cached: {cached}/{total}
                 </box>
-                <box style={style} top="100%-1">
+                <box style={trackInfo.box} top="100%-1">
                     <box top={0}>{currentTime}%</box>
                     <progressbar
                         top={0}
                         left={4}
                         height={1}
                         filled={currentTime}
-                        style={{ bar: { bg: 'green' } }}
+                        style={trackInfo.progressbar}
                     />
                 </box>
             </box>

@@ -1,6 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import chalk from 'chalk';
 import formatDuration from 'format-duration';
+import { tracksList } from '../theme/colors';
 
 const TrackShape = PropTypes.shape({
     title: PropTypes.string
@@ -11,12 +12,6 @@ export default class TracksList extends Component {
         tracks: PropTypes.arrayOf(TrackShape),
         current: PropTypes.number,
         onTrackSelect: PropTypes.func
-    };
-
-    style = {
-        selected: {
-            bg: 'blue'
-        }
     };
 
     componentDidMount() {
@@ -35,10 +30,10 @@ export default class TracksList extends Component {
         const body = tracks.map((it, i) => {
             const { prefix, suffix, duration } = it;
             const currentSign = i === current ? '>' : ' ';
-            const fullTitle = `${chalk.yellow(prefix)}${chalk.bold(suffix)}`;
+            const fullTitle = `${prefix}${chalk.bold(suffix)}`;
             return [
                 `${currentSign}${fullTitle}`,
-                chalk.yellow(formatDuration(duration * 1000))
+                formatDuration(duration * 1000)
             ];
         });
         return [headers, ...body];
@@ -57,7 +52,6 @@ export default class TracksList extends Component {
 
     render() {
         const {
-            style,
             props: { tracks, current },
             tracksListToListItems
         } = this;
@@ -72,7 +66,7 @@ export default class TracksList extends Component {
                     keys
                     mouse
                     selected={current + 1}
-                    style={style}
+                    style={tracksList.list}
                     rows={tracksListToListItems(tracks, current)}
                 />
             </element>

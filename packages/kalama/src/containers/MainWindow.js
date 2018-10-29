@@ -12,6 +12,7 @@ import {
 import { getCurrentTrack, getParentResource } from '../ducks/tracks';
 import { getMessage } from '../ducks/flashMessages';
 import chalk from 'chalk';
+import { mainWindow } from '../theme/colors';
 
 const mapStateToProps = state => {
     return {
@@ -56,14 +57,11 @@ const getTitle = (route, playlist, tasksSummary, currentTrack, message) => {
 };
 
 class MainWindow extends Component {
-    boxStyle = { border: { fg: 'blue' } };
     borderOptions = { type: 'line' };
-    titleStyle = { bg: 'blue' };
     render() {
         const {
             boxStyle,
             borderOptions,
-            titleStyle,
             props: {
                 children,
                 route,
@@ -77,14 +75,14 @@ class MainWindow extends Component {
             <element>
                 <box
                     border={borderOptions}
-                    style={boxStyle}
+                    style={mainWindow.box}
                     width="100%"
                     height="100%"
                 >
                     {children}
                 </box>
                 <Label
-                    style={titleStyle}
+                    style={mainWindow.title}
                     top={0}
                     text={getTitle(
                         route,
