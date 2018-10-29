@@ -28,3 +28,6 @@ export const mainWindow = {
     box: { border: { fg: 'blue' } },
     title: { bg: 'blue' }
 };
+
+export const highlight = 'magenta';
+export const prefix = 'magenta';

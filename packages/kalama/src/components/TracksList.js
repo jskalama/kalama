@@ -1,7 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 import chalk from 'chalk';
 import formatDuration from 'format-duration';
-import { tracksList } from '../theme/colors';
+import { tracksList, prefix } from '../theme/colors';
+
+const pfx = chalk.keyword(prefix);
 
 const TrackShape = PropTypes.shape({
     title: PropTypes.string
@@ -30,7 +32,7 @@ export default class TracksList extends Component {
         const body = tracks.map((it, i) => {
             const { prefix, suffix, duration } = it;
             const currentSign = i === current ? '>' : ' ';
-            const fullTitle = `${prefix}${chalk.bold(suffix)}`;
+            const fullTitle = `${pfx(prefix)}${chalk.bold(suffix)}`;
             return [
                 `${currentSign}${fullTitle}`,
                 formatDuration(duration * 1000)
