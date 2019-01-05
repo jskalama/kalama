@@ -29,7 +29,9 @@
         "@types/configstore": "^2.1.1",
         "assert": "^1.4.1",
         "axios": "^0.18.0",
+        "buffer": "^5.2.1",
         "cheerio": "^0.22.0",
+        "events": "^3.0.0",
         "node-fetch": "^1.6.3"
     },
     "repository": {
