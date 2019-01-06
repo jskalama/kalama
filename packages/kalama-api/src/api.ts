@@ -1,4 +1,5 @@
-import fetch from 'node-fetch';
+// import fetch from 'node-fetch';
+import axios from 'axios';
 import cheerio = require('cheerio');
 import { equal } from 'assert';
 import assert = require('assert');
@@ -110,13 +111,13 @@ export const search = async (term: string | null): Promise<SearchResult> => {
         };
     }
 
-    const res = await fetch(
+    const res = await axios.get(
         `${SERVER_ROOT}/Search/Suggestions?term=${encodeURIComponent(term)}`,
         {
             headers: { referer: SERVER_ROOT }
         }
     );
-    const items = (await res.json()).map(decodeItem);
+    const items = res.data.map(decodeItem);
     return {
         artists: items.filter(item => item.itemType === ItemType.Artist),
         albums: items.filter(item => item.itemType === ItemType.Album),
@@ -129,10 +130,10 @@ export const getArtistAlbumsList = async (
 ): Promise<Array<Album>> => {
     const url = artist.url;
     const albumsUrl = `${url}/albums`;
-    const queryResult = await fetch(albumsUrl, {
+    const queryResult = await axios.get(albumsUrl, {
         headers: { referer: SERVER_ROOT }
     });
-    const htmlText: string = await queryResult.text();
+    const htmlText: string = await queryResult.data;
     return parseAlbumsListHtml(htmlText);
 };
 
@@ -140,10 +141,10 @@ export const getTracksList = async (
     resource: SearchResultItem
 ): Promise<Array<Track>> => {
     const url = resource.url;
-    const queryResult = await fetch(url, {
+    const queryResult = await axios.get(url, {
         headers: { referer: SERVER_ROOT }
     });
-    const htmlText: string = await queryResult.text();
+    const htmlText: string = await queryResult.data;
     let tracks = parseTracksListHtml(htmlText);
     if (resource.itemType === ItemType.Song) {
         tracks = tracks.slice(0, 1);
@@ -207,7 +208,7 @@ const parseTracksListHtml = (htmlText: string): Array<Track> => {
         })
         .get()
         .filter(_ => _)
-        .map(({id, url, title, duration }) => ({
+        .map(({ id, url, title, duration }) => ({
             id,
             url: normalizeUrl(url),
             title,
@@ -241,11 +242,18 @@ const parseAlbumsListHtml = (htmlText: string): Array<Album> => {
 export const resolveRedirectedTrack = async (
     resource: Track
 ): Promise<Track> => {
-    const response = await fetch(resource.url, {
-        method: 'HEAD',
-        redirect: 'manual'
-    });
-    const location = response.headers.get('Location');
-    equal(response.status, 302, 'Resource should be redirected');
-    return { ...resource, url: location };
+    //Yes, it looks like shit. But Axios treats 302 as an error,
+    //so in our case success and failure are turned upside down.
+    try {
+        await axios.head(resource.url, {
+            maxRedirects: 0
+        });
+        throw new Error('Resource should be redirected');
+    } catch (error) {
+        if (error.response && error.response.status === 302) {
+            return { ...resource, url: error.response.headers.location };
+        } else {
+            throw error;
+        }
+    }
 };

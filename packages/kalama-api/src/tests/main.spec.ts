@@ -31,7 +31,7 @@ describe('getTracksList', () => {
             itemType: ItemType.Album,
             label: '',
             url:
-                'https://myzuka.me/Album/802734/Asd-Blockbasta-Deluxe-Edition-2015'
+                'https://myzcloud.me/album/3037656/asd-blockbasta-deluxe-edition-2015'
         });
         tracks.forEach(expectToBeAValidPlayableTrack);
         expectToHaveUniqueIds(tracks);
