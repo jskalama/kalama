@@ -242,10 +242,18 @@ const parseAlbumsListHtml = (htmlText: string): Array<Album> => {
 export const resolveRedirectedTrack = async (
     resource: Track
 ): Promise<Track> => {
-    const response = await axios.head(resource.url, {
-        maxRedirects: 0
-    });
-    const location = response.headers.Location;
-    equal(response.status, 302, 'Resource should be redirected');
-    return { ...resource, url: location };
+    //Yes, it looks like shit. But Axios treats 302 as an error,
+    //so in our case success and failure are turned upside down.
+    try {
+        await axios.head(resource.url, {
+            maxRedirects: 0
+        });
+        throw new Error('Resource should be redirected');
+    } catch (error) {
+        if (error.response && error.response.status === 302) {
+            return { ...resource, url: error.response.headers.location };
+        } else {
+            throw error;
+        }
+    }
 };
