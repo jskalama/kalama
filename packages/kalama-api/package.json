@@ -1,6 +1,6 @@
 {
     "name": "kalama-api",
-    "version": "0.8.2",
+    "version": "0.8.3",
     "main": "./dist/api.js",
     "typings": "./dist/api.d.ts",
     "license": "MIT",
