@@ -73,9 +73,11 @@ export interface SearchResult {
 
 const normalizeUrl = (url: string): string => {
     const _url = url.trim();
-    if (_url.startsWith('http://') || _url.startsWith('https://')) {
+    //Not using startsWith here becasue of: https://github.com/facebook/react-native/issues/11370
+    if (_url.indexOf('http://') === 0 || _url.indexOf('https://') === 0) {
         return _url;
     }
+
     return `${SERVER_ROOT}${_url}`;
 };
 
