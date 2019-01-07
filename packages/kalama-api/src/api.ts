@@ -72,10 +72,11 @@ export interface SearchResult {
 }
 
 const normalizeUrl = (url: string): string => {
-    if (url.startsWith('http://') || url.startsWith('https://')) {
-        return url;
+    const _url = url.trim();
+    if (_url.startsWith('http://') || _url.startsWith('https://')) {
+        return _url;
     }
-    return `${SERVER_ROOT}${url}`;
+    return `${SERVER_ROOT}${_url}`;
 };
 
 const itemTypeMap = {
