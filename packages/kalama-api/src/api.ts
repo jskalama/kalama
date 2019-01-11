@@ -143,8 +143,13 @@ export const getArtistAlbumsList = async (
     return parseAlbumsListHtml(htmlText);
 };
 
+export interface IGetTracksListOptions {
+    noResolveRedirects?: boolean;
+}
+
 export const getTracksList = async (
-    resource: SearchResultItem
+    resource: SearchResultItem,
+    { noResolveRedirects = false }: IGetTracksListOptions = {}
 ): Promise<Array<Track>> => {
     const url = resource.url;
     const queryResult = await axios.get(url, {
@@ -154,6 +159,9 @@ export const getTracksList = async (
     let tracks = parseTracksListHtml(htmlText);
     if (resource.itemType === ItemType.Song) {
         tracks = tracks.slice(0, 1);
+    }
+    if (noResolveRedirects) {
+        return tracks;
     }
     return Promise.all(tracks.map(resolveRedirectedTrack));
 };
