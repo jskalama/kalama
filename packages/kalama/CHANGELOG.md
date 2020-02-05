@@ -1,5 +1,13 @@
 # kalama
 
+## 0.8.11-fix-remove-test-pre.0
+
+### Patch Changes
+
+- Updated dependencies [facb193]
+  - kalama-api@0.9.2-fix-remove-test-pre.0
+  - kalama-cache@0.8.10-fix-remove-test-pre.0
+
 ## 0.8.10
 
 ### Patch Changes

@@ -6,5 +6,7 @@
     "kalama-api": "0.9.1",
     "kalama-cache": "0.8.9"
   },
-  "changesets": []
+  "changesets": [
+    "rude-seas-stare"
+  ]
 }

@@ -1,5 +1,11 @@
 # kalama-api
 
+## 0.9.2-fix-remove-test-pre.0
+
+### Patch Changes
+
+- facb193: removed automatic tests
+
 ## 0.9.1
 
 ### Patch Changes
