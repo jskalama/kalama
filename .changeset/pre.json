@@ -1,0 +1,10 @@
+{
+  "mode": "pre",
+  "tag": "fix-remove-test-pre",
+  "initialVersions": {
+    "kalama": "0.8.10",
+    "kalama-api": "0.9.1",
+    "kalama-cache": "0.8.9"
+  },
+  "changesets": []
+}
