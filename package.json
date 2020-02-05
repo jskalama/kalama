@@ -9,8 +9,8 @@
     "devDependencies": {
         "@changesets/cli": "^2.5.1",
         "lerna": "^3.4.3"
-	},
-	"scripts": {
-		"release":"node ./tasks/release.js"
-	}
+    },
+    "scripts": {
+        "release": "node ./tasks/release.js"
+    }
 }
