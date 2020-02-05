@@ -1,5 +1,13 @@
 # kalama-cache
 
+## 0.8.11
+
+### Patch Changes
+
+- 4aed2fe: remove lockfiles
+- Updated dependencies [4aed2fe]
+  - kalama-api@0.9.3
+
 ## 0.8.10
 
 ### Patch Changes

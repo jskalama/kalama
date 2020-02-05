@@ -1,5 +1,11 @@
 # kalama-api
 
+## 0.9.3
+
+### Patch Changes
+
+- 4aed2fe: remove lockfiles
+
 ## 0.9.2
 
 ### Patch Changes
