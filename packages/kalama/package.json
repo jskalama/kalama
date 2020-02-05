@@ -53,7 +53,7 @@
     "kalama-cache": "^0.8.8",
     "kalama-mplayer-as-promised": "0.1.0",
     "lcp": "^1.1.0",
-    "lodash": "^4.17.5",
+    "lodash": "^4.17.15",
     "macaddress": "^0.2.9",
     "md5": "^2.2.1",
     "mixpanel": "^0.9.2",
