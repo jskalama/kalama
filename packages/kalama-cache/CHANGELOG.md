@@ -1,5 +1,13 @@
 # kalama-cache
 
+## 0.8.10
+
+### Patch Changes
+
+- 572a960: removed automatic tests
+- Updated dependencies [572a960]
+  - kalama-api@0.9.2
+
 ## 0.8.9
 
 ### Patch Changes

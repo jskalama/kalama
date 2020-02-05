@@ -1,5 +1,11 @@
 # kalama-api
 
+## 0.9.2
+
+### Patch Changes
+
+- 572a960: removed automatic tests
+
 ## 0.9.1
 
 ### Patch Changes
