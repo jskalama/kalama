@@ -51,7 +51,6 @@ describe('getTracksList', () => {
         );
         tracks.forEach(expectToBeAValidPlayableTrack);
         expectToHaveUniqueIds(tracks);
-        console.log(tracks)
     });
 
     it('should get a list of album tracks even if some of them were removed by copyright holder', async () => {

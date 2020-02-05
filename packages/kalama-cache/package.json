@@ -6,7 +6,7 @@
   "typings": "./dist/kalama-cache.d.ts",
   "scripts": {
     "compile": "tsc -p tsconfig.json",
-    "prepare": "npm run compile",
+    "prepare": "npm run compile && npm run test",
     "example": "npm run compile && node dist/example.js",
     "test": "mocha -r ts-node/register src/tests/**/*.spec.ts --timeout 10000"
   },
@@ -37,7 +37,7 @@
     "@types/q-io": "0.0.30",
     "download": "^7.0.0",
     "kalama-api": "^0.9.0",
-    "lodash": "^4.17.10",
+    "lodash": "^4.17.15",
     "md5": "^2.2.1",
     "q-io": "^1.13.6",
     "snap-shot-it": "^5.0.1",

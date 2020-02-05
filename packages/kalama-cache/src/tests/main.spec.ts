@@ -8,6 +8,7 @@ import {
 import snapshot = require('snap-shot-it');
 import { join } from 'path';
 import { PlaylistCache } from '../kalama-cache';
+import { tmpdir } from 'os';
 
 describe('getTracksList', () => {
     let tracks, cache;
@@ -19,14 +20,9 @@ describe('getTracksList', () => {
             label: '',
             url:
                 'https://myzcloud.me/album/3037660/asd-wer-hatte-das-gedacht-2003'
-            // 'https://myzcloud.me/album/3037656/asd-blockbasta-deluxe-edition-2015'
         });
-        cache = new PlaylistCache(tracks, {
-            storageDirectory: join(
-                process.env.HOME,
-                '.cache',
-                'kalama-cache-test'
-            ),
+        cache = new PlaylistCache(tracks.slice(0, 2), {
+            storageDirectory: tmpdir(),
             concurrency: 1,
             maxSize: 500e6
         });
