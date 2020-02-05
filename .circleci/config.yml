@@ -1,0 +1,114 @@
+version: 2
+
+x-git-push: &git-push
+  run:
+    name: Persist in git
+    command: |
+      if [[ -n $(git status --porcelain) ]]; then
+        git add .
+        git commit -m '[ci skip] publish packages'
+        git push -u origin ${CIRCLE_BRANCH} --follow-tags
+      else
+        echo "No changes in GIT, not pushing"
+      fi
+
+x-job-setup: &job-setup
+  docker:
+    - image: circleci/node:10
+  working_directory: ~/repo
+
+x-npm-auth: &npm-auth
+  run:
+    name: Authenticate with NPM registry
+    command: echo "//registry.npmjs.org/:_authToken=${NPM_TOKEN}" > ${HOME}/.npmrc
+
+x-git-user: &git-user
+  run:
+    name: Git user
+    command: |
+      git config user.email "circle"
+      git config user.name "circle"
+
+x-lerna-bootstrap: &lerna-bootstrap
+  run:
+    name: Lerna bootstrap
+    command: |
+      npx lerna bootstrap --no-ci
+
+x-fail-on-pre: &fail-on-pre
+  run:
+    name: Ensure there is no pre.json
+    command: |
+      if [[ -f ".changeset/pre.json" ]]; then
+        echo "pre.json may only exist in branches ending with -pre"
+        exit 1
+      fi
+
+jobs:
+
+  pre_release:
+    <<: *job-setup
+    steps:
+      - checkout
+      - <<: *npm-auth
+      - run: npm ci
+      - <<: *git-user
+      - <<: *lerna-bootstrap
+      - run:
+          name: Enter PRE mode
+          command: |
+            npx changeset pre enter ${CIRCLE_BRANCH} || echo "Already in PRE mode"
+      - run:
+          name: Pre-release version bump
+          command: |
+            npx changeset version
+      - run:
+          name: Pre-release publish
+          command: |
+            npx changeset publish
+      - <<: *git-push
+
+  release:
+    <<: *job-setup
+    steps:
+      - checkout
+      - <<: *fail-on-pre
+      - <<: *npm-auth
+      - run: npm ci
+      - <<: *git-user
+      - <<: *lerna-bootstrap
+      - run:
+          name: Exit PRE mode
+          command: |
+            npx changeset pre exit || echo "Already exited PRE mode"
+      - run:
+          name: Version bump
+          command: |
+            npx changeset version
+      - run:
+          name: Publish
+          command: |
+            npx changeset publish
+      - <<: *git-push
+
+  test:
+    <<: *job-setup
+    steps:
+      - checkout
+      - <<: *fail-on-pre
+      - <<: *npm-auth
+      - run: npm ci
+      - <<: *git-user
+      - <<: *lerna-bootstrap
+
+workflows:
+  version: 2
+  test-flow:
+    jobs:
+      - test:
+          filters: { branches: { ignore: ['/^.*\-pre$/'] } }
+
+  prerelease-flow:
+    jobs:
+      - pre_release:
+          filters: { branches: { only: ['/^.*\-pre$/'] } }
