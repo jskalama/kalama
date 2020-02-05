@@ -35,6 +35,12 @@ x-lerna-bootstrap: &lerna-bootstrap
     command: |
       npx lerna bootstrap --no-ci
 
+x-lerna-test: &lerna-test
+  run:
+    name: Lerna test
+    command: |
+      npx lerna run test
+
 x-fail-on-pre: &fail-on-pre
   run:
     name: Ensure there is no pre.json
@@ -54,6 +60,7 @@ jobs:
       - run: npm ci
       - <<: *git-user
       - <<: *lerna-bootstrap
+      - <<: *lerna-test
       - run:
           name: Enter PRE mode
           command: |
@@ -77,6 +84,7 @@ jobs:
       - run: npm ci
       - <<: *git-user
       - <<: *lerna-bootstrap
+      - <<: *lerna-test
       - run:
           name: Exit PRE mode
           command: |
@@ -100,6 +108,7 @@ jobs:
       - run: npm ci
       - <<: *git-user
       - <<: *lerna-bootstrap
+      - <<: *lerna-test
 
 workflows:
   version: 2
