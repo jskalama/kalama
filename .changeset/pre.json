@@ -1,0 +1,12 @@
+{
+  "mode": "pre",
+  "tag": "fix-404-pre",
+  "initialVersions": {
+    "kalama": "0.8.8",
+    "kalama-api": "0.8.7",
+    "kalama-cache": "0.8.7"
+  },
+  "changesets": [
+    "fair-snakes-travel"
+  ]
+}

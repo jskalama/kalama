@@ -1,46 +1,46 @@
 {
-    "name": "kalama-cache",
-    "version": "0.8.7",
-    "description": "Media file cache for kalama",
-    "main": "./dist/kalama-cache.js",
-    "typings": "./dist/kalama-cache.d.ts",
-    "scripts": {
-        "compile": "tsc -p tsconfig.json",
-        "prepare": "npm run compile",
-        "example": "npm run compile && node dist/example.js",
-        "test": "mocha -r ts-node/register src/tests/**/*.spec.ts --timeout 10000"
-    },
-    "files": [
-        "dist",
-        "migrations",
-        "src"
-    ],
-    "devDependencies": {
-        "@types/chai": "^4.0.4",
-        "@types/mocha": "^2.2.43",
-        "@types/node": "^8.0.20",
-        "@types/node-fetch": "^1.6.7",
-        "chai": "^4.1.2",
-        "mocha": "^4.0.0",
-        "ts-node": "^3.3.0",
-        "typescript": "^2.4.2"
-    },
-    "author": "",
-    "license": "ISC",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/jskalama/kalama"
-    },
-    "dependencies": {
-        "@types/lodash": "^4.14.110",
-        "@types/md5": "^2.1.32",
-        "@types/q-io": "0.0.30",
-        "download": "^7.0.0",
-        "kalama-api": "^0.8.7",
-        "lodash": "^4.17.10",
-        "md5": "^2.2.1",
-        "q-io": "^1.13.6",
-        "snap-shot-it": "^5.0.1",
-        "sqlite": "^2.9.2"
-    }
+  "name": "kalama-cache",
+  "version": "0.8.8-fix-404-pre.0",
+  "description": "Media file cache for kalama",
+  "main": "./dist/kalama-cache.js",
+  "typings": "./dist/kalama-cache.d.ts",
+  "scripts": {
+    "compile": "tsc -p tsconfig.json",
+    "prepare": "npm run compile",
+    "example": "npm run compile && node dist/example.js",
+    "test": "mocha -r ts-node/register src/tests/**/*.spec.ts --timeout 10000"
+  },
+  "files": [
+    "dist",
+    "migrations",
+    "src"
+  ],
+  "devDependencies": {
+    "@types/chai": "^4.0.4",
+    "@types/mocha": "^2.2.43",
+    "@types/node": "^8.0.20",
+    "@types/node-fetch": "^1.6.7",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.0",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.4.2"
+  },
+  "author": "",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jskalama/kalama"
+  },
+  "dependencies": {
+    "@types/lodash": "^4.14.110",
+    "@types/md5": "^2.1.32",
+    "@types/q-io": "0.0.30",
+    "download": "^7.0.0",
+    "kalama-api": "^0.9.0-fix-404-pre.0",
+    "lodash": "^4.17.10",
+    "md5": "^2.2.1",
+    "q-io": "^1.13.6",
+    "snap-shot-it": "^5.0.1",
+    "sqlite": "^2.9.2"
+  }
 }

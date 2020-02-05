@@ -1,41 +1,41 @@
 {
-    "name": "kalama-api",
-    "version": "0.8.7",
-    "main": "./dist/api.js",
-    "typings": "./dist/api.d.ts",
-    "license": "MIT",
-    "scripts": {
-        "compile": "tsc -p tsconfig.json",
-        "prepare": "npm run compile",
-        "example": "npm run compile && node dist/example.js",
-        "test": "mocha -r ts-node/register src/tests/**/*.spec.ts --timeout 10000"
-    },
-    "files": [
-        "dist",
-        "src"
-    ],
-    "devDependencies": {
-        "@types/chai": "^4.0.4",
-        "@types/mocha": "^2.2.43",
-        "@types/node": "^8.0.20",
-        "@types/node-fetch": "^1.6.7",
-        "chai": "^4.1.2",
-        "mocha": "^4.0.0",
-        "snap-shot-it": "^4.0.1",
-        "ts-node": "^3.3.0",
-        "typescript": "^2.4.2"
-    },
-    "dependencies": {
-        "@types/configstore": "^2.1.1",
-        "assert": "^1.4.1",
-        "axios": "^0.18.0",
-        "buffer": "^5.2.1",
-        "cheerio": "^0.22.0",
-        "events": "^3.0.0",
-        "node-fetch": "^1.6.3"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/jskalama/kalama"
-    }
+  "name": "kalama-api",
+  "version": "0.9.0-fix-404-pre.0",
+  "main": "./dist/api.js",
+  "typings": "./dist/api.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "compile": "tsc -p tsconfig.json",
+    "prepare": "npm run compile",
+    "example": "npm run compile && node dist/example.js",
+    "test": "mocha -r ts-node/register src/tests/**/*.spec.ts --timeout 10000"
+  },
+  "files": [
+    "dist",
+    "src"
+  ],
+  "devDependencies": {
+    "@types/chai": "^4.0.4",
+    "@types/mocha": "^2.2.43",
+    "@types/node": "^8.0.20",
+    "@types/node-fetch": "^1.6.7",
+    "chai": "^4.1.2",
+    "mocha": "^4.0.0",
+    "snap-shot-it": "^4.0.1",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.4.2"
+  },
+  "dependencies": {
+    "@types/configstore": "^2.1.1",
+    "assert": "^1.4.1",
+    "axios": "^0.18.0",
+    "buffer": "^5.2.1",
+    "cheerio": "^0.22.0",
+    "events": "^3.0.0",
+    "node-fetch": "^1.6.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jskalama/kalama"
+  }
 }
