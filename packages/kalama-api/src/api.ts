@@ -163,7 +163,9 @@ export const getTracksList = async (
     if (noResolveRedirects) {
         return tracks;
     }
-    return Promise.all(tracks.map(resolveRedirectedTrack));
+    return (await Promise.all(tracks.map(resolveRedirectedTrack))).filter(
+        track => track !== null
+    );
 };
 
 const parseDurationDOM = (durationBitrateDiv: any): number => {
@@ -264,8 +266,13 @@ export const resolveRedirectedTrack = async (
         });
         throw new Error('Resource should be redirected');
     } catch (error) {
-        if (error.response && error.response.status === 302) {
+        if (!error.response) {
+            throw error;
+        }
+        if (error.response.status === 302) {
             return { ...resource, url: error.response.headers.location };
+        } else if (error.response.status === 404) {
+            return null;
         } else {
             throw error;
         }

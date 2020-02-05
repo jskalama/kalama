@@ -1,9 +1,16 @@
 {
-	"devDependencies": {
-		"lerna": "^3.4.3"
-	},
-	"dependencies": {
-		"download": "^7.0.0"
-	},
-	"name": "kalama"
+    "name": "root",
+    "private": true,
+    "workspaces": [
+        "packages/kalama",
+        "packages/kalama-api",
+        "packages/kalama-cache"
+    ],
+    "devDependencies": {
+        "@changesets/cli": "^2.5.1",
+        "lerna": "^3.4.3"
+    },
+    "scripts": {
+        "release": "node ./tasks/release.js"
+    }
 }

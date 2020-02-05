@@ -1,6 +1,8 @@
 {
-  "packages": [
-    "packages/*"
-  ],
-  "version": "independent"
+    "packages": [
+        "packages/kalama",
+        "packages/kalama-api",
+        "packages/kalama-cache"
+    ],
+    "version": "independent"
 }
