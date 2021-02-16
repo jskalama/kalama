@@ -4,7 +4,7 @@ import cheerio = require('cheerio');
 import { equal } from 'assert';
 import assert = require('assert');
 
-const SERVER_ROOT = 'https://myzcloud.me';
+const SERVER_ROOT = 'https://myzuka.club';
 
 export enum ItemType {
     Artist,

@@ -1,10 +1,8 @@
-import { expect } from 'chai';
-import { ItemType, search, getArtistAlbumsList, getTracksList } from '../api';
-import snapshot = require('snap-shot-it');
+import { getArtistAlbumsList, getTracksList, ItemType, search } from '../api';
 import {
     expectToBeAValidItem,
     expectToBeAValidPlayableTrack,
-    expectToHaveUniqueIds
+    expectToHaveUniqueIds,
 } from './expectations';
 
 describe('search', () => {
@@ -19,7 +17,7 @@ describe('search', () => {
 describe('getArtistAlbumsList', () => {
     it("should get a list of artist's albums", async () => {
         const albums = await getArtistAlbumsList({
-            url: 'https://myzcloud.me/artist/426461/asd'
+            url: 'https://myzuka.club/Artist/142641/Asd',
         });
         albums.forEach(expectToBeAValidItem);
     });
@@ -31,7 +29,7 @@ describe('getTracksList', () => {
             itemType: ItemType.Album,
             label: '',
             url:
-                'https://myzcloud.me/album/3037656/asd-blockbasta-deluxe-edition-2015'
+                'https://myzuka.club/Album/802734/Asd-Blockbasta-Deluxe-Edition-2015',
         });
         tracks.forEach(expectToBeAValidPlayableTrack);
         expectToHaveUniqueIds(tracks);
@@ -43,10 +41,10 @@ describe('getTracksList', () => {
                 itemType: ItemType.Album,
                 label: '',
                 url:
-                    'https://myzcloud.me/album/3037656/asd-blockbasta-deluxe-edition-2015'
+                    'https://myzuka.club/Album/802734/Asd-Blockbasta-Deluxe-Edition-2015',
             },
             {
-                noResolveRedirects: true
+                noResolveRedirects: true,
             }
         );
         tracks.forEach(expectToBeAValidPlayableTrack);
@@ -58,7 +56,7 @@ describe('getTracksList', () => {
             itemType: ItemType.Album,
             label: '',
             url:
-                'https://myzcloud.me/album/1105221/joao-gilberto-joao-gilberto-in-tokyo-2004'
+                'https://myzuka.club/Album/297617/Joao-Gilberto-Joao-Gilberto-In-Tokyo-2004',
         });
         tracks.forEach(expectToBeAValidPlayableTrack);
         expectToHaveUniqueIds(tracks);
