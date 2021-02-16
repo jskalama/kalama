@@ -19,7 +19,7 @@ describe('getTracksList', () => {
             itemType: ItemType.Album,
             label: '',
             url:
-                'https://myzcloud.me/album/3037660/asd-wer-hatte-das-gedacht-2003'
+                'https://myzuka.club/Album/802736/Asd-Wer-Hatte-Das-Gedacht-2003'
         });
         cache = new PlaylistCache(tracks.slice(0, 2), {
             storageDirectory: tmpdir(),
