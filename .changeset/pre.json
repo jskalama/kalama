@@ -1,0 +1,12 @@
+{
+  "mode": "pre",
+  "tag": "reemerge-pre",
+  "initialVersions": {
+    "kalama": "0.8.11",
+    "kalama-api": "0.9.3",
+    "kalama-cache": "0.8.11"
+  },
+  "changesets": [
+    "tiny-dingos-drop"
+  ]
+}

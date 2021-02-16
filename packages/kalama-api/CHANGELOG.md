@@ -1,5 +1,11 @@
 # kalama-api
 
+## 0.9.4-reemerge-pre.0
+
+### Patch Changes
+
+- 579661e: Fix the server host in order to bring the project back to life
+
 ## 0.9.3
 
 ### Patch Changes

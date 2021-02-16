@@ -1,5 +1,13 @@
 # kalama
 
+## 0.8.12-reemerge-pre.0
+
+### Patch Changes
+
+- Updated dependencies [579661e]
+  - kalama-api@0.9.4-reemerge-pre.0
+  - kalama-cache@0.8.12-reemerge-pre.0
+
 ## 0.8.11
 
 ### Patch Changes
