@@ -1,5 +1,13 @@
 # kalama-cache
 
+## 0.8.12-reemerge-pre.1
+
+### Patch Changes
+
+- 2317b7a: Fix search and albums list
+- Updated dependencies [2317b7a]
+  - kalama-api@0.9.4-reemerge-pre.1
+
 ## 0.8.12-reemerge-pre.0
 
 ### Patch Changes
