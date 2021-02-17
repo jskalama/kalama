@@ -92,7 +92,7 @@ const itemTypeMap = {
 
 const decodeItemTypeFromUrl = (url: string): ItemType => {
     const parts = url.split('/');
-    const itemTypeIdentStr = parts[1];
+    const itemTypeIdentStr = (parts[1] ?? '').toLowerCase();
     if (itemTypeMap.hasOwnProperty(itemTypeIdentStr)) {
         return itemTypeMap[itemTypeIdentStr];
     } else {
@@ -208,9 +208,7 @@ const parseTracksListHtml = (htmlText: string): Array<Track> => {
             const playButton = $(node).find(
                 '[data-url][data-position][data-title]'
             );
-            const durationBitrateDiv = $(node).find(
-                '.options .data'
-            );
+            const durationBitrateDiv = $(node).find('.options .data');
             const url = playButton.attr('data-url');
             if (!url) {
                 return null;
