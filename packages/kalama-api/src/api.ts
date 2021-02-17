@@ -135,7 +135,7 @@ export const getArtistAlbumsList = async (
     artist: Resource
 ): Promise<Array<Album>> => {
     const url = artist.url;
-    const albumsUrl = `${url}/albums`;
+    const albumsUrl = `${url}/Albums`;
     const queryResult = await axios.get(albumsUrl, {
         headers: { referer: SERVER_ROOT },
     });
@@ -183,7 +183,7 @@ const parseDurationDOM = (durationBitrateDiv: any): number => {
 
 const parseYearDOM = (albumDiv: any): number => {
     const yearStr = albumDiv
-        .find('.card-footer > .card-text > a[href^="/albums/"]')
+        .find('.info > .tags > a[href^="/Albums/"]')
         .text()
         .trim();
 
@@ -232,17 +232,17 @@ const parseTracksListHtml = (htmlText: string): Array<Track> => {
 
 const parseAlbumsListHtml = (htmlText: string): Array<Album> => {
     const $ = cheerio.load(htmlText);
-    const albumNodes = $('#divAlbumsList .card');
+    const albumNodes = $('#divAlbumsList>.item[data-type]');
     return albumNodes
         .map((i, node) => {
             const $node = $(node);
-            const labelNode = $node.find('.card-body > .card-subtitle > a');
+            const labelNode = $node.find('.info > .title > a');
             return {
                 url: labelNode.attr('href'),
                 label: labelNode.text(),
                 year: parseYearDOM($node),
                 albumCategory: parseInt($node.attr('data-type'), 10),
-                image: $node.find('a > img.card-img-top').attr('src'),
+                image: $node.find('.vis > a > img').attr('src'),
             };
         })
         .get()
