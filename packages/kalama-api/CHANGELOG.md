@@ -1,5 +1,11 @@
 # kalama-api
 
+## 0.9.4-reemerge-pre.2
+
+### Patch Changes
+
+- 4d0972c: bump
+
 ## 0.9.4-reemerge-pre.1
 
 ### Patch Changes

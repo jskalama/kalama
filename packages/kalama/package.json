@@ -1,6 +1,6 @@
 {
   "name": "kalama",
-  "version": "0.8.12-reemerge-pre.0",
+  "version": "0.8.12-reemerge-pre.1",
   "description": "MPlayer frontend for kalama",
   "main": "index.js",
   "scripts": {
@@ -49,8 +49,8 @@
     "format-duration": "^1.1.0",
     "fuzzy-search": "2.1.0",
     "humanhash": "^1.0.4",
-    "kalama-api": "^0.9.4-reemerge-pre.0",
-    "kalama-cache": "^0.8.12-reemerge-pre.0",
+    "kalama-api": "^0.9.4-reemerge-pre.2",
+    "kalama-cache": "^0.8.12-reemerge-pre.2",
     "kalama-mplayer-as-promised": "0.1.0",
     "lcp": "^1.1.0",
     "lodash": "^4.17.15",
