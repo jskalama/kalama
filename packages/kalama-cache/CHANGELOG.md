@@ -1,5 +1,17 @@
 # kalama-cache
 
+## 0.8.12
+
+### Patch Changes
+
+- 2317b7a: Fix search and albums list
+- 579661e: Fix the server host in order to bring the project back to life
+- 4d0972c: bump
+- Updated dependencies [2317b7a]
+- Updated dependencies [579661e]
+- Updated dependencies [4d0972c]
+  - kalama-api@0.9.4
+
 ## 0.8.11
 
 ### Patch Changes

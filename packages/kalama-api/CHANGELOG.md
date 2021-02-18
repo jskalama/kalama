@@ -1,5 +1,13 @@
 # kalama-api
 
+## 0.9.4
+
+### Patch Changes
+
+- 2317b7a: Fix search and albums list
+- 579661e: Fix the server host in order to bring the project back to life
+- 4d0972c: bump
+
 ## 0.9.3
 
 ### Patch Changes

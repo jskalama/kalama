@@ -1,5 +1,16 @@
 # kalama
 
+## 0.8.12
+
+### Patch Changes
+
+- 4d0972c: bump
+- Updated dependencies [2317b7a]
+- Updated dependencies [579661e]
+- Updated dependencies [4d0972c]
+  - kalama-api@0.9.4
+  - kalama-cache@0.8.12
+
 ## 0.8.11
 
 ### Patch Changes
