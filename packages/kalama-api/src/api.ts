@@ -4,13 +4,13 @@ import cheerio = require('cheerio');
 import { equal } from 'assert';
 import assert = require('assert');
 
-const SERVER_ROOT = 'https://myzcloud.me';
+const SERVER_ROOT = 'https://myzuka.club';
 
 export enum ItemType {
     Artist,
     Album,
     Song,
-    Unknown
+    Unknown,
 }
 
 export enum AlbumCategory {
@@ -26,7 +26,7 @@ export enum AlbumCategory {
     Bootleg = 5,
     VariousCollection = 7,
     FanCollection = 13,
-    Other = 1
+    Other = 1,
 }
 
 export interface Resource {
@@ -87,12 +87,12 @@ const normalizeUrl = (url: string): string => {
 const itemTypeMap = {
     artist: ItemType.Artist,
     album: ItemType.Album,
-    song: ItemType.Song
+    song: ItemType.Song,
 };
 
 const decodeItemTypeFromUrl = (url: string): ItemType => {
     const parts = url.split('/');
-    const itemTypeIdentStr = parts[1];
+    const itemTypeIdentStr = (parts[1] ?? '').toLowerCase();
     if (itemTypeMap.hasOwnProperty(itemTypeIdentStr)) {
         return itemTypeMap[itemTypeIdentStr];
     } else {
@@ -104,7 +104,7 @@ const decodeItem = (item: Item): SearchResultItem => {
     return {
         ...item,
         url: normalizeUrl(item.url),
-        itemType: decodeItemTypeFromUrl(item.url)
+        itemType: decodeItemTypeFromUrl(item.url),
     };
 };
 
@@ -113,21 +113,21 @@ export const search = async (term: string | null): Promise<SearchResult> => {
         return {
             artists: [],
             albums: [],
-            songs: []
+            songs: [],
         };
     }
 
     const res = await axios.get(
         `${SERVER_ROOT}/Search/Suggestions?term=${encodeURIComponent(term)}`,
         {
-            headers: { referer: SERVER_ROOT }
+            headers: { referer: SERVER_ROOT },
         }
     );
     const items = res.data.map(decodeItem);
     return {
-        artists: items.filter(item => item.itemType === ItemType.Artist),
-        albums: items.filter(item => item.itemType === ItemType.Album),
-        songs: items.filter(item => item.itemType === ItemType.Song)
+        artists: items.filter((item) => item.itemType === ItemType.Artist),
+        albums: items.filter((item) => item.itemType === ItemType.Album),
+        songs: items.filter((item) => item.itemType === ItemType.Song),
     };
 };
 
@@ -135,9 +135,9 @@ export const getArtistAlbumsList = async (
     artist: Resource
 ): Promise<Array<Album>> => {
     const url = artist.url;
-    const albumsUrl = `${url}/albums`;
+    const albumsUrl = `${url}/Albums`;
     const queryResult = await axios.get(albumsUrl, {
-        headers: { referer: SERVER_ROOT }
+        headers: { referer: SERVER_ROOT },
     });
     const htmlText: string = await queryResult.data;
     return parseAlbumsListHtml(htmlText);
@@ -153,7 +153,7 @@ export const getTracksList = async (
 ): Promise<Array<Track>> => {
     const url = resource.url;
     const queryResult = await axios.get(url, {
-        headers: { referer: SERVER_ROOT }
+        headers: { referer: SERVER_ROOT },
     });
     const htmlText: string = await queryResult.data;
     let tracks = parseTracksListHtml(htmlText);
@@ -164,7 +164,7 @@ export const getTracksList = async (
         return tracks;
     }
     return (await Promise.all(tracks.map(resolveRedirectedTrack))).filter(
-        track => track !== null
+        (track) => track !== null
     );
 };
 
@@ -183,7 +183,7 @@ const parseDurationDOM = (durationBitrateDiv: any): number => {
 
 const parseYearDOM = (albumDiv: any): number => {
     const yearStr = albumDiv
-        .find('.card-footer > .card-text > a[href^="/albums/"]')
+        .find('.info > .tags > a[href^="/Albums/"]')
         .text()
         .trim();
 
@@ -206,52 +206,50 @@ const parseTracksListHtml = (htmlText: string): Array<Track> => {
     return nodes
         .map((i, node) => {
             const playButton = $(node).find(
-                '.playlist__control.play[data-url]'
+                '[data-url][data-position][data-title]'
             );
-            const durationBitrateDiv = $(node).find(
-                '.track__details .text-muted'
-            );
+            const durationBitrateDiv = $(node).find('.options .data');
             const url = playButton.attr('data-url');
             if (!url) {
                 return null;
             }
             return {
-                id: parseTrackId(playButton.attr('id')),
+                id: parseTrackId(playButton.parent().attr('id')),
                 url,
                 title: playButton.attr('data-title'),
-                duration: parseDurationDOM(durationBitrateDiv)
+                duration: parseDurationDOM(durationBitrateDiv),
             };
         })
         .get()
-        .filter(_ => _)
+        .filter((_) => _)
         .map(({ id, url, title, duration }) => ({
             id,
             url: normalizeUrl(url),
             title,
-            duration
+            duration,
         }));
 };
 
 const parseAlbumsListHtml = (htmlText: string): Array<Album> => {
     const $ = cheerio.load(htmlText);
-    const albumNodes = $('#divAlbumsList .card');
+    const albumNodes = $('#divAlbumsList>.item[data-type]');
     return albumNodes
         .map((i, node) => {
             const $node = $(node);
-            const labelNode = $node.find('.card-body > .card-subtitle > a');
+            const labelNode = $node.find('.info > .title > a');
             return {
                 url: labelNode.attr('href'),
                 label: labelNode.text(),
                 year: parseYearDOM($node),
                 albumCategory: parseInt($node.attr('data-type'), 10),
-                image: $node.find('a > img.card-img-top').attr('src')
+                image: $node.find('.vis > a > img').attr('src'),
             };
         })
         .get()
-        .map(item => ({
+        .map((item) => ({
             ...item,
             url: normalizeUrl(item.url),
-            image: normalizeUrl(item.image)
+            image: normalizeUrl(item.image),
         }));
 };
 
@@ -262,7 +260,7 @@ export const resolveRedirectedTrack = async (
     //so in our case success and failure are turned upside down.
     try {
         await axios.head(resource.url, {
-            maxRedirects: 0
+            maxRedirects: 0,
         });
         throw new Error('Resource should be redirected');
     } catch (error) {
