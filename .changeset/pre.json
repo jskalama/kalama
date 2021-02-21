@@ -1,0 +1,13 @@
+{
+  "mode": "pre",
+  "tag": "fix-download-pre",
+  "initialVersions": {
+    "kalama": "0.8.12",
+    "kalama-api": "0.9.4",
+    "kalama-cache": "0.8.12"
+  },
+  "changesets": [
+    "eleven-camels-attack",
+    "stale-forks-pay"
+  ]
+}
