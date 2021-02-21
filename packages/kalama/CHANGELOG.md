@@ -1,5 +1,12 @@
 # kalama
 
+## 0.8.13
+
+### Patch Changes
+
+- 214addd: Change: add track numbers to downloaded file names
+- 214addd: Fix: restore download mechanism
+
 ## 0.8.12
 
 ### Patch Changes
