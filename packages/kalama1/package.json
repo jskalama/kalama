@@ -45,7 +45,7 @@
         "q-io": "^1.13.2",
         "qrcode-terminal": "^0.11.0",
         "sanitize-filename": "^1.6.1",
-        "serve": "^6.0.6",
+        "serve": "^11.3.2",
         "tmp-promise": "^1.0.3",
         "yargs": "^8.0.2"
     },
